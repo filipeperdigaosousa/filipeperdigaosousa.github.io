@@ -4,6 +4,7 @@ import "./globals.css";
 import TopNav from "@/components/layout/TopNav";
 import BottomNav from "@/components/layout/BottomNav";
 import Footer from "@/components/layout/Footer";
+import LiquidFlow from "@/components/ui/LiquidFlow";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased bg-background`}
     >
       <head>
         <link
@@ -51,7 +52,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans text-on-surface bg-background">
+      <body className="min-h-full flex flex-col font-sans text-on-surface isolate">
+        <LiquidFlow />
         <TopNav />
         <main className="flex-1">{children}</main>
         <Footer />
