@@ -29,6 +29,8 @@ export const skills: Skill[] = [
 
   { name: "PostgreSQL", category: "storage", featured: true },
   { name: "MongoDB", category: "storage" },
+  { name: "Neo4j", category: "storage" },
+  { name: "Redis", category: "storage" },
 
   { name: "GCP", category: "cloud" },
   { name: "AWS", category: "cloud" },
@@ -38,6 +40,12 @@ export const skills: Skill[] = [
 
   { name: "Git", category: "tooling" },
   { name: "GitHub Actions", category: "tooling" },
+  { name: "CI/CD", category: "tooling" },
+  { name: "Numaflow", category: "tooling" },
+  { name: "Storybook", category: "tooling" },
+  { name: "pnpm / npm", category: "tooling" },
+  { name: "Biome", category: "tooling" },
+  { name: "ESLint", category: "tooling" },
 ];
 
 export const skillsByCategory: Record<SkillCategory, Skill[]> = {
