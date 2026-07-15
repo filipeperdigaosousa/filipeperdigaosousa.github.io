@@ -83,26 +83,26 @@ export default function ImpactPage() {
 
       <section className="mb-4">
         <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
-          / Career
+          / Career · all-time
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
           <Tile
-            label="Career PRs Merged"
+            label="PRs Merged"
             value={formatNumber(totals.prsMergedAllTime)}
-            sub="all-time"
+            sub="across all public and private PRs"
             tone="primary"
           />
           <Tile
             label="Years Shipping"
             value={`${yearsShipping}+`}
-            sub={`${experience.length} companies since 2015`}
+            sub="since 2015"
             tone="primary"
           />
           <Tile
-            label="Merge Rate"
-            value={`${mergeRate}%`}
-            sub={`${formatNumber(totals.prsMerged)} of ${formatNumber(totals.prsOpened)} opened this year`}
-            tone="secondary"
+            label="Companies"
+            value={experience.length}
+            sub="engagements listed on Work"
+            tone="primary"
           />
         </div>
       </section>
@@ -111,11 +111,17 @@ export default function ImpactPage() {
         <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
           / Last 12 months
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
           <Tile
             label="PRs Merged"
             value={formatNumber(totals.prsMerged)}
             sub={`${activeDays} active days · streak ${totals.currentStreak}d`}
+          />
+          <Tile
+            label="Merge Rate"
+            value={`${mergeRate}%`}
+            sub={`${formatNumber(totals.prsMerged)} of ${formatNumber(totals.prsOpened)} opened`}
+            tone="secondary"
           />
           <Tile
             label="PRs Reviewed"
@@ -125,7 +131,7 @@ export default function ImpactPage() {
           <Tile
             label="Same-Day Merge"
             value={`${cycle.sameDayPct}%`}
-            sub="of PRs merge in under 24 hours"
+            sub="of PRs merge in under 24h"
             tone="secondary"
           />
         </div>
