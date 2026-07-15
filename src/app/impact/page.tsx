@@ -138,30 +138,7 @@ export default function ImpactPage() {
       </section>
 
       <section className="mt-8 mb-4">
-        <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
-          / Craft
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          <Tile
-            label="Cycle Time p50"
-            value={`${cycle.p50}h`}
-            sub={`mean ${cycle.mean}h · p90 ${cycle.p90}h`}
-          />
-          <Tile
-            label="Refactor + Fix Share"
-            value={`${refactorFixPct}%`}
-            sub="of commits are refactor / fix"
-          />
-          <Tile
-            label="Small-PR Share"
-            value={`${smallPRPct}%`}
-            sub={`${sizeHistogram.S} of ${sizeTotal} PRs under 200 LOC`}
-          />
-        </div>
-      </section>
-
-      <section className="mt-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
-        <div className="md:col-span-12 glass-card p-6 rounded-xl">
+        <div className="glass-card p-6 rounded-xl">
           <div className="flex justify-between items-end mb-6">
             <div>
               <h3 className="font-mono text-headline-md mb-1">
@@ -184,7 +161,32 @@ export default function ImpactPage() {
           </div>
           <Heatmap days={contributions.days} />
         </div>
+      </section>
 
+      <section className="mt-8 mb-4">
+        <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
+          / Craft
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <Tile
+            label="Cycle Time p50"
+            value={`${cycle.p50}h`}
+            sub={`mean ${cycle.mean}h · p90 ${cycle.p90}h`}
+          />
+          <Tile
+            label="Refactor + Fix Share"
+            value={`${refactorFixPct}%`}
+            sub="of commits are refactor / fix"
+          />
+          <Tile
+            label="Small-PR Share"
+            value={`${smallPRPct}%`}
+            sub={`${sizeHistogram.S} of ${sizeTotal} PRs under 200 LOC`}
+          />
+        </div>
+      </section>
+
+      <section className="mt-8 grid grid-cols-1 md:grid-cols-12 gap-gutter">
         <section className="md:col-span-12 glass-card p-6 rounded-xl">
           <div className="mb-4">
             <h3 className="font-mono text-headline-md mb-1">
