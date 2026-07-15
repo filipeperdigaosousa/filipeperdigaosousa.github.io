@@ -309,18 +309,14 @@ function computeCommitTypes(prs) {
   return counts;
 }
 
-function computeTopRepos(prs, extraRepos = new Map()) {
+function countDistinctRepos(prs, extraRepos = new Map()) {
   const merged = new Map(extraRepos);
   for (const p of prs) {
     const name = p.repository?.nameWithOwner;
     if (!name) continue;
     merged.set(name, (merged.get(name) ?? 0) + 1);
   }
-  const list = [...merged.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 12)
-    .map(([name, count]) => ({ name, count }));
-  return { list, distinctCount: merged.size };
+  return { distinctCount: merged.size };
 }
 
 async function main() {
@@ -341,7 +337,7 @@ async function main() {
   const sizeHistogram = computeSizeHistogram(prs);
   const ttfrHistogram = computeTTFRHistogram(prs);
   const commitTypes = computeCommitTypes(prs);
-  const topRepos = computeTopRepos(prs, reviewedInfo.repos);
+  const repoInfo = countDistinctRepos(prs, reviewedInfo.repos);
 
   const stats = {
     generatedAt: new Date().toISOString(),
@@ -356,14 +352,13 @@ async function main() {
       publicRepos: prof.publicRepos,
       prsMergedAllTime: prof.prsMergedTotal,
       distinctAuthorsReviewed: reviewedInfo.distinct,
-      reposTouched: topRepos.distinctCount,
+      reposTouched: repoInfo.distinctCount,
     },
     cycle,
     topLanguages: langs,
     sizeHistogram,
     ttfrHistogram,
     commitTypes,
-    topRepos: topRepos.list,
     prSampleSize: prs.length,
   };
 
@@ -377,7 +372,7 @@ async function main() {
   );
 
   console.log(
-    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMergedLastYear} merged · ${prof.prsReviewedLastYear} reviewed · ${reviewedInfo.distinct} authors reviewed · ${topRepos.distinctCount} repos touched · sampled ${prs.length} PRs`,
+    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMergedLastYear} merged · ${prof.prsReviewedLastYear} reviewed · ${reviewedInfo.distinct} authors reviewed · ${repoInfo.distinctCount} repos touched · sampled ${prs.length} PRs`,
   );
 }
 

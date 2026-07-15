@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
 import BarHistogram from "@/components/metrics/BarHistogram";
 import CommitTypeDonut from "@/components/metrics/CommitTypeDonut";
-import TopReposList from "@/components/metrics/TopReposList";
 import TechStackBar from "@/components/ui/TechStackBar";
+import Typewriter from "@/components/ui/Typewriter";
 import stats from "@/data/generated/stats.json";
 import contributions from "@/data/generated/contributions.json";
 import { formatNumber } from "@/lib/format";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default function ImpactPage() {
-  const { totals, cycle, topLanguages, sizeHistogram, ttfrHistogram, commitTypes, topRepos, prSampleSize } = stats;
+  const { totals, cycle, topLanguages, sizeHistogram, commitTypes, prSampleSize } = stats;
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
@@ -25,8 +25,8 @@ export default function ImpactPage() {
             System Online
           </span>
         </div>
-        <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl mb-4">
-          Metrics Log
+        <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary mb-4">
+          <Typewriter text="Metrics Log" />
         </h1>
         <p className="text-on-surface-variant max-w-2xl text-body-lg">
           Live engineering telemetry. Refreshed every 6 hours from public
@@ -230,7 +230,7 @@ export default function ImpactPage() {
           </div>
         </div>
 
-        <section className="md:col-span-7 glass-card p-6 rounded-xl">
+        <section className="md:col-span-12 glass-card p-6 rounded-xl">
           <div className="mb-4">
             <h3 className="font-mono text-headline-md mb-1">Commit Composition</h3>
             <p className="text-tertiary font-mono text-code-sm">
@@ -241,17 +241,7 @@ export default function ImpactPage() {
           <CommitTypeDonut data={commitTypes} />
         </section>
 
-        <section className="md:col-span-5 glass-card p-6 rounded-xl">
-          <div className="mb-4">
-            <h3 className="font-mono text-headline-md mb-1">Repositories</h3>
-            <p className="text-tertiary font-mono text-code-sm">
-              Where the work landed · PRs authored per repo
-            </p>
-          </div>
-          <TopReposList repos={topRepos} />
-        </section>
-
-        <section className="md:col-span-6 glass-card p-6 rounded-xl">
+        <section className="md:col-span-12 glass-card p-6 rounded-xl">
           <div className="mb-4">
             <h3 className="font-mono text-headline-md mb-1">PR Size</h3>
             <p className="text-tertiary font-mono text-code-sm">
@@ -266,22 +256,6 @@ export default function ImpactPage() {
           <p className="mt-4 font-mono text-code-sm text-tertiary">
             S &lt;200 · M 200-499 · L 500-999 · XL 1000+
           </p>
-        </section>
-
-        <section className="md:col-span-6 glass-card p-6 rounded-xl">
-          <div className="mb-4">
-            <h3 className="font-mono text-headline-md mb-1">
-              Time To First Review
-            </h3>
-            <p className="text-tertiary font-mono text-code-sm">
-              Hours from PR opened to first human review
-            </p>
-          </div>
-          <BarHistogram
-            data={ttfrHistogram}
-            order={["<1h", "1-4h", "4-24h", "1-3d", ">3d"]}
-            color="bg-secondary"
-          />
         </section>
 
         <section className="md:col-span-12 glass-card p-6 rounded-xl">

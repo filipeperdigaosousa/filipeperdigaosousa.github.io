@@ -13,24 +13,25 @@ export default function BarHistogram({
 }: BarHistogramProps) {
   const keys = order ?? Object.keys(data);
   const max = Math.max(1, ...keys.map((k) => data[k] ?? 0));
+  const gridCols = { gridTemplateColumns: `repeat(${keys.length},minmax(0,1fr))` };
+
   return (
     <div>
-      <div className="h-40 flex items-end gap-4 pt-4">
+      <div className="h-40 grid gap-4 items-end pt-4" style={gridCols}>
         {keys.map((k) => {
           const v = data[k] ?? 0;
+          const height = `${Math.max(v ? 6 : 2, (v / max) * 100)}%`;
           return (
-            <div key={k} className="flex-1 flex flex-col items-center gap-2">
-              <div className="w-full flex items-end h-full">
-                <div
-                  className={`w-full rounded-t ${color} progress-glow transition-all`}
-                  style={{ height: `${(v / max) * 100}%` }}
-                />
-              </div>
-            </div>
+            <div
+              key={k}
+              className={`rounded-t ${color} progress-glow transition-all`}
+              style={{ height }}
+              title={`${k}: ${v}`}
+            />
           );
         })}
       </div>
-      <div className="grid gap-4 mt-3" style={{ gridTemplateColumns: `repeat(${keys.length},1fr)` }}>
+      <div className="grid gap-4 mt-3" style={gridCols}>
         {keys.map((k) => {
           const v = data[k] ?? 0;
           return (

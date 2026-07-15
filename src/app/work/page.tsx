@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TimelineItem from "@/components/work/TimelineItem";
+import Typewriter from "@/components/ui/Typewriter";
 import { experience } from "@/data/experience";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function WorkPage() {
       <section className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div className="max-w-3xl">
           <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary mb-6">
-            Career Architecture
+            <Typewriter text="Career Architecture" />
           </h1>
           <p className="text-on-surface-variant text-body-lg max-w-2xl">
             A structural timeline of shipped web and mobile products, from

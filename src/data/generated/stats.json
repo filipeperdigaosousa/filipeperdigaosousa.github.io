@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T12:51:25.834Z",
+  "generatedAt": "2026-07-15T13:01:43.909Z",
   "totals": {
-    "contributionsLastYear": 2648,
+    "contributionsLastYear": 2649,
     "currentStreak": 3,
     "longestStreak": 6,
     "topLanguage": "Ruby",
@@ -21,7 +21,7 @@
   "topLanguages": [
     {
       "name": "Ruby",
-      "percent": 71
+      "percent": 70
     },
     {
       "name": "TypeScript",
@@ -29,7 +29,7 @@
     },
     {
       "name": "JavaScript",
-      "percent": 4
+      "percent": 5
     },
     {
       "name": "CSS",
@@ -66,39 +66,5 @@
     "ci": 2,
     "other": 15
   },
-  "topRepos": [
-    {
-      "name": "PlayerData/app",
-      "count": 348
-    },
-    {
-      "name": "PlayerData/api",
-      "count": 224
-    },
-    {
-      "name": "PlayerData/web",
-      "count": 11
-    },
-    {
-      "name": "PlayerData/playerdata-core",
-      "count": 7
-    },
-    {
-      "name": "PlayerData/kubernetes",
-      "count": 4
-    },
-    {
-      "name": "PlayerData/analysis-services",
-      "count": 3
-    },
-    {
-      "name": "PlayerData/claude-config",
-      "count": 2
-    },
-    {
-      "name": "PlayerData/pipelines",
-      "count": 1
-    }
-  ],
   "prSampleSize": 500
 }

@@ -39,11 +39,13 @@ export default function CommitTypeDonut({ data }: CommitTypeDonutProps) {
 
   const entries = useMemo(() => {
     const total = Object.values(data).reduce((a, b) => a + b, 0) || 1;
-    return TYPE_ORDER.filter((t) => (data[t] ?? 0) > 0).map((t) => ({
-      name: t,
-      count: data[t],
-      percent: (data[t] / total) * 100,
-    }));
+    return TYPE_ORDER.filter((t) => (data[t] ?? 0) > 0)
+      .map((t) => ({
+        name: t,
+        count: data[t],
+        percent: (data[t] / total) * 100,
+      }))
+      .filter((e) => e.percent >= 1);
   }, [data]);
 
   const size = 200;

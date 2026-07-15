@@ -3,6 +3,7 @@ import Image from "next/image";
 import TerminalWindow from "@/components/ui/TerminalWindow";
 import GlassCard from "@/components/ui/GlassCard";
 import SkillTag from "@/components/ui/SkillTag";
+import Typewriter from "@/components/ui/Typewriter";
 import Heatmap from "@/components/metrics/Heatmap";
 import { profile } from "@/data/profile";
 import { skillsByCategory, categoryLabels, type SkillCategory } from "@/data/skills";
@@ -22,26 +23,24 @@ export default function HomePage() {
         <div className="lg:col-span-8">
           <TerminalWindow prompt="filipesousa@system:~ (main)">
             <div className="flex flex-col gap-6 text-on-surface/85">
-              <div className="space-y-4 text-body-md md:text-body-lg leading-relaxed">
-                <p>
-                  <strong className="text-primary">
-                    Senior Full-Stack Engineer with 10+ years of experience
-                  </strong>{" "}
-                  building scalable web, mobile, and backend systems.
-                </p>
-                <p>
-                  I enjoy taking complex product ideas from architecture
-                  through production, working across{" "}
-                  <span className="text-secondary">Ruby on Rails</span>,{" "}
-                  <span className="text-secondary">React</span>,{" "}
-                  <span className="text-secondary">React Native</span>,{" "}
-                  <span className="text-secondary">GraphQL</span>
-                  {" "}and cloud infrastructure. More recently I&apos;ve been leading
-                  cross-functional engineering pods while remaining a hands-on
-                  contributor — owning technical direction, delivery planning
-                  and implementation.
-                </p>
-              </div>
+              <h1 className="font-mono text-body-lg md:text-headline-md text-primary leading-snug">
+                <Typewriter
+                  text="Senior Full-Stack Engineer with 10+ years of experience building scalable web, mobile, and backend systems."
+                  speed={35}
+                />
+              </h1>
+              <p className="text-body-md md:text-body-lg leading-relaxed">
+                I enjoy taking complex product ideas from architecture
+                through production, working across{" "}
+                <span className="text-secondary">Ruby on Rails</span>,{" "}
+                <span className="text-secondary">React</span>,{" "}
+                <span className="text-secondary">React Native</span>,{" "}
+                <span className="text-secondary">GraphQL</span>
+                {" "}and cloud infrastructure. More recently I&apos;ve been leading
+                cross-functional engineering pods while remaining a hands-on
+                contributor — owning technical direction, delivery planning
+                and implementation.
+              </p>
 
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link
