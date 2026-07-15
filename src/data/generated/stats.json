@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-15T12:43:28.005Z",
+  "generatedAt": "2026-07-15T12:51:25.834Z",
   "totals": {
-    "contributionsLastYear": 2647,
+    "contributionsLastYear": 2648,
     "currentStreak": 3,
     "longestStreak": 6,
     "topLanguage": "Ruby",
@@ -9,7 +9,9 @@
     "prsOpened": 582,
     "prsReviewed": 639,
     "publicRepos": 14,
-    "prsMergedAllTime": 1157
+    "prsMergedAllTime": 1157,
+    "distinctAuthorsReviewed": 15,
+    "reposTouched": 8
   },
   "cycle": {
     "p50": 17.8,
@@ -19,15 +21,15 @@
   "topLanguages": [
     {
       "name": "Ruby",
-      "percent": 75
+      "percent": 71
     },
     {
       "name": "TypeScript",
-      "percent": 20
+      "percent": 23
     },
     {
       "name": "JavaScript",
-      "percent": 3
+      "percent": 4
     },
     {
       "name": "CSS",
@@ -38,108 +40,6 @@
       "percent": 0
     }
   ],
-  "monthly": {
-    "merged": [
-      {
-        "month": "2025-08",
-        "count": 31
-      },
-      {
-        "month": "2025-09",
-        "count": 49
-      },
-      {
-        "month": "2025-10",
-        "count": 66
-      },
-      {
-        "month": "2025-11",
-        "count": 48
-      },
-      {
-        "month": "2025-12",
-        "count": 11
-      },
-      {
-        "month": "2026-01",
-        "count": 11
-      },
-      {
-        "month": "2026-02",
-        "count": 24
-      },
-      {
-        "month": "2026-03",
-        "count": 58
-      },
-      {
-        "month": "2026-04",
-        "count": 61
-      },
-      {
-        "month": "2026-05",
-        "count": 63
-      },
-      {
-        "month": "2026-06",
-        "count": 100
-      },
-      {
-        "month": "2026-07",
-        "count": 13
-      }
-    ],
-    "reviewed": [
-      {
-        "month": "2025-08",
-        "count": 62
-      },
-      {
-        "month": "2025-09",
-        "count": 66
-      },
-      {
-        "month": "2025-10",
-        "count": 55
-      },
-      {
-        "month": "2025-11",
-        "count": 68
-      },
-      {
-        "month": "2025-12",
-        "count": 7
-      },
-      {
-        "month": "2026-01",
-        "count": 15
-      },
-      {
-        "month": "2026-02",
-        "count": 42
-      },
-      {
-        "month": "2026-03",
-        "count": 86
-      },
-      {
-        "month": "2026-04",
-        "count": 78
-      },
-      {
-        "month": "2026-05",
-        "count": 54
-      },
-      {
-        "month": "2026-06",
-        "count": 64
-      },
-      {
-        "month": "2026-07",
-        "count": 19
-      }
-    ]
-  },
   "sizeHistogram": {
     "S": 278,
     "M": 88,
@@ -153,189 +53,52 @@
     "1-3d": 55,
     ">3d": 26
   },
-  "dayHourHeatmap": [
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      2,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      2,
-      3,
-      13,
-      28,
-      21,
-      18,
-      15,
-      16,
-      21,
-      22,
-      15,
-      3,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      5,
-      16,
-      26,
-      21,
-      16,
-      11,
-      28,
-      32,
-      38,
-      11,
-      10,
-      3,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      2,
-      20,
-      17,
-      22,
-      13,
-      14,
-      22,
-      32,
-      25,
-      8,
-      6,
-      1,
-      0,
-      1,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      6,
-      12,
-      16,
-      16,
-      16,
-      16,
-      7,
-      16,
-      26,
-      11,
-      5,
-      2,
-      0,
-      2,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      10,
-      13,
-      10,
-      10,
-      15,
-      17,
-      14,
-      27,
-      20,
-      20,
-      5,
-      0,
-      0,
-      2,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1
-    ]
+  "commitTypes": {
+    "feat": 381,
+    "fix": 250,
+    "refactor": 117,
+    "test": 47,
+    "chore": 36,
+    "docs": 2,
+    "perf": 4,
+    "style": 6,
+    "build": 4,
+    "ci": 2,
+    "other": 15
+  },
+  "topRepos": [
+    {
+      "name": "PlayerData/app",
+      "count": 348
+    },
+    {
+      "name": "PlayerData/api",
+      "count": 224
+    },
+    {
+      "name": "PlayerData/web",
+      "count": 11
+    },
+    {
+      "name": "PlayerData/playerdata-core",
+      "count": 7
+    },
+    {
+      "name": "PlayerData/kubernetes",
+      "count": 4
+    },
+    {
+      "name": "PlayerData/analysis-services",
+      "count": 3
+    },
+    {
+      "name": "PlayerData/claude-config",
+      "count": 2
+    },
+    {
+      "name": "PlayerData/pipelines",
+      "count": 1
+    }
   ],
   "prSampleSize": 500
 }

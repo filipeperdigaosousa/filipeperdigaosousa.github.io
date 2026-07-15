@@ -158,7 +158,16 @@ async function fetchMergedPRDetail(maxPages = 5) {
           pageInfo { hasNextPage endCursor }
           nodes {
             createdAt mergedAt additions deletions
-            commits(first:20) { nodes { commit { authoredDate } } }
+            repository { nameWithOwner }
+            commits(first:30) {
+              nodes {
+                commit {
+                  authoredDate
+                  messageHeadline
+                  authors(first:5) { nodes { user { login } email } }
+                }
+              }
+            }
             reviews(first:20, states:[APPROVED, CHANGES_REQUESTED, COMMENTED]) {
               nodes { submittedAt author { login } }
             }
@@ -177,28 +186,40 @@ async function fetchMergedPRDetail(maxPages = 5) {
   return nodes;
 }
 
-async function fetchReviewedByMonth(months) {
-  const query = `query($q:String!) { search(type:ISSUE, query:$q) { issueCount } }`;
-  const results = await Promise.all(
-    months.map(async (m) => {
-      const q = `is:pr reviewed-by:${USER} -author:${USER} created:${m.from}..${m.to}`;
-      const res = await gql(query, { q });
-      return { month: m.key, count: res.search.issueCount };
-    }),
-  );
-  return results;
-}
+async function fetchReviewedAuthors(maxPages = 3) {
+  const query = `
+    query($q:String!) {
+      search(type:ISSUE, query:$q, first:100) {
+        edges {
+          node {
+            ... on PullRequest {
+              author { login }
+              repository { nameWithOwner }
+            }
+          }
+        }
+      }
+    }`;
+  const now = new Date();
+  const from = new Date(now);
+  from.setUTCFullYear(from.getUTCFullYear() - 1);
+  const fromDate = from.toISOString().slice(0, 10);
 
-async function fetchMergedByMonth(months) {
-  const query = `query($q:String!) { search(type:ISSUE, query:$q) { issueCount } }`;
-  const results = await Promise.all(
-    months.map(async (m) => {
-      const q = `is:pr author:${USER} is:merged merged:${m.from}..${m.to}`;
-      const res = await gql(query, { q });
-      return { month: m.key, count: res.search.issueCount };
-    }),
-  );
-  return results;
+  const authors = new Map();
+  const repos = new Map();
+  const q = `is:pr reviewed-by:${USER} -author:${USER} created:>=${fromDate}`;
+  const res = await gql(query, { q });
+  for (const e of res.search.edges) {
+    const login = e.node?.author?.login;
+    if (login) authors.set(login, (authors.get(login) ?? 0) + 1);
+    const repo = e.node?.repository?.nameWithOwner;
+    if (repo) repos.set(repo, (repos.get(repo) ?? 0) + 1);
+  }
+  return {
+    distinct: authors.size,
+    top: [...authors.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10),
+    repos,
+  };
 }
 
 function computeCycleFromPRs(prs) {
@@ -260,63 +281,67 @@ function computeTTFRHistogram(prs) {
   return buckets;
 }
 
-function computeDayHourHeatmap(prs) {
-  const grid = Array.from({ length: 7 }, () => Array(24).fill(0));
-  const seen = new Set();
-  for (const p of prs) {
-    for (const c of p.commits?.nodes ?? []) {
-      const iso = c.commit?.authoredDate;
-      if (!iso) continue;
-      const key = iso;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      const d = new Date(iso);
-      const dow = d.getUTCDay();
-      const hour = d.getUTCHours();
-      grid[dow][hour] += 1;
-    }
-  }
-  return grid;
+const CONV_TYPES = ["feat", "fix", "refactor", "test", "chore", "docs", "perf", "style", "build", "ci"];
+
+function classifyHeadline(headline) {
+  if (!headline) return "other";
+  const m = headline.trim().toLowerCase().match(/^([a-z]+)(?:\([^)]+\))?!?:/);
+  if (m && CONV_TYPES.includes(m[1])) return m[1];
+  return "other";
 }
 
-function lastNMonths(n) {
-  const months = [];
-  const now = new Date();
-  for (let i = n - 1; i >= 0; i--) {
-    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
-    const start = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1));
-    const end = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0));
-    months.push({
-      key: `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`,
-      from: start.toISOString().slice(0, 10),
-      to: end.toISOString().slice(0, 10),
-    });
+function computeCommitTypes(prs) {
+  const counts = {};
+  for (const t of [...CONV_TYPES, "other"]) counts[t] = 0;
+  for (const p of prs) {
+    for (const c of p.commits?.nodes ?? []) {
+      const authors = c.commit?.authors?.nodes ?? [];
+      const isMine = authors.some(
+        (a) =>
+          a.user?.login === USER ||
+          (typeof a.email === "string" && a.email.includes(USER)),
+      );
+      if (!isMine) continue;
+      const t = classifyHeadline(c.commit?.messageHeadline);
+      counts[t] = (counts[t] ?? 0) + 1;
+    }
   }
-  return months;
+  return counts;
+}
+
+function computeTopRepos(prs, extraRepos = new Map()) {
+  const merged = new Map(extraRepos);
+  for (const p of prs) {
+    const name = p.repository?.nameWithOwner;
+    if (!name) continue;
+    merged.set(name, (merged.get(name) ?? 0) + 1);
+  }
+  const list = [...merged.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12)
+    .map(([name, count]) => ({ name, count }));
+  return { list, distinctCount: merged.size };
 }
 
 async function main() {
   console.log(`[fetch-metrics] user=${USER}`);
   await mkdir(OUT_DIR, { recursive: true });
 
-  const months = lastNMonths(12);
-
-  const [contributions, prof, prs, langs, mergedByMonth, reviewedByMonth] =
-    await Promise.all([
-      fetchContributions(),
-      fetchProfile(),
-      fetchMergedPRDetail(5),
-      fetchTopLanguages(),
-      fetchMergedByMonth(months),
-      fetchReviewedByMonth(months),
-    ]);
+  const [contributions, prof, prs, langs, reviewedInfo] = await Promise.all([
+    fetchContributions(),
+    fetchProfile(),
+    fetchMergedPRDetail(5),
+    fetchTopLanguages(),
+    fetchReviewedAuthors(),
+  ]);
 
   const { currentStreak, longestStreak } = computeStreaks(contributions.days);
   const topLanguage = langs[0]?.name ?? "TypeScript";
   const cycle = computeCycleFromPRs(prs);
   const sizeHistogram = computeSizeHistogram(prs);
   const ttfrHistogram = computeTTFRHistogram(prs);
-  const dayHourHeatmap = computeDayHourHeatmap(prs);
+  const commitTypes = computeCommitTypes(prs);
+  const topRepos = computeTopRepos(prs, reviewedInfo.repos);
 
   const stats = {
     generatedAt: new Date().toISOString(),
@@ -330,16 +355,15 @@ async function main() {
       prsReviewed: prof.prsReviewedLastYear,
       publicRepos: prof.publicRepos,
       prsMergedAllTime: prof.prsMergedTotal,
+      distinctAuthorsReviewed: reviewedInfo.distinct,
+      reposTouched: topRepos.distinctCount,
     },
     cycle,
     topLanguages: langs,
-    monthly: {
-      merged: mergedByMonth,
-      reviewed: reviewedByMonth,
-    },
     sizeHistogram,
     ttfrHistogram,
-    dayHourHeatmap,
+    commitTypes,
+    topRepos: topRepos.list,
     prSampleSize: prs.length,
   };
 
@@ -353,7 +377,7 @@ async function main() {
   );
 
   console.log(
-    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMergedLastYear} PRs merged (year) · ${prof.prsReviewedLastYear} reviewed (year) · sampled ${prs.length} PRs for histograms`,
+    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMergedLastYear} merged · ${prof.prsReviewedLastYear} reviewed · ${reviewedInfo.distinct} authors reviewed · ${topRepos.distinctCount} repos touched · sampled ${prs.length} PRs`,
   );
 }
 

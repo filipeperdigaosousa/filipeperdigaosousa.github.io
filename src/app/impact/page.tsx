@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
-import MonthlyVelocity from "@/components/metrics/MonthlyVelocity";
 import BarHistogram from "@/components/metrics/BarHistogram";
-import DayHourHeatmap from "@/components/metrics/DayHourHeatmap";
+import CommitTypeDonut from "@/components/metrics/CommitTypeDonut";
+import TopReposList from "@/components/metrics/TopReposList";
 import TechStackBar from "@/components/ui/TechStackBar";
 import stats from "@/data/generated/stats.json";
 import contributions from "@/data/generated/contributions.json";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default function ImpactPage() {
-  const { totals, cycle, topLanguages, monthly, sizeHistogram, ttfrHistogram, dayHourHeatmap, prSampleSize } = stats;
+  const { totals, cycle, topLanguages, sizeHistogram, ttfrHistogram, commitTypes, topRepos, prSampleSize } = stats;
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
@@ -177,28 +177,86 @@ export default function ImpactPage() {
           </div>
         </section>
 
-        <section className="md:col-span-12 glass-card p-6 rounded-xl">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h3 className="font-mono text-headline-md mb-1">
-                Monthly Velocity
-              </h3>
-              <p className="text-tertiary font-mono text-code-sm">
-                PRs merged and reviewed per month · last 12 months
-              </p>
-            </div>
+        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
+          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
+            Authors Reviewed
+          </span>
+          <div>
+            <span className="font-mono text-headline-xl block">
+              {totals.distinctAuthorsReviewed}
+            </span>
+            <span className="text-tertiary font-mono text-code-sm">
+              distinct engineers · last year
+            </span>
           </div>
-          <MonthlyVelocity merged={monthly.merged} reviewed={monthly.reviewed} />
+        </div>
+
+        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
+          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
+            Repos Touched
+          </span>
+          <div>
+            <span className="font-mono text-headline-xl block">
+              {totals.reposTouched}
+            </span>
+            <span className="text-tertiary font-mono text-code-sm">
+              codebases contributed to
+            </span>
+          </div>
+        </div>
+
+        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
+          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
+            Refactor Share
+          </span>
+          <div>
+            {(() => {
+              const total = Object.values(commitTypes).reduce(
+                (a, b) => a + b,
+                0,
+              ) || 1;
+              const consolidation = ((commitTypes.refactor ?? 0) + (commitTypes.fix ?? 0)) / total;
+              return (
+                <>
+                  <span className="font-mono text-headline-xl block">
+                    {Math.round(consolidation * 100)}%
+                  </span>
+                  <span className="text-tertiary font-mono text-code-sm">
+                    of commits are refactor / fix
+                  </span>
+                </>
+              );
+            })()}
+          </div>
+        </div>
+
+        <section className="md:col-span-7 glass-card p-6 rounded-xl">
+          <div className="mb-4">
+            <h3 className="font-mono text-headline-md mb-1">Commit Composition</h3>
+            <p className="text-tertiary font-mono text-code-sm">
+              How my work splits between feature, refactor, fix, and infra —
+              sampled across {prSampleSize} recent PRs
+            </p>
+          </div>
+          <CommitTypeDonut data={commitTypes} />
+        </section>
+
+        <section className="md:col-span-5 glass-card p-6 rounded-xl">
+          <div className="mb-4">
+            <h3 className="font-mono text-headline-md mb-1">Repositories</h3>
+            <p className="text-tertiary font-mono text-code-sm">
+              Where the work landed · PRs authored per repo
+            </p>
+          </div>
+          <TopReposList repos={topRepos} />
         </section>
 
         <section className="md:col-span-6 glass-card p-6 rounded-xl">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3 className="font-mono text-headline-md mb-1">PR Size</h3>
-              <p className="text-tertiary font-mono text-code-sm">
-                Merged PRs by lines changed (last {prSampleSize} sampled)
-              </p>
-            </div>
+          <div className="mb-4">
+            <h3 className="font-mono text-headline-md mb-1">PR Size</h3>
+            <p className="text-tertiary font-mono text-code-sm">
+              Merged PRs by lines changed (sample of {prSampleSize})
+            </p>
           </div>
           <BarHistogram
             data={sizeHistogram}
@@ -211,35 +269,19 @@ export default function ImpactPage() {
         </section>
 
         <section className="md:col-span-6 glass-card p-6 rounded-xl">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h3 className="font-mono text-headline-md mb-1">
-                Time To First Review
-              </h3>
-              <p className="text-tertiary font-mono text-code-sm">
-                Hours from PR opened to first human review
-              </p>
-            </div>
+          <div className="mb-4">
+            <h3 className="font-mono text-headline-md mb-1">
+              Time To First Review
+            </h3>
+            <p className="text-tertiary font-mono text-code-sm">
+              Hours from PR opened to first human review
+            </p>
           </div>
           <BarHistogram
             data={ttfrHistogram}
             order={["<1h", "1-4h", "4-24h", "1-3d", ">3d"]}
             color="bg-secondary"
           />
-        </section>
-
-        <section className="md:col-span-12 glass-card p-6 rounded-xl">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h3 className="font-mono text-headline-md mb-1">
-                When I Ship
-              </h3>
-              <p className="text-tertiary font-mono text-code-sm">
-                Commit distribution by day of week × hour of day (UTC)
-              </p>
-            </div>
-          </div>
-          <DayHourHeatmap grid={dayHourHeatmap} />
         </section>
 
         <section className="md:col-span-12 glass-card p-6 rounded-xl">
