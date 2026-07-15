@@ -230,13 +230,15 @@ function computeCycleFromPRs(prs) {
     .map((p) => (new Date(p.mergedAt) - new Date(p.createdAt)) / (1000 * 60 * 60))
     .filter((h) => h >= 0)
     .sort((a, b) => a - b);
-  if (!hours.length) return { p50: 0, mean: 0, p90: 0 };
+  if (!hours.length) return { p50: 0, mean: 0, p90: 0, sameDayPct: 0 };
   const p = (q) => hours[Math.max(0, Math.floor(hours.length * q) - 1)];
   const mean = hours.reduce((a, b) => a + b, 0) / hours.length;
+  const sameDay = hours.filter((h) => h < 24).length;
   return {
     p50: Math.round(p(0.5) * 10) / 10,
     mean: Math.round(mean * 10) / 10,
     p90: Math.round(p(0.9) * 10) / 10,
+    sameDayPct: Math.round((sameDay / hours.length) * 100),
   };
 }
 

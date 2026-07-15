@@ -1,21 +1,68 @@
 import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
-import BarHistogram from "@/components/metrics/BarHistogram";
 import CommitTypeDonut from "@/components/metrics/CommitTypeDonut";
-import TechStackBar from "@/components/ui/TechStackBar";
 import Typewriter from "@/components/ui/Typewriter";
 import stats from "@/data/generated/stats.json";
 import contributions from "@/data/generated/contributions.json";
+import { experience } from "@/data/experience";
 import { formatNumber } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Impact",
   description:
-    "Live engineering metrics — contribution activity, PR throughput, cycle time, tech stack density. Refreshed every six hours from public GitHub data.",
+    "Live engineering metrics — career output, merge rate, cycle time, code composition. Refreshed every six hours from GitHub data.",
 };
 
+interface TileProps {
+  label: string;
+  value: string | number;
+  sub?: string;
+  tone?: "primary" | "secondary" | "default";
+}
+
+function Tile({ label, value, sub, tone = "default" }: TileProps) {
+  const color =
+    tone === "primary"
+      ? "text-primary"
+      : tone === "secondary"
+        ? "text-secondary"
+        : "text-on-surface";
+  return (
+    <div className="glass-card p-6 rounded-xl flex flex-col justify-between h-full">
+      <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
+        {label}
+      </span>
+      <div>
+        <span className={`font-mono text-headline-xl block ${color}`}>
+          {value}
+        </span>
+        {sub ? (
+          <span className="text-tertiary font-mono text-code-sm mt-1 block">
+            {sub}
+          </span>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export default function ImpactPage() {
-  const { totals, cycle, topLanguages, sizeHistogram, commitTypes, prSampleSize } = stats;
+  const { totals, cycle, sizeHistogram, commitTypes, prSampleSize } = stats;
+
+  const yearsShipping = new Date().getUTCFullYear() - 2015;
+  const mergeRate = Math.round((totals.prsMerged / totals.prsOpened) * 100);
+  const reviewToAuthorRatio = (totals.prsReviewed / totals.prsMerged).toFixed(2);
+
+  const sizeTotal = Object.values(sizeHistogram).reduce((a, b) => a + b, 0) || 1;
+  const smallPRPct = Math.round(((sizeHistogram.S ?? 0) / sizeTotal) * 100);
+
+  const commitTotal = Object.values(commitTypes).reduce((a, b) => a + b, 0) || 1;
+  const refactorFixPct = Math.round(
+    (((commitTypes.refactor ?? 0) + (commitTypes.fix ?? 0)) / commitTotal) * 100,
+  );
+
+  const activeDays = contributions.days.filter((d) => d.count > 0).length;
+
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
@@ -29,13 +76,86 @@ export default function ImpactPage() {
           <Typewriter text="Metrics Log" />
         </h1>
         <p className="text-on-surface-variant max-w-2xl text-body-lg">
-          Live engineering telemetry. Refreshed every 6 hours from public
-          GitHub data via a scheduled GitHub Action.
+          Live engineering telemetry. Refreshed every 6 hours from the GitHub
+          API via a scheduled GitHub Action.
         </p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
-        <section className="md:col-span-12 glass-card p-6 rounded-xl">
+      <section className="mb-4">
+        <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
+          / Career
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <Tile
+            label="Career PRs Merged"
+            value={formatNumber(totals.prsMergedAllTime)}
+            sub="all-time"
+            tone="primary"
+          />
+          <Tile
+            label="Years Shipping"
+            value={`${yearsShipping}+`}
+            sub={`${experience.length} companies since 2015`}
+            tone="primary"
+          />
+          <Tile
+            label="Merge Rate"
+            value={`${mergeRate}%`}
+            sub={`${formatNumber(totals.prsMerged)} of ${formatNumber(totals.prsOpened)} opened this year`}
+            tone="secondary"
+          />
+        </div>
+      </section>
+
+      <section className="mt-8 mb-4">
+        <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
+          / Last 12 months
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <Tile
+            label="PRs Merged"
+            value={formatNumber(totals.prsMerged)}
+            sub={`${activeDays} active days · streak ${totals.currentStreak}d`}
+          />
+          <Tile
+            label="PRs Reviewed"
+            value={formatNumber(totals.prsReviewed)}
+            sub={`${reviewToAuthorRatio}× ratio · reviewer-heavy`}
+          />
+          <Tile
+            label="Same-Day Merge"
+            value={`${cycle.sameDayPct}%`}
+            sub="of PRs merge in under 24 hours"
+            tone="secondary"
+          />
+        </div>
+      </section>
+
+      <section className="mt-8 mb-4">
+        <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
+          / Craft
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <Tile
+            label="Cycle Time p50"
+            value={`${cycle.p50}h`}
+            sub={`mean ${cycle.mean}h · p90 ${cycle.p90}h`}
+          />
+          <Tile
+            label="Refactor + Fix Share"
+            value={`${refactorFixPct}%`}
+            sub="of commits are refactor / fix"
+          />
+          <Tile
+            label="Small-PR Share"
+            value={`${smallPRPct}%`}
+            sub={`${sizeHistogram.S} of ${sizeTotal} PRs under 200 LOC`}
+          />
+        </div>
+      </section>
+
+      <section className="mt-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        <div className="md:col-span-12 glass-card p-6 rounded-xl">
           <div className="flex justify-between items-end mb-6">
             <div>
               <h3 className="font-mono text-headline-md mb-1">
@@ -46,7 +166,7 @@ export default function ImpactPage() {
                 the last year
               </p>
             </div>
-            <div className="flex gap-2 items-center text-tertiary font-mono text-code-sm">
+            <div className="hidden md:flex gap-2 items-center text-tertiary font-mono text-code-sm">
               <span>Less</span>
               <div className="w-3 h-3 bg-white/5 rounded-[2px]" />
               <div className="w-3 h-3 bg-secondary/20 rounded-[2px]" />
@@ -57,211 +177,19 @@ export default function ImpactPage() {
             </div>
           </div>
           <Heatmap days={contributions.days} />
-        </section>
-
-        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
-          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
-            Total Contributions
-          </span>
-          <div>
-            <span className="font-mono text-headline-xl block">
-              {formatNumber(totals.contributionsLastYear)}
-            </span>
-            <span className="text-tertiary font-mono text-code-sm">
-              last 12 months
-            </span>
-          </div>
-        </div>
-
-        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
-          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
-            Current Streak
-          </span>
-          <div>
-            <span className="font-mono text-headline-xl block">
-              {totals.currentStreak}{" "}
-              <span className="text-headline-md text-on-surface-variant">
-                days
-              </span>
-            </span>
-            <span className="text-tertiary font-mono text-code-sm">
-              record: {totals.longestStreak} days
-            </span>
-          </div>
-        </div>
-
-        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between relative overflow-hidden">
-          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
-            PRs Reviewed
-          </span>
-          <div>
-            <span className="font-mono text-headline-xl block">
-              {formatNumber(totals.prsReviewed)}
-            </span>
-            <span className="text-tertiary font-mono text-code-sm">
-              reviewed &gt; authored ({totals.prsMerged} merged)
-            </span>
-          </div>
-          <div className="absolute -bottom-6 -right-4 opacity-10 text-primary">
-            <span
-              className="material-symbols-outlined text-[120px]"
-              style={{ fontVariationSettings: '"FILL" 1' }}
-            >
-              fact_check
-            </span>
-          </div>
-        </div>
-
-        <section className="md:col-span-8 glass-card p-8 rounded-xl">
-          <div className="flex justify-between items-start mb-8">
-            <div>
-              <h3 className="font-mono text-headline-md mb-1">
-                PR Cycle Time
-              </h3>
-              <p className="text-tertiary font-mono text-code-sm">
-                Median hours from PR opened to merged
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-headline-md font-mono text-secondary">
-                {cycle.p50}h
-              </div>
-              <div className="font-mono text-label-caps text-tertiary uppercase tracking-widest">
-                p50
-              </div>
-            </div>
-          </div>
-          {(() => {
-            const bars = [
-              { label: "p50", value: cycle.p50, color: "bg-secondary" },
-              { label: "mean", value: cycle.mean, color: "bg-primary/60" },
-              { label: "p90", value: cycle.p90, color: "bg-primary/30" },
-            ];
-            const max = Math.max(cycle.p90 * 1.1, 1);
-            return (
-              <div>
-                <div className="h-48 w-full grid grid-cols-3 gap-6 px-2 items-end">
-                  {bars.map((b) => (
-                    <div
-                      key={b.label}
-                      className={`rounded-t ${b.color} progress-glow transition-all`}
-                      style={{ height: `${Math.max(6, (b.value / max) * 100)}%` }}
-                    />
-                  ))}
-                </div>
-                <div className="grid grid-cols-3 gap-6 px-2 mt-3 text-center">
-                  {bars.map((b) => (
-                    <div key={b.label}>
-                      <div className="font-mono text-label-caps uppercase text-tertiary tracking-widest">
-                        {b.label}
-                      </div>
-                      <div className="font-mono text-body-md text-on-surface mt-1">
-                        {b.value}h
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })()}
-        </section>
-
-        <section className="md:col-span-4 glass-card p-8 rounded-xl">
-          <h3 className="font-mono text-label-caps uppercase tracking-widest text-on-surface-variant mb-6">
-            Top Languages
-          </h3>
-          <div className="space-y-6">
-            {topLanguages
-              .filter((l) => l.percent > 0)
-              .map((l) => (
-                <TechStackBar
-                  key={l.name}
-                  label={l.name}
-                  percent={l.percent}
-                />
-              ))}
-          </div>
-        </section>
-
-        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
-          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
-            Authors Reviewed
-          </span>
-          <div>
-            <span className="font-mono text-headline-xl block">
-              {totals.distinctAuthorsReviewed}
-            </span>
-            <span className="text-tertiary font-mono text-code-sm">
-              distinct engineers · last year
-            </span>
-          </div>
-        </div>
-
-        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
-          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
-            Repos Touched
-          </span>
-          <div>
-            <span className="font-mono text-headline-xl block">
-              {totals.reposTouched}
-            </span>
-            <span className="text-tertiary font-mono text-code-sm">
-              codebases contributed to
-            </span>
-          </div>
-        </div>
-
-        <div className="md:col-span-4 glass-card p-6 rounded-xl flex flex-col justify-between">
-          <span className="font-mono text-label-caps text-primary uppercase tracking-widest mb-4 block">
-            Refactor Share
-          </span>
-          <div>
-            {(() => {
-              const total = Object.values(commitTypes).reduce(
-                (a, b) => a + b,
-                0,
-              ) || 1;
-              const consolidation = ((commitTypes.refactor ?? 0) + (commitTypes.fix ?? 0)) / total;
-              return (
-                <>
-                  <span className="font-mono text-headline-xl block">
-                    {Math.round(consolidation * 100)}%
-                  </span>
-                  <span className="text-tertiary font-mono text-code-sm">
-                    of commits are refactor / fix
-                  </span>
-                </>
-              );
-            })()}
-          </div>
         </div>
 
         <section className="md:col-span-12 glass-card p-6 rounded-xl">
           <div className="mb-4">
-            <h3 className="font-mono text-headline-md mb-1">Commit Composition</h3>
+            <h3 className="font-mono text-headline-md mb-1">
+              Commit Composition
+            </h3>
             <p className="text-tertiary font-mono text-code-sm">
               How my work splits between feature, refactor, fix, and infra —
               sampled across {prSampleSize} recent PRs
             </p>
           </div>
           <CommitTypeDonut data={commitTypes} />
-        </section>
-
-        <section className="md:col-span-12 glass-card p-6 rounded-xl">
-          <div className="mb-4">
-            <h3 className="font-mono text-headline-md mb-1">PR Size</h3>
-            <p className="text-tertiary font-mono text-code-sm">
-              Merged PRs by lines changed (sample of {prSampleSize})
-            </p>
-          </div>
-          <BarHistogram
-            data={sizeHistogram}
-            order={["S", "M", "L", "XL"]}
-            color="bg-primary/70"
-          />
-          <p className="mt-4 font-mono text-code-sm text-tertiary">
-            S &lt;200 · M 200-499 · L 500-999 · XL 1000+
-          </p>
         </section>
 
         <section className="md:col-span-12 glass-card p-6 rounded-xl">
@@ -278,7 +206,7 @@ export default function ImpactPage() {
             </span>
           </div>
         </section>
-      </div>
+      </section>
     </div>
   );
 }
