@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
+import MonthlyVelocity from "@/components/metrics/MonthlyVelocity";
+import BarHistogram from "@/components/metrics/BarHistogram";
+import DayHourHeatmap from "@/components/metrics/DayHourHeatmap";
 import TechStackBar from "@/components/ui/TechStackBar";
 import stats from "@/data/generated/stats.json";
 import contributions from "@/data/generated/contributions.json";
@@ -12,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default function ImpactPage() {
-  const { totals, cycle, topLanguages } = stats;
+  const { totals, cycle, topLanguages, monthly, sizeHistogram, ttfrHistogram, dayHourHeatmap, prSampleSize } = stats;
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
@@ -175,13 +178,78 @@ export default function ImpactPage() {
         </section>
 
         <section className="md:col-span-12 glass-card p-6 rounded-xl">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="font-mono text-headline-md mb-1">
+                Monthly Velocity
+              </h3>
+              <p className="text-tertiary font-mono text-code-sm">
+                PRs merged and reviewed per month · last 12 months
+              </p>
+            </div>
+          </div>
+          <MonthlyVelocity merged={monthly.merged} reviewed={monthly.reviewed} />
+        </section>
+
+        <section className="md:col-span-6 glass-card p-6 rounded-xl">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="font-mono text-headline-md mb-1">PR Size</h3>
+              <p className="text-tertiary font-mono text-code-sm">
+                Merged PRs by lines changed (last {prSampleSize} sampled)
+              </p>
+            </div>
+          </div>
+          <BarHistogram
+            data={sizeHistogram}
+            order={["S", "M", "L", "XL"]}
+            color="bg-primary/70"
+          />
+          <p className="mt-4 font-mono text-code-sm text-tertiary">
+            S &lt;200 · M 200-499 · L 500-999 · XL 1000+
+          </p>
+        </section>
+
+        <section className="md:col-span-6 glass-card p-6 rounded-xl">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h3 className="font-mono text-headline-md mb-1">
+                Time To First Review
+              </h3>
+              <p className="text-tertiary font-mono text-code-sm">
+                Hours from PR opened to first human review
+              </p>
+            </div>
+          </div>
+          <BarHistogram
+            data={ttfrHistogram}
+            order={["<1h", "1-4h", "4-24h", "1-3d", ">3d"]}
+            color="bg-secondary"
+          />
+        </section>
+
+        <section className="md:col-span-12 glass-card p-6 rounded-xl">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="font-mono text-headline-md mb-1">
+                When I Ship
+              </h3>
+              <p className="text-tertiary font-mono text-code-sm">
+                Commit distribution by day of week × hour of day (UTC)
+              </p>
+            </div>
+          </div>
+          <DayHourHeatmap grid={dayHourHeatmap} />
+        </section>
+
+        <section className="md:col-span-12 glass-card p-6 rounded-xl">
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
             <p className="font-mono text-code-sm text-tertiary">
               Generated at{" "}
               <span className="text-on-surface">
                 {new Date(stats.generatedAt).toUTCString()}
               </span>{" "}
-              — Source: public GitHub API
+              — Source: GitHub API
             </p>
             <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
               build:auto · cron:6h
