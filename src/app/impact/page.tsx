@@ -89,7 +89,7 @@ export default function ImpactPage() {
           <Tile
             label="PRs Merged"
             value={formatNumber(totals.prsMergedAllTime)}
-            sub="across all public and private PRs"
+            sub="GitHub-tracked · since May 2017"
             tone="primary"
           />
           <Tile
