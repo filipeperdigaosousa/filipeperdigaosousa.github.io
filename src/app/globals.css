@@ -1,26 +1,156 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-background: #121317;
+  --color-surface: #121317;
+  --color-surface-container: #1e1f23;
+  --color-surface-container-low: #1a1b1f;
+  --color-surface-container-high: #292a2e;
+  --color-surface-container-lowest: #0d0e12;
+  --color-surface-variant: #343539;
+  --color-surface-bright: #38393d;
+
+  --color-primary: #adc6ff;
+  --color-primary-container: #4b8eff;
+  --color-primary-fixed-dim: #adc6ff;
+  --color-on-primary: #002e69;
+  --color-on-primary-container: #00285c;
+
+  --color-secondary: #42e355;
+  --color-secondary-container: #04c339;
+  --color-secondary-fixed-dim: #42e355;
+  --color-on-secondary: #00390a;
+  --color-on-secondary-container: #00480f;
+
+  --color-tertiary: #c8c6c5;
+  --color-tertiary-container: #929090;
+
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+
+  --color-on-surface: #e3e2e7;
+  --color-on-surface-variant: #c1c6d7;
+  --color-on-tertiary-container: #2a2a29;
+
+  --color-outline: #8b90a0;
+  --color-outline-variant: #414755;
+
+  --radius-DEFAULT: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 8px;
+  --radius-full: 12px;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 64px;
+
+  --container-content: 1200px;
+
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 1;
+  --text-label-caps--letter-spacing: 0.1em;
+  --text-label-caps--font-weight: 600;
+
+  --text-code-sm: 14px;
+  --text-code-sm--line-height: 1.4;
+  --text-code-sm--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.5;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 1.3;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-xl-mobile: 32px;
+  --text-headline-xl-mobile--line-height: 1.2;
+  --text-headline-xl-mobile--font-weight: 700;
+
+  --text-headline-xl: 48px;
+  --text-headline-xl--line-height: 1.1;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 700;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
+    -webkit-font-smoothing: antialiased;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-primary) 30%, transparent);
+    color: var(--color-primary);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-surface-variant);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-outline-variant);
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glass-card:hover {
+    border-color: rgba(173, 198, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 40px rgba(173, 198, 255, 0.05);
+  }
+  .glow-secondary {
+    box-shadow: 0 0 30px -5px rgba(66, 227, 85, 0.15);
+  }
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(173, 198, 255, 0.15);
+  }
+  .terminal-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background: var(--color-primary);
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .timeline-line {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(173, 198, 255, 0.2) 15%,
+      rgba(173, 198, 255, 0.2) 85%,
+      transparent 100%
+    );
+  }
+  .progress-glow {
+    box-shadow: 0 0 10px currentColor;
+  }
 }

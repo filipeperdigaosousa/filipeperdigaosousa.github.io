@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-07-15T09:54:47.052Z",
+  "totals": {
+    "contributionsLastYear": 2622,
+    "currentStreak": 3,
+    "longestStreak": 6,
+    "topLanguage": "Ruby",
+    "prsMerged": 1156,
+    "prsReviewed": 0,
+    "publicRepos": 13
+  },
+  "cycle": {
+    "p50": 17.8,
+    "mean": 35.6,
+    "p90": 72.9
+  },
+  "topLanguages": [
+    {
+      "name": "Ruby",
+      "percent": 99
+    },
+    {
+      "name": "SCSS",
+      "percent": 1
+    }
+  ]
+}
