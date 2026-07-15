@@ -1,5 +1,6 @@
 import type { ExperienceEntry } from "@/data/experience";
 import { formatRange } from "@/lib/format";
+import CompanyLogo from "./CompanyLogo";
 
 interface TimelineItemProps {
   entry: ExperienceEntry;
@@ -40,12 +41,23 @@ export default function TimelineItem({
           <span className="font-mono text-label-caps text-secondary uppercase tracking-widest mb-3 block opacity-80">
             {formatRange(entry.start, entry.end)}
           </span>
-          <h3 className="font-mono text-headline-md text-primary mb-1">
-            {entry.company}
-          </h3>
-          <p className="font-mono text-code-sm text-on-surface-variant mb-6 font-bold tracking-widest uppercase">
-            {entry.role}
-          </p>
+          <div className="flex items-center gap-4 mb-6">
+            <CompanyLogo
+              company={entry.company}
+              domain={entry.domain}
+              logo={entry.logo}
+              size={48}
+              className="shrink-0"
+            />
+            <div>
+              <h3 className="font-mono text-headline-md text-primary leading-tight">
+                {entry.company}
+              </h3>
+              <p className="font-mono text-code-sm text-on-surface-variant font-bold tracking-widest uppercase mt-1">
+                {entry.role}
+              </p>
+            </div>
+          </div>
 
           <p className="text-body-md text-on-surface/80 mb-6">
             {entry.summary}

@@ -91,33 +91,34 @@ async function fetchProfile() {
   const now = new Date();
   const from = new Date(now);
   from.setUTCFullYear(from.getUTCFullYear() - 1);
+  const fromDate = from.toISOString().slice(0, 10);
+
   const query = `
-    query($user:String!, $from:DateTime!, $to:DateTime!) {
+    query($user:String!, $mergedQ:String!, $reviewedQ:String!, $openedQ:String!) {
       user(login:$user) {
         login
         name
         publicRepos: repositories(privacy:PUBLIC) { totalCount }
         pullRequests(states:[MERGED]) { totalCount }
-        contributionsCollection(from:$from, to:$to) {
-          totalPullRequestReviewContributions
-          totalCommitContributions
-          totalPullRequestContributions
-        }
       }
+      mergedLastYear: search(type:ISSUE, query:$mergedQ) { issueCount }
+      reviewedLastYear: search(type:ISSUE, query:$reviewedQ) { issueCount }
+      openedLastYear: search(type:ISSUE, query:$openedQ) { issueCount }
     }`;
+
   const res = await gql(query, {
     user: USER,
-    from: from.toISOString(),
-    to: now.toISOString(),
+    mergedQ: `is:pr author:${USER} is:merged merged:>=${fromDate}`,
+    reviewedQ: `is:pr reviewed-by:${USER} -author:${USER} created:>=${fromDate}`,
+    openedQ: `is:pr author:${USER} created:>=${fromDate}`,
   });
+
   return {
     publicRepos: res.user.publicRepos.totalCount,
-    prsMerged: res.user.pullRequests.totalCount,
-    prsMergedLastYear: res.user.contributionsCollection.totalPullRequestContributions,
-    prsReviewed:
-      res.user.contributionsCollection.totalPullRequestReviewContributions,
-    commitsLastYear:
-      res.user.contributionsCollection.totalCommitContributions,
+    prsMergedTotal: res.user.pullRequests.totalCount,
+    prsMergedLastYear: res.mergedLastYear.issueCount,
+    prsOpenedLastYear: res.openedLastYear.issueCount,
+    prsReviewedLastYear: res.reviewedLastYear.issueCount,
   };
 }
 
@@ -197,9 +198,11 @@ async function main() {
       currentStreak,
       longestStreak,
       topLanguage,
-      prsMerged: prof.prsMerged,
-      prsReviewed: prof.prsReviewed,
+      prsMerged: prof.prsMergedLastYear,
+      prsOpened: prof.prsOpenedLastYear,
+      prsReviewed: prof.prsReviewedLastYear,
       publicRepos: prof.publicRepos,
+      prsMergedAllTime: prof.prsMergedTotal,
     },
     cycle,
     topLanguages: langs,
@@ -215,7 +218,7 @@ async function main() {
   );
 
   console.log(
-    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMerged} PRs merged · ${prof.prsReviewed} reviewed`,
+    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMergedLastYear} PRs merged (year) · ${prof.prsReviewedLastYear} reviewed (year)`,
   );
 }
 

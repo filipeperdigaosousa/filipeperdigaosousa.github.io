@@ -7,14 +7,37 @@ export interface ExperienceEntry {
   summary: string;
   highlights: string[];
   note?: string;
+  domain?: string;
+  logo?: string;
 }
 
 export const experience: ExperienceEntry[] = [
   {
+    company: "Glazed",
+    role: "Full-Stack Software Engineer",
+    start: "2016-12",
+    end: null,
+    domain: "glazedsolutions.com",
+    logo: "/logos/glazed.jpeg",
+    stack: ["Ruby on Rails", "Node.js", "React", "TypeScript", "PostgreSQL"],
+    summary:
+      "Home consultancy since 2016. WeChangers, Pasabi, and PlayerData engagements below were delivered through Glazed.",
+    highlights: [
+      "9+ years shipping client work across web and mobile, front-end and back-end.",
+      "JavaScript, Ruby on Rails, Node.js, React, TypeScript in production across engagements.",
+      "PostgreSQL and MongoDB data layers.",
+      "Cloud deployments on AWS and GCP with Terraform and Kubernetes.",
+      "Drove CI/CD adoption and engineering practice across teams.",
+    ],
+    note: "Umbrella consultancy — WeChangers, Pasabi, and PlayerData were placements delivered through Glazed.",
+  },
+  {
     company: "PlayerData",
     role: "Senior Full-Stack Engineer",
     start: "2024-10",
-    end: null,
+    end: "2026-07",
+    domain: "playerdata.co",
+    logo: "/logos/playerdata.jpeg",
     stack: [
       "Ruby on Rails",
       "GraphQL",
@@ -35,12 +58,15 @@ export const experience: ExperienceEntry[] = [
       "Optimised backend performance across Rails and GraphQL — eliminated N+1 queries, introduced DataLoader batching.",
       "Assumed Pod Lead while remaining hands-on — delivery planning, risk management, stakeholder coordination.",
     ],
+    note: "Placement delivered through Glazed.",
   },
   {
     company: "Pasabi",
     role: "Fullstack Engineer / Tech Lead",
     start: "2022-01",
     end: "2024-08",
+    domain: "pasabi.com",
+    logo: "/logos/pasabi.jpeg",
     stack: [
       "Node.js",
       "TypeScript",
@@ -64,29 +90,15 @@ export const experience: ExperienceEntry[] = [
       "Introduced CI features via GitHub Actions to enhance automated workflows and build processes.",
       "Designed and deployed APIs for seamless customer integrations.",
     ],
-  },
-  {
-    company: "Glazed",
-    role: "Full-Stack Software Engineer",
-    start: "2016-12",
-    end: null,
-    stack: ["Ruby on Rails", "Node.js", "React", "TypeScript", "PostgreSQL"],
-    summary:
-      "Home consultancy since 2016. PlayerData and Pasabi engagements listed above have all been delivered through Glazed.",
-    highlights: [
-      "9+ years shipping client work across web and mobile, front-end and back-end.",
-      "JavaScript, Ruby on Rails, Node.js, React, TypeScript in production across engagements.",
-      "PostgreSQL and MongoDB data layers.",
-      "Cloud deployments on AWS and GCP with Terraform and Kubernetes.",
-      "Drove CI/CD adoption and engineering practice across teams.",
-    ],
-    note: "Umbrella consultancy — PlayerData and Pasabi were placements delivered through Glazed.",
+    note: "Placement delivered through Glazed.",
   },
   {
     company: "WeChangers",
     role: "Full-Stack Engineer",
     start: "2017-01",
     end: "2021-12",
+    domain: "wechangers.com",
+    logo: "/logos/wechangers.jpeg",
     stack: [
       "Ruby on Rails",
       "React",
@@ -106,26 +118,15 @@ export const experience: ExperienceEntry[] = [
       "Crafted a Node.js web scraper.",
       "Restructured the website to a mobile-first approach using React.",
     ],
-  },
-  {
-    company: "Manolo Blahnik",
-    role: "Web Developer",
-    start: "2016-01",
-    end: "2017-01",
-    stack: ["React", "Node.js"],
-    summary: "Luxury e-commerce front-end modernisation.",
-    highlights: [
-      "Migrated the website from a monolithic flux architecture.",
-      "Introduced Redux to simplify and enhance state management.",
-      "Integrated with the customer's Node.js backend.",
-      "Updated the application lifecycle to improve performance.",
-    ],
+    note: "Placement delivered through Glazed.",
   },
   {
     company: "Deloitte Digital",
     role: "Web Developer",
     start: "2015-01",
     end: "2016-01",
+    domain: "deloittedigital.com",
+    logo: "/logos/deloitte.png",
     stack: ["AngularJS", "Node.js", "MongoDB"],
     summary:
       "Digital transformation tooling — insurance products and rapid prototyping platform.",

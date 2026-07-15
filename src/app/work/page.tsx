@@ -3,7 +3,7 @@ import TimelineItem from "@/components/work/TimelineItem";
 import { experience } from "@/data/experience";
 
 export const metadata: Metadata = {
-  title: "Experience — Filipe Sousa",
+  title: "Experience",
   description:
     "10 years of production web and mobile engineering — PlayerData, Pasabi, Glazed, WeChangers, Manolo Blahnik, Deloitte Digital.",
 };
@@ -16,12 +16,6 @@ export default function WorkPage() {
     <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <section className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div className="max-w-3xl">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-2 h-2 bg-secondary rounded-full animate-pulse shadow-[0_0_20px_rgba(66,227,85,0.6)]" />
-            <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
-              system.log: experience_chronology
-            </span>
-          </div>
           <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary mb-6">
             Career Architecture
           </h1>

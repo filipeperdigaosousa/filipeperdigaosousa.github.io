@@ -1,9 +1,3 @@
-export interface Skill {
-  name: string;
-  proficiency: number;
-  category: SkillCategory;
-}
-
 export type SkillCategory =
   | "language"
   | "framework"
@@ -11,29 +5,39 @@ export type SkillCategory =
   | "cloud"
   | "tooling";
 
+export interface Skill {
+  name: string;
+  category: SkillCategory;
+  featured?: boolean;
+}
+
 export const skills: Skill[] = [
-  { name: "TypeScript", proficiency: 95, category: "language" },
-  { name: "JavaScript", proficiency: 95, category: "language" },
-  { name: "Ruby", proficiency: 90, category: "language" },
-  { name: "SQL", proficiency: 85, category: "language" },
+  { name: "TypeScript", category: "language", featured: true },
+  { name: "JavaScript", category: "language" },
+  { name: "Ruby", category: "language", featured: true },
+  { name: "SQL", category: "language" },
 
-  { name: "React Native", proficiency: 92, category: "framework" },
-  { name: "React", proficiency: 92, category: "framework" },
-  { name: "Ruby on Rails", proficiency: 92, category: "framework" },
-  { name: "GraphQL", proficiency: 88, category: "framework" },
-  { name: "Node.js", proficiency: 85, category: "framework" },
-  { name: "Vue", proficiency: 70, category: "framework" },
+  { name: "React Native", category: "framework", featured: true },
+  { name: "React", category: "framework", featured: true },
+  { name: "Ruby on Rails", category: "framework", featured: true },
+  { name: "GraphQL", category: "framework", featured: true },
+  { name: "Node.js", category: "framework", featured: true },
+  { name: "Vue", category: "framework" },
+  { name: "Expo", category: "framework" },
+  { name: "REST", category: "framework" },
+  { name: "WebSockets", category: "framework" },
 
-  { name: "PostgreSQL", proficiency: 88, category: "storage" },
-  { name: "MongoDB", proficiency: 75, category: "storage" },
+  { name: "PostgreSQL", category: "storage", featured: true },
+  { name: "MongoDB", category: "storage" },
 
-  { name: "GCP", proficiency: 78, category: "cloud" },
-  { name: "AWS", proficiency: 75, category: "cloud" },
-  { name: "Kubernetes", proficiency: 65, category: "cloud" },
-  { name: "Terraform", proficiency: 70, category: "cloud" },
+  { name: "GCP", category: "cloud" },
+  { name: "AWS", category: "cloud" },
+  { name: "Kubernetes", category: "cloud" },
+  { name: "Terraform", category: "cloud" },
+  { name: "Docker", category: "cloud" },
 
-  { name: "Git", proficiency: 92, category: "tooling" },
-  { name: "Docker", proficiency: 80, category: "tooling" },
+  { name: "Git", category: "tooling" },
+  { name: "GitHub Actions", category: "tooling" },
 ];
 
 export const skillsByCategory: Record<SkillCategory, Skill[]> = {
@@ -44,11 +48,12 @@ export const skillsByCategory: Record<SkillCategory, Skill[]> = {
   tooling: skills.filter((s) => s.category === "tooling"),
 };
 
-export const featuredSkills: Skill[] = [
-  skills.find((s) => s.name === "TypeScript")!,
-  skills.find((s) => s.name === "React Native")!,
-  skills.find((s) => s.name === "Ruby on Rails")!,
-  skills.find((s) => s.name === "GraphQL")!,
-  skills.find((s) => s.name === "Node.js")!,
-  skills.find((s) => s.name === "PostgreSQL")!,
-];
+export const featuredSkills = skills.filter((s) => s.featured);
+
+export const categoryLabels: Record<SkillCategory, string> = {
+  language: "Languages",
+  framework: "Frameworks & Libraries",
+  storage: "Storage",
+  cloud: "Cloud & Infra",
+  tooling: "Tooling",
+};

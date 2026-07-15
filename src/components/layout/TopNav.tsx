@@ -1,10 +1,11 @@
 import Link from "next/link";
+import Logo from "@/components/ui/Logo";
+import { profile } from "@/data/profile";
 
 const links = [
   { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
   { href: "/impact", label: "Impact" },
-  { href: "/labs", label: "Labs" },
 ];
 
 export default function TopNav() {
@@ -13,13 +14,11 @@ export default function TopNav() {
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full max-w-content mx-auto">
         <Link
           href="/"
-          className="flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
+          className="flex items-center gap-3 cursor-pointer active:scale-95 transition-all"
         >
-          <span className="material-symbols-outlined text-primary text-headline-md">
-            terminal
-          </span>
+          <Logo size={32} />
           <span className="font-mono text-headline-md font-bold text-primary tracking-tighter">
-            SYS.LOG_
+            {profile.name}
           </span>
         </Link>
         <nav className="hidden md:flex gap-8">
@@ -33,11 +32,6 @@ export default function TopNav() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-4">
-          <span className="material-symbols-outlined text-primary cursor-pointer active:scale-95">
-            settings_ethernet
-          </span>
-        </div>
       </div>
     </header>
   );

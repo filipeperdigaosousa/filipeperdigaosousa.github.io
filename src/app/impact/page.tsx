@@ -6,7 +6,7 @@ import contributions from "@/data/generated/contributions.json";
 import { formatNumber } from "@/lib/format";
 
 export const metadata: Metadata = {
-  title: "Impact — Filipe Sousa",
+  title: "Impact",
   description:
     "Live engineering metrics — contribution activity, PR throughput, cycle time, tech stack density. Refreshed every six hours from public GitHub data.",
 };
@@ -128,28 +128,39 @@ export default function ImpactPage() {
               </div>
             </div>
           </div>
-          <div className="h-48 w-full flex items-end gap-6 px-2">
-            {[
+          {(() => {
+            const bars = [
               { label: "p50", value: cycle.p50, color: "bg-secondary" },
               { label: "mean", value: cycle.mean, color: "bg-primary/60" },
               { label: "p90", value: cycle.p90, color: "bg-primary/30" },
-            ].map((b) => {
-              const max = cycle.p90 * 1.1;
-              const h = Math.max(8, (b.value / max) * 100);
-              return (
-                <div key={b.label} className="flex-1 flex flex-col items-center gap-2">
-                  <div
-                    className={`w-full rounded-t ${b.color} transition-all`}
-                    style={{ height: `${h}%` }}
-                  />
-                  <div className="text-code-sm font-mono text-tertiary uppercase">
-                    {b.label}
-                  </div>
-                  <div className="font-mono text-body-md">{b.value}h</div>
+            ];
+            const max = Math.max(cycle.p90 * 1.1, 1);
+            return (
+              <div>
+                <div className="h-48 w-full grid grid-cols-3 gap-6 px-2 items-end">
+                  {bars.map((b) => (
+                    <div
+                      key={b.label}
+                      className={`rounded-t ${b.color} progress-glow transition-all`}
+                      style={{ height: `${Math.max(6, (b.value / max) * 100)}%` }}
+                    />
+                  ))}
                 </div>
-              );
-            })}
-          </div>
+                <div className="grid grid-cols-3 gap-6 px-2 mt-3 text-center">
+                  {bars.map((b) => (
+                    <div key={b.label}>
+                      <div className="font-mono text-label-caps uppercase text-tertiary tracking-widest">
+                        {b.label}
+                      </div>
+                      <div className="font-mono text-body-md text-on-surface mt-1">
+                        {b.value}h
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
         </section>
 
         <section className="md:col-span-4 glass-card p-8 rounded-xl">

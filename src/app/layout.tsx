@@ -18,16 +18,19 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Filipe Sousa — Senior Full-Stack Engineer",
+  title: {
+    default: "Filipe Sousa | Home",
+    template: "Filipe Sousa | %s",
+  },
   description:
     "Senior full-stack engineer. React Native + TypeScript on the front, Ruby on Rails + GraphQL on the back. Portfolio, experience, and live engineering metrics.",
   metadataBase: new URL("https://filipeperdigaosousa.github.io"),
   openGraph: {
-    title: "Filipe Sousa — Senior Full-Stack Engineer",
+    title: "Filipe Sousa | Portfolio",
     description:
       "React Native + Ruby on Rails. 10y shipping production apps. Live engineering metrics.",
     url: "https://filipeperdigaosousa.github.io",
-    siteName: "filipesousa",
+    siteName: "Filipe Sousa",
     type: "website",
   },
 };
