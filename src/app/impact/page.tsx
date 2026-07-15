@@ -171,9 +171,15 @@ export default function ImpactPage() {
             Top Languages
           </h3>
           <div className="space-y-6">
-            {topLanguages.map((l) => (
-              <TechStackBar key={l.name} label={l.name} percent={l.percent} />
-            ))}
+            {topLanguages
+              .filter((l) => l.percent > 0)
+              .map((l) => (
+                <TechStackBar
+                  key={l.name}
+                  label={l.name}
+                  percent={l.percent}
+                />
+              ))}
           </div>
         </section>
 
