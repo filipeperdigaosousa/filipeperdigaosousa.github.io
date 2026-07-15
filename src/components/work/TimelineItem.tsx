@@ -1,6 +1,21 @@
+import { Fragment } from "react";
 import type { ExperienceEntry } from "@/data/experience";
 import { formatRange } from "@/lib/format";
 import CompanyLogo from "./CompanyLogo";
+
+function renderInlineBold(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="text-primary font-semibold">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <Fragment key={i}>{part}</Fragment>;
+  });
+}
 
 interface TimelineItemProps {
   entry: ExperienceEntry;
@@ -69,7 +84,7 @@ export default function TimelineItem({
                 <span className="material-symbols-outlined text-primary text-sm mt-1">
                   subdirectory_arrow_right
                 </span>
-                <span className="text-on-surface/80">{h}</span>
+                <span className="text-on-surface/80">{renderInlineBold(h)}</span>
               </li>
             ))}
           </ul>
