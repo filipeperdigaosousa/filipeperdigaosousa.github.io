@@ -33,6 +33,7 @@ export default function HomePage() {
                 I enjoy taking complex product ideas from architecture
                 through production, working across{" "}
                 <span className="text-secondary">Ruby on Rails</span>,{" "}
+                <span className="text-secondary">JavaScript</span>,{" "}
                 <span className="text-secondary">React</span>,{" "}
                 <span className="text-secondary">React Native</span>,{" "}
                 <span className="text-secondary">GraphQL</span>
