@@ -166,7 +166,7 @@
 @media print {
   @page {
     size: A4;
-    margin: 14mm 12mm;
+    margin: 0;
   }
   html,
   body {
@@ -174,23 +174,41 @@
     color: var(--color-on-surface) !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    color-adjust: exact;
   }
+  body {
+    margin: 0 !important;
+  }
+  /* hide site chrome */
   header:has(nav),
   footer,
   nav[class*="fixed"],
+  canvas,
   .print\:hidden {
     display: none !important;
   }
   main {
     padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .resume-shell {
+    background: var(--color-background) !important;
+    min-height: 100vh;
   }
   .resume-page {
     max-width: 100% !important;
-    padding: 0 !important;
+    padding: 14mm 12mm !important;
+    background: var(--color-background) !important;
   }
   .resume-entry {
     page-break-inside: avoid;
     break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid-page;
   }
   a {
     color: inherit !important;
