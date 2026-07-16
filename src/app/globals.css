@@ -166,7 +166,7 @@
 @media print {
   @page {
     size: A4;
-    margin: 12mm 0;
+    margin: 0;
   }
   html,
   body {
@@ -194,7 +194,7 @@
   }
   .resume-page {
     max-width: 100% !important;
-    padding: 0 12mm !important;
+    padding: 10mm 12mm !important;
     background: var(--color-background) !important;
   }
   .resume-entry {

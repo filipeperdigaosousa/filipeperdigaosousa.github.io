@@ -69,7 +69,12 @@ export default function ResumePage() {
               </ul>
             </div>
             <p className="mt-3 text-[13px] leading-relaxed text-on-surface/85 max-w-3xl">
-              {profile.tagline}
+              I enjoy taking complex product ideas from architecture through
+              production, working across Ruby on Rails, JavaScript, React,
+              React Native, GraphQL and cloud infrastructure. More recently
+              I&apos;ve been leading cross-functional engineering pods while
+              remaining a hands-on contributor — owning technical direction,
+              delivery planning and implementation.
             </p>
           </div>
         </header>
