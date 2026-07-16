@@ -49,7 +49,7 @@ export default function YearlyActivity({ years }: YearlyActivityProps) {
             key={y.year}
             className="font-mono text-[10px] text-tertiary text-center uppercase tracking-widest"
           >
-            {String(y.year).slice(2)}
+            {y.year}
           </div>
         ))}
       </div>

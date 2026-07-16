@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -38,6 +38,19 @@ jobs:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN || github.token }}
           GH_USER: ${{ github.repository_owner }}
         run: node scripts/fetch-metrics.mjs
+
+      - name: Persist metrics snapshot to repo
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "metrics-bot"
+          git config user.email "actions@github.com"
+          git add src/data/generated/stats.json src/data/generated/contributions.json
+          if git diff --cached --quiet; then
+            echo "No metrics changes to commit"
+          else
+            git commit -m "chore(metrics): refresh snapshot [skip ci]"
+            git push
+          fi
 
       - name: Build Next.js static export
         run: pnpm build

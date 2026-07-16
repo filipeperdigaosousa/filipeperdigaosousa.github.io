@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-16T10:00:14.858Z",
+  "generatedAt": "2026-07-16T10:08:33.803Z",
   "totals": {
-    "contributionsLastYear": 2707,
+    "contributionsLastYear": 2708,
     "currentStreak": 4,
     "longestStreak": 6,
     "topLanguage": "Ruby",
@@ -12,7 +12,7 @@
     "prsMergedAllTime": 1159,
     "distinctAuthorsReviewed": 16,
     "reposTouched": 8,
-    "careerTotal": 15483,
+    "careerTotal": 15484,
     "firstActiveYear": 2016,
     "yearsShipping": 11,
     "peakYear": 2022,
@@ -61,7 +61,7 @@
     },
     {
       "year": 2026,
-      "total": 1674
+      "total": 1675
     }
   ],
   "cycle": {
@@ -73,7 +73,7 @@
   "topLanguages": [
     {
       "name": "Ruby",
-      "percent": 71
+      "percent": 70
     },
     {
       "name": "TypeScript",
@@ -85,7 +85,7 @@
     },
     {
       "name": "CSS",
-      "percent": 2
+      "percent": 1
     },
     {
       "name": "SCSS",
@@ -118,5 +118,8 @@
     "ci": 2,
     "other": 15
   },
-  "prSampleSize": 500
+  "prSampleSize": 500,
+  "snapshot": {
+    "hasStale": false
+  }
 }

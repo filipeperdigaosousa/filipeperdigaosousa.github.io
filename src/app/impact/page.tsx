@@ -63,6 +63,12 @@ export default function ImpactPage() {
 
   const activeDays = contributions.days.filter((d) => d.count > 0).length;
 
+  const snapshot = (stats as { snapshot?: { hasStale: boolean; snapshotAt?: string; staleFields?: string[] } }).snapshot;
+  const isStale = snapshot?.hasStale;
+  const snapshotDate = snapshot?.snapshotAt
+    ? new Date(snapshot.snapshotAt).toUTCString()
+    : null;
+
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
@@ -79,6 +85,18 @@ export default function ImpactPage() {
           Live engineering telemetry. Refreshed every 6 hours from the GitHub
           API via a scheduled GitHub Action.
         </p>
+        {isStale && snapshotDate ? (
+          <div className="mt-6 glass-card rounded-xl px-4 py-3 inline-flex items-center gap-3 border-primary/20">
+            <span className="material-symbols-outlined text-primary text-lg">
+              lock_clock
+            </span>
+            <span className="font-mono text-code-sm text-on-surface-variant">
+              Last-12-month tiles are a snapshot from {snapshotDate}. Some
+              private-org access was lost — values preserved from the last
+              successful fetch.
+            </span>
+          </div>
+        ) : null}
       </header>
 
       <section className="mb-4">

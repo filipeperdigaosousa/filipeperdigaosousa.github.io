@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { graphql } from "@octokit/graphql";
-import { writeFile, mkdir } from "node:fs/promises";
+import { writeFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 const USER = process.env.GH_USER || "filipeperdigaosousa";
@@ -345,9 +345,119 @@ function countDistinctRepos(prs, extraRepos = new Map()) {
   return { distinctCount: merged.size };
 }
 
+async function loadPrevious() {
+  try {
+    const raw = await readFile(path.join(OUT_DIR, "stats.json"), "utf8");
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+const DEGRADE_THRESHOLD = 0.4;
+const DEGRADE_ABS_MIN = 40;
+
+function isDegraded(newVal, prevVal, absMin = DEGRADE_ABS_MIN) {
+  if (!prevVal || prevVal < absMin) return false;
+  return newVal < prevVal * DEGRADE_THRESHOLD;
+}
+
+function pickHigher(newVal, prevVal) {
+  const a = typeof newVal === "number" ? newVal : 0;
+  const b = typeof prevVal === "number" ? prevVal : 0;
+  return Math.max(a, b);
+}
+
+function reconcile(fresh, prev) {
+  if (!prev) return { stats: fresh, staleFields: [] };
+
+  const staleFields = [];
+  const stats = JSON.parse(JSON.stringify(fresh));
+
+  const rescueSet = (field, getter, setter) => {
+    if (isDegraded(getter(fresh), getter(prev))) {
+      setter(stats, getter(prev));
+      staleFields.push(field);
+    }
+  };
+
+  rescueSet(
+    "prsMerged",
+    (s) => s.totals.prsMerged,
+    (s, v) => (s.totals.prsMerged = v),
+  );
+  rescueSet(
+    "prsOpened",
+    (s) => s.totals.prsOpened,
+    (s, v) => (s.totals.prsOpened = v),
+  );
+  rescueSet(
+    "prsReviewed",
+    (s) => s.totals.prsReviewed,
+    (s, v) => (s.totals.prsReviewed = v),
+  );
+
+  if (staleFields.includes("prsMerged")) {
+    stats.cycle = prev.cycle;
+    stats.sizeHistogram = prev.sizeHistogram;
+    stats.ttfrHistogram = prev.ttfrHistogram;
+    stats.commitTypes = prev.commitTypes;
+    stats.prSampleSize = prev.prSampleSize;
+    staleFields.push("cycle", "sizeHistogram", "ttfrHistogram", "commitTypes");
+  }
+
+  const mono = [
+    "prsMergedAllTime",
+    "careerTotal",
+    "distinctAuthorsReviewed",
+    "reposTouched",
+    "peakYearTotal",
+    "publicRepos",
+  ];
+  for (const key of mono) {
+    stats.totals[key] = pickHigher(stats.totals[key], prev.totals?.[key]);
+  }
+  if (prev.totals?.peakYear && stats.totals.peakYearTotal === prev.totals.peakYearTotal) {
+    stats.totals.peakYear = prev.totals.peakYear;
+  }
+  stats.totals.yearsShipping = pickHigher(
+    stats.totals.yearsShipping,
+    prev.totals?.yearsShipping,
+  );
+
+  if (prev.careerYears?.length) {
+    const prevMap = new Map(prev.careerYears.map((y) => [y.year, y.total]));
+    stats.careerYears = stats.careerYears.map((y) => ({
+      year: y.year,
+      total: pickHigher(y.total, prevMap.get(y.year) ?? 0),
+    }));
+  }
+
+  stats.totals.contributionsLastYear = pickHigher(
+    stats.totals.contributionsLastYear,
+    prev.totals?.contributionsLastYear,
+  );
+
+  if (staleFields.length) {
+    stats.snapshot = {
+      hasStale: true,
+      snapshotAt: prev.generatedAt,
+      staleFields,
+    };
+    console.log(
+      `[fetch-metrics] detected data loss, falling back to previous values for: ${staleFields.join(", ")}`,
+    );
+  } else {
+    stats.snapshot = { hasStale: false };
+  }
+  return { stats, staleFields };
+}
+
 async function main() {
   console.log(`[fetch-metrics] user=${USER}`);
   await mkdir(OUT_DIR, { recursive: true });
+
+  const previous = await loadPrevious();
 
   const [contributions, prof, prs, langs, reviewedInfo, careerYears] =
     await Promise.all([
@@ -374,7 +484,7 @@ async function main() {
   const commitTypes = computeCommitTypes(prs);
   const repoInfo = countDistinctRepos(prs, reviewedInfo.repos);
 
-  const stats = {
+  const fresh = {
     generatedAt: new Date().toISOString(),
     totals: {
       contributionsLastYear: contributions.total,
@@ -403,6 +513,8 @@ async function main() {
     prSampleSize: prs.length,
   };
 
+  const { stats, staleFields } = reconcile(fresh, previous);
+
   await writeFile(
     path.join(OUT_DIR, "contributions.json"),
     JSON.stringify({ weeks: 52, days: contributions.days }, null, 2),
@@ -413,7 +525,7 @@ async function main() {
   );
 
   console.log(
-    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${prof.prsMergedLastYear} merged · ${prof.prsReviewedLastYear} reviewed · ${reviewedInfo.distinct} authors reviewed · ${repoInfo.distinctCount} repos touched · sampled ${prs.length} PRs`,
+    `[fetch-metrics] wrote ${contributions.days.length} days · ${contributions.total} contributions · ${stats.totals.prsMerged} merged · ${stats.totals.prsReviewed} reviewed · sampled ${prs.length} PRs${staleFields.length ? ` · fallback: ${staleFields.join(",")}` : ""}`,
   );
 }
 
