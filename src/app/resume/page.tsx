@@ -41,12 +41,12 @@ export default function ResumePage() {
 
       <div className="resume-page bg-background text-on-surface mx-auto max-w-4xl px-margin-mobile md:px-10 pt-2 pb-10 print:py-0 print:px-0">
         <header className="resume-header pb-5 mb-6 border-b border-white/10 grid grid-cols-[auto_1fr] gap-5 items-start">
-          <div className="relative shrink-0 rounded-lg overflow-hidden border border-white/10 w-24 h-24">
+          <div className="relative shrink-0 rounded-lg overflow-hidden border border-white/10 w-48 h-48">
             <Image
               src="/portrait.jpg"
               alt={`${profile.name} portrait`}
               fill
-              sizes="96px"
+              sizes="192px"
               className="object-cover"
               priority
             />
