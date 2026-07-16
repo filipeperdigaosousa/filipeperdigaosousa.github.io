@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
 import CommitTypeDonut from "@/components/metrics/CommitTypeDonut";
 import YearlyActivity from "@/components/metrics/YearlyActivity";
+import ContributionDiamond from "@/components/metrics/ContributionDiamond";
 import Typewriter from "@/components/ui/Typewriter";
 import stats from "@/data/generated/stats.json";
 import contributions from "@/data/generated/contributions.json";
@@ -48,6 +49,13 @@ function Tile({ label, value, sub, tone = "default" }: TileProps) {
 
 export default function ImpactPage() {
   const { totals, cycle, sizeHistogram, commitTypes, prSampleSize, careerYears } = stats;
+  const contributionMix = (stats as { contributionMix?: {
+    commits: number;
+    pullRequests: number;
+    codeReviews: number;
+    issues: number;
+    percent: { commits: number; pullRequests: number; codeReviews: number; issues: number };
+  } }).contributionMix;
 
   const yearsShipping = totals.yearsShipping;
   const mergeRate = Math.round((totals.prsMerged / totals.prsOpened) * 100);
@@ -162,6 +170,29 @@ export default function ImpactPage() {
             tone="secondary"
           />
         </div>
+
+        {contributionMix ? (
+          <div className="glass-card rounded-xl p-6 mt-gutter">
+            <div className="mb-4">
+              <h3 className="font-mono text-headline-md mb-1">
+                Contribution Mix
+              </h3>
+              <p className="text-tertiary font-mono text-code-sm">
+                How my last-12-month contributions split across commits,
+                reviews, PRs and issues
+              </p>
+            </div>
+            <ContributionDiamond
+              percent={contributionMix.percent}
+              raw={{
+                commits: contributionMix.commits,
+                pullRequests: contributionMix.pullRequests,
+                codeReviews: contributionMix.codeReviews,
+                issues: contributionMix.issues,
+              }}
+            />
+          </div>
+        ) : null}
       </section>
 
       <section className="mt-8 mb-4">

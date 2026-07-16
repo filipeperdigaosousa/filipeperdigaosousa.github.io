@@ -118,7 +118,7 @@ async function fetchProfile() {
   const fromDate = from.toISOString().slice(0, 10);
 
   const query = `
-    query($user:String!, $mergedQ:String!, $reviewedQ:String!, $openedQ:String!) {
+    query($user:String!, $mergedQ:String!, $reviewedQ:String!, $openedQ:String!, $issuesQ:String!) {
       user(login:$user) {
         login
         name
@@ -128,6 +128,7 @@ async function fetchProfile() {
       mergedLastYear: search(type:ISSUE, query:$mergedQ) { issueCount }
       reviewedLastYear: search(type:ISSUE, query:$reviewedQ) { issueCount }
       openedLastYear: search(type:ISSUE, query:$openedQ) { issueCount }
+      issuesLastYear: search(type:ISSUE, query:$issuesQ) { issueCount }
     }`;
 
   const res = await gql(query, {
@@ -135,6 +136,7 @@ async function fetchProfile() {
     mergedQ: `is:pr author:${USER} is:merged merged:>=${fromDate}`,
     reviewedQ: `is:pr reviewed-by:${USER} -author:${USER} created:>=${fromDate}`,
     openedQ: `is:pr author:${USER} created:>=${fromDate}`,
+    issuesQ: `is:issue author:${USER} created:>=${fromDate}`,
   });
 
   return {
@@ -143,6 +145,7 @@ async function fetchProfile() {
     prsMergedLastYear: res.mergedLastYear.issueCount,
     prsOpenedLastYear: res.openedLastYear.issueCount,
     prsReviewedLastYear: res.reviewedLastYear.issueCount,
+    issuesOpenedLastYear: res.issuesLastYear.issueCount,
   };
 }
 
@@ -406,6 +409,22 @@ function reconcile(fresh, prev) {
     staleFields.push("cycle", "sizeHistogram", "ttfrHistogram", "commitTypes");
   }
 
+  if (
+    prev.contributionMix &&
+    (staleFields.includes("prsReviewed") ||
+      staleFields.includes("prsOpened") ||
+      isDegraded(
+        fresh.contributionMix?.total ?? 0,
+        prev.contributionMix.total,
+        200,
+      ))
+  ) {
+    stats.contributionMix = prev.contributionMix;
+    stats.totals.issuesOpened =
+      prev.totals?.issuesOpened ?? stats.totals.issuesOpened;
+    staleFields.push("contributionMix");
+  }
+
   const mono = [
     "prsMergedAllTime",
     "careerTotal",
@@ -484,6 +503,31 @@ async function main() {
   const commitTypes = computeCommitTypes(prs);
   const repoInfo = countDistinctRepos(prs, reviewedInfo.repos);
 
+  const prsAuthored = prof.prsOpenedLastYear;
+  const prsReviewed = prof.prsReviewedLastYear;
+  const issuesOpened = prof.issuesOpenedLastYear;
+  const commitsDerived = Math.max(
+    0,
+    contributions.total - prsAuthored - prsReviewed - issuesOpened,
+  );
+  const diamondTotal = Math.max(
+    1,
+    commitsDerived + prsAuthored + prsReviewed + issuesOpened,
+  );
+  const contributionMix = {
+    commits: commitsDerived,
+    pullRequests: prsAuthored,
+    codeReviews: prsReviewed,
+    issues: issuesOpened,
+    total: diamondTotal,
+    percent: {
+      commits: Math.round((commitsDerived / diamondTotal) * 100),
+      pullRequests: Math.round((prsAuthored / diamondTotal) * 100),
+      codeReviews: Math.round((prsReviewed / diamondTotal) * 100),
+      issues: Math.round((issuesOpened / diamondTotal) * 100),
+    },
+  };
+
   const fresh = {
     generatedAt: new Date().toISOString(),
     totals: {
@@ -494,6 +538,7 @@ async function main() {
       prsMerged: prof.prsMergedLastYear,
       prsOpened: prof.prsOpenedLastYear,
       prsReviewed: prof.prsReviewedLastYear,
+      issuesOpened,
       publicRepos: prof.publicRepos,
       prsMergedAllTime: prof.prsMergedTotal,
       distinctAuthorsReviewed: reviewedInfo.distinct,
@@ -510,6 +555,7 @@ async function main() {
     sizeHistogram,
     ttfrHistogram,
     commitTypes,
+    contributionMix,
     prSampleSize: prs.length,
   };
 
