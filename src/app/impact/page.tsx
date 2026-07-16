@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
-import CommitTypeDonut from "@/components/metrics/CommitTypeDonut";
 import YearlyActivity from "@/components/metrics/YearlyActivity";
 import ContributionDiamond from "@/components/metrics/ContributionDiamond";
 import Typewriter from "@/components/ui/Typewriter";
@@ -171,28 +170,6 @@ export default function ImpactPage() {
           />
         </div>
 
-        {contributionMix ? (
-          <div className="glass-card rounded-xl p-6 mt-gutter">
-            <div className="mb-4">
-              <h3 className="font-mono text-headline-md mb-1">
-                Contribution Mix
-              </h3>
-              <p className="text-tertiary font-mono text-code-sm">
-                How my last-12-month contributions split across commits,
-                reviews, PRs and issues
-              </p>
-            </div>
-            <ContributionDiamond
-              percent={contributionMix.percent}
-              raw={{
-                commits: contributionMix.commits,
-                pullRequests: contributionMix.pullRequests,
-                codeReviews: contributionMix.codeReviews,
-                issues: contributionMix.issues,
-              }}
-            />
-          </div>
-        ) : null}
       </section>
 
       <section className="mt-8 mb-4">
@@ -219,6 +196,31 @@ export default function ImpactPage() {
           </div>
           <Heatmap days={contributions.days} />
         </div>
+
+        {contributionMix ? (
+          <div className="glass-card rounded-xl p-6 mt-gutter">
+            <div className="mb-4 text-center">
+              <h3 className="font-mono text-headline-md mb-1">
+                Contribution Mix
+              </h3>
+              <p className="text-tertiary font-mono text-code-sm">
+                How my last-12-month contributions split across commits,
+                reviews, PRs and issues
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <ContributionDiamond
+                percent={contributionMix.percent}
+                raw={{
+                  commits: contributionMix.commits,
+                  pullRequests: contributionMix.pullRequests,
+                  codeReviews: contributionMix.codeReviews,
+                  issues: contributionMix.issues,
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="mt-8 mb-4">
@@ -244,34 +246,19 @@ export default function ImpactPage() {
         </div>
       </section>
 
-      <section className="mt-8 grid grid-cols-1 md:grid-cols-12 gap-gutter">
-        <section className="md:col-span-12 glass-card p-6 rounded-xl">
-          <div className="mb-4">
-            <h3 className="font-mono text-headline-md mb-1">
-              Commit Composition
-            </h3>
-            <p className="text-tertiary font-mono text-code-sm">
-              How my work splits between feature, refactor, fix, and infra —
-              sampled across {prSampleSize} recent PRs
-            </p>
-          </div>
-          <CommitTypeDonut data={commitTypes} />
-        </section>
-
-        <section className="md:col-span-12 glass-card p-6 rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-            <p className="font-mono text-code-sm text-tertiary">
-              Generated at{" "}
-              <span className="text-on-surface">
-                {new Date(stats.generatedAt).toUTCString()}
-              </span>{" "}
-              — Source: GitHub API
-            </p>
-            <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
-              build:auto · cron:6h
-            </span>
-          </div>
-        </section>
+      <section className="mt-8 glass-card p-6 rounded-xl">
+        <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+          <p className="font-mono text-code-sm text-tertiary">
+            Generated at{" "}
+            <span className="text-on-surface">
+              {new Date(stats.generatedAt).toUTCString()}
+            </span>{" "}
+            — Source: GitHub API
+          </p>
+          <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
+            build:auto · cron:6h
+          </span>
+        </div>
       </section>
     </div>
   );
