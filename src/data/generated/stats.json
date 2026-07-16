@@ -1,20 +1,71 @@
 {
-  "generatedAt": "2026-07-15T13:12:32.342Z",
+  "generatedAt": "2026-07-16T10:00:14.858Z",
   "totals": {
-    "contributionsLastYear": 2653,
-    "currentStreak": 3,
+    "contributionsLastYear": 2707,
+    "currentStreak": 4,
     "longestStreak": 6,
     "topLanguage": "Ruby",
-    "prsMerged": 549,
-    "prsOpened": 582,
-    "prsReviewed": 639,
+    "prsMerged": 551,
+    "prsOpened": 592,
+    "prsReviewed": 643,
     "publicRepos": 14,
-    "prsMergedAllTime": 1157,
-    "distinctAuthorsReviewed": 15,
-    "reposTouched": 8
+    "prsMergedAllTime": 1159,
+    "distinctAuthorsReviewed": 16,
+    "reposTouched": 8,
+    "careerTotal": 15483,
+    "firstActiveYear": 2016,
+    "yearsShipping": 11,
+    "peakYear": 2022,
+    "peakYearTotal": 2375
   },
+  "careerYears": [
+    {
+      "year": 2016,
+      "total": 48
+    },
+    {
+      "year": 2017,
+      "total": 1022
+    },
+    {
+      "year": 2018,
+      "total": 1585
+    },
+    {
+      "year": 2019,
+      "total": 1240
+    },
+    {
+      "year": 2020,
+      "total": 1847
+    },
+    {
+      "year": 2021,
+      "total": 1810
+    },
+    {
+      "year": 2022,
+      "total": 2375
+    },
+    {
+      "year": 2023,
+      "total": 781
+    },
+    {
+      "year": 2024,
+      "total": 865
+    },
+    {
+      "year": 2025,
+      "total": 2236
+    },
+    {
+      "year": 2026,
+      "total": 1674
+    }
+  ],
   "cycle": {
-    "p50": 17.8,
+    "p50": 17.7,
     "mean": 36.1,
     "p90": 87.5,
     "sameDayPct": 70
@@ -43,21 +94,21 @@
   ],
   "sizeHistogram": {
     "S": 278,
-    "M": 88,
+    "M": 87,
     "L": 63,
-    "XL": 71
+    "XL": 72
   },
   "ttfrHistogram": {
-    "<1h": 230,
+    "<1h": 229,
     "1-4h": 81,
-    "4-24h": 105,
+    "4-24h": 106,
     "1-3d": 55,
     ">3d": 26
   },
   "commitTypes": {
-    "feat": 381,
+    "feat": 380,
     "fix": 250,
-    "refactor": 117,
+    "refactor": 128,
     "test": 47,
     "chore": 36,
     "docs": 2,

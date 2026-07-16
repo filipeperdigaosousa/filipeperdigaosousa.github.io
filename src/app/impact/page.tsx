@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Heatmap from "@/components/metrics/Heatmap";
 import CommitTypeDonut from "@/components/metrics/CommitTypeDonut";
+import YearlyActivity from "@/components/metrics/YearlyActivity";
 import Typewriter from "@/components/ui/Typewriter";
 import stats from "@/data/generated/stats.json";
 import contributions from "@/data/generated/contributions.json";
-import { experience } from "@/data/experience";
 import { formatNumber } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -47,9 +47,9 @@ function Tile({ label, value, sub, tone = "default" }: TileProps) {
 }
 
 export default function ImpactPage() {
-  const { totals, cycle, sizeHistogram, commitTypes, prSampleSize } = stats;
+  const { totals, cycle, sizeHistogram, commitTypes, prSampleSize, careerYears } = stats;
 
-  const yearsShipping = new Date().getUTCFullYear() - 2015;
+  const yearsShipping = totals.yearsShipping;
   const mergeRate = Math.round((totals.prsMerged / totals.prsOpened) * 100);
   const reviewToAuthorRatio = (totals.prsReviewed / totals.prsMerged).toFixed(2);
 
@@ -85,25 +85,34 @@ export default function ImpactPage() {
         <p className="font-mono text-label-caps uppercase tracking-widest text-tertiary mb-3">
           / Career · all-time
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-          <Tile
-            label="PRs Merged"
-            value={formatNumber(totals.prsMergedAllTime)}
-            sub="GitHub-tracked · since May 2017"
-            tone="primary"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
           <Tile
             label="Years Shipping"
             value={`${yearsShipping}+`}
-            sub="since 2015"
+            sub={`since ${totals.firstActiveYear}`}
             tone="primary"
           />
           <Tile
-            label="Companies"
-            value={experience.length}
-            sub="engagements listed on Work"
+            label="Total Contributions"
+            value={formatNumber(totals.careerTotal)}
+            sub="commits, PRs, reviews & issues"
             tone="primary"
           />
+          <Tile
+            label="Peak Year"
+            value={formatNumber(totals.peakYearTotal)}
+            sub={`most contributions · ${totals.peakYear}`}
+            tone="primary"
+          />
+        </div>
+        <div className="glass-card rounded-xl p-6">
+          <div className="mb-4">
+            <h3 className="font-mono text-headline-md mb-1">Career Activity</h3>
+            <p className="text-tertiary font-mono text-code-sm">
+              Contributions per year across my full GitHub-tracked career
+            </p>
+          </div>
+          <YearlyActivity years={careerYears} />
         </div>
       </section>
 

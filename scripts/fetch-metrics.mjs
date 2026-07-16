@@ -18,6 +18,30 @@ const gql = graphql.defaults({
   headers: { authorization: `token ${TOKEN}` },
 });
 
+async function fetchCareerYears(firstYear = 2016) {
+  const now = new Date();
+  const currentYear = now.getUTCFullYear();
+  const years = [];
+  for (let y = firstYear; y <= currentYear; y++) {
+    const from = new Date(Date.UTC(y, 0, 1)).toISOString();
+    const to = new Date(Date.UTC(y, 11, 31, 23, 59, 59)).toISOString();
+    const query = `
+      query($user:String!, $from:DateTime!, $to:DateTime!) {
+        user(login:$user) {
+          contributionsCollection(from:$from, to:$to) {
+            contributionCalendar { totalContributions }
+          }
+        }
+      }`;
+    const res = await gql(query, { user: USER, from, to });
+    years.push({
+      year: y,
+      total: res.user.contributionsCollection.contributionCalendar.totalContributions,
+    });
+  }
+  return years;
+}
+
 async function fetchContributions() {
   const now = new Date();
   const from = new Date(now);
@@ -325,13 +349,22 @@ async function main() {
   console.log(`[fetch-metrics] user=${USER}`);
   await mkdir(OUT_DIR, { recursive: true });
 
-  const [contributions, prof, prs, langs, reviewedInfo] = await Promise.all([
-    fetchContributions(),
-    fetchProfile(),
-    fetchMergedPRDetail(5),
-    fetchTopLanguages(),
-    fetchReviewedAuthors(),
-  ]);
+  const [contributions, prof, prs, langs, reviewedInfo, careerYears] =
+    await Promise.all([
+      fetchContributions(),
+      fetchProfile(),
+      fetchMergedPRDetail(5),
+      fetchTopLanguages(),
+      fetchReviewedAuthors(),
+      fetchCareerYears(2016),
+    ]);
+  const careerTotal = careerYears.reduce((a, b) => a + b.total, 0);
+  const firstActiveYear =
+    careerYears.find((y) => y.total > 0)?.year ?? 2016;
+  const peakYear = careerYears.reduce(
+    (m, y) => (y.total > m.total ? y : m),
+    careerYears[0],
+  );
 
   const { currentStreak, longestStreak } = computeStreaks(contributions.days);
   const topLanguage = langs[0]?.name ?? "TypeScript";
@@ -355,7 +388,13 @@ async function main() {
       prsMergedAllTime: prof.prsMergedTotal,
       distinctAuthorsReviewed: reviewedInfo.distinct,
       reposTouched: repoInfo.distinctCount,
+      careerTotal,
+      firstActiveYear,
+      yearsShipping: new Date().getUTCFullYear() - firstActiveYear + 1,
+      peakYear: peakYear.year,
+      peakYearTotal: peakYear.total,
     },
+    careerYears,
     cycle,
     topLanguages: langs,
     sizeHistogram,
