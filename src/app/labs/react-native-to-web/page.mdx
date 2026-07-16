@@ -1,0 +1,105 @@
+import Link from "next/link";
+
+export const metadata = {
+  title: "Bringing a React Native App to the Web",
+  description:
+    "Cross-platform playbook — page-by-page redesigns, static-asset infrastructure, stale-chunk recovery, e2e coverage.",
+};
+
+<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
+
+<Link
+  href="/labs"
+  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
+>
+  <span className="material-symbols-outlined text-sm">arrow_back</span>
+  Back to Labs
+</Link>
+
+<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
+  react-native · expo-router · web
+</p>
+
+# Bringing a React Native App to the Web
+
+React Native for web is a real technology in 2026, but "our RN app also runs on the web now" is not a switch you flip. Getting there means rethinking layouts, wiring up static-asset delivery, adding a testing layer that mobile never needed, and cutting over production traffic without breaking either surface.
+
+I did this over about three months, following [an Expo Router migration](/labs/staged-migration-to-expo-router/). What follows is the shape of the work, not a recipe — every codebase does this a bit differently.
+
+## The prerequisite
+
+You can't ship a web build of a React Navigation app without a lot of pain. Expo Router gives you real URLs — one file tree that produces both a native navigator and a URL-addressable web app. If you haven't done that migration, do it first. The rest of this post assumes you have.
+
+## Redesigning screens
+
+Most mobile screens look wrong on a 1440-wide desktop viewport. Text stretches. Grids collapse. Fixed positioning that made sense on a 375-wide phone becomes weird on the web.
+
+The pattern that worked: each screen gets a "web design" pass as its own PR. Small, focused, one page at a time. Twenty-something of these landed over a couple of months. Some rules I settled on:
+
+Never change native and web layout in the same commit unless they share the code. `Platform.OS === "web"` is a smell — prefer a `useBreakpoint()` hook that returns `phone / tablet / desktop` and let native be phone by default. Grids that need CSS Grid on web can render RN primitives plus a `grid` prop that emits `display: grid` only on web. Modals that need to become drawers on wide screens: one shared component with a `presentation` prop.
+
+The sidebar is the biggest single visual change. Phones don't have room; desktops need one. Expect fifty small tweaks to it over the course of the project — collapse, expand, tablet behaviour, icons, the current-context section at the bottom. Ship them incrementally, don't try to nail it in one PR.
+
+## Static assets
+
+<Callout icon="📦">
+The single detail that made this whole thing robust: chunks live in a bucket, not in the container.
+</Callout>
+
+Native RN apps ship their JS inside the binary. A web build produces static assets — HTML, JS chunks, images, fonts — that must be served from somewhere. My path was:
+
+1. Dedicated Cloud Storage bucket for the web build's static assets.
+2. CI step that, after `expo export`, syncs the generated chunks to that bucket keyed by build hash.
+3. Nginx (or your CDN) proxies `/_expo/static/*` from the bucket instead of the app container's filesystem.
+
+Why the bucket instead of shipping chunks with the container? Two reasons. Chunks are hash-versioned. When a user has a stale HTML page cached (referencing older chunks) and your deploy is rolling out new ones, the bucket still has the old chunks around — no 404s during rollout. Cache headers can also be immutable + long, which the bucket honours cheaply.
+
+## Stale chunks
+
+Even with bucket-hosted chunks, users can end up with an HTML page whose referenced chunk doesn't exist anymore — usually a tab that's been open for days. Browser fetches, gets a 404, throws, and the app breaks.
+
+Fix: detect it and hard-reload.
+
+```ts
+window.addEventListener("error", (event) => {
+  if (event.message?.match(/Loading chunk .* failed/i)) {
+    window.location.reload();
+  }
+});
+```
+
+Refine over time to also cover unhandled promise rejections and specific module-load error signatures. In production this catches maybe one user per 10k sessions — but that user would otherwise see a broken page they didn't cause and can't recover from.
+
+## Tests
+
+Native RN apps typically ship with unit tests only. A web build needs end-to-end tests, because the surface area is now "what happens in a browser."
+
+I added Playwright, sharded it across CI workers, replaced arbitrary `waitForTimeout()` calls with real network waits, and got coverage over the critical paths: sign-in, create-a-record, navigate deep-link, sign-out. Playwright is native to web, cheap to run, and integrates well with Expo web builds. Detox is native-only. I use both.
+
+## The cutover
+
+Native app releases go through app stores. Web releases go straight to prod. The cutover was gated behind an API feature flag for the first two weeks — internal users only. Then a subdomain went live for a small pilot cohort. Then all users.
+
+Roll-back plan: the flag kills web-app access instantly. Users get bounced to the marketing site. Native app unaffected. Clean.
+
+<Callout icon="🐛">
+Budget for a long tail. After the cutover, roughly a month of small PRs for browser-specific quirks — Firefox text clipping, dropdown overflow, position-sticky quirks, auto-reload after deploy hash change. Every browser has its own tail. This is normal.
+</Callout>
+
+## Things I'd do differently
+
+Playwright before the cutover, not during it. Retrofitting e2e coverage while under pressure to ship is stressful. The `useBreakpoint()` primitive on day one — I hand-rolled it in the first three PRs then extracted it, should have been first thing. Sidebar redesign earlier — it sets the tone for every page; other engineers can't build good screens until the shell is stable.
+
+## Signals it was working
+
+Team members started opening their own "move X into web design" PRs unprompted. Bug reports shifted from "web is broken" to specific browser edge cases — a good change. The sales team started demoing the web build without qualifiers.
+
+<hr />
+
+Cross-platform React Native is a real project, not a checkbox. Done incrementally, page by page, behind flags, it ships. The payoff is a single JavaScript codebase running on iOS, Android and the web with the same navigation, auth, and features — and a team that isn't stretched maintaining two of them.
+
+<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
+  Filipe Sousa
+</p>
+
+</div>

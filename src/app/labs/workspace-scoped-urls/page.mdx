@@ -1,0 +1,93 @@
+import Link from "next/link";
+
+export const metadata = {
+  title: "Scoping the Workspace ID into the URL",
+  description:
+    "A small refactor with an outsized DX payoff — put the tenant identifier in the URL and stop losing tab context.",
+};
+
+<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
+
+<Link
+  href="/labs"
+  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
+>
+  <span className="material-symbols-outlined text-sm">arrow_back</span>
+  Back to Labs
+</Link>
+
+<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
+  react-native · expo-router · multi-tenant
+</p>
+
+# Scoping the Workspace ID into the URL
+
+Every multi-tenant app I've worked on hits this problem the first time a user opens two tabs of the web build side-by-side and gets confused about which workspace each tab is showing. The URL says `/home` in both; the sidebars disagree; the "current workspace" is stored globally and tab A ends up affecting tab B.
+
+The fix is straightforward and load-bearing: **make the workspace ID part of the URL**. One well-scoped refactor. Permanent DX improvement.
+
+## The starting point
+
+The app supported multiple workspaces per user. Selection lived in a client-side context. Every screen read `currentWorkspace` implicitly; every deep-link inherited whatever was in local storage. Fine on native, where the app runs in one process. Broken on the web.
+
+<Callout icon="🎯">
+Target: every URL is fully qualified.
+<br />
+<code>/ws/[workspaceId]/home</code>
+<br />
+<code>/ws/[workspaceId]/records/[id]</code>
+<br />
+<code>/ws/[workspaceId]/settings</code>
+</Callout>
+
+## What the refactor actually does
+
+The whole authenticated tree moves under `app/ws/[workspaceId]/_layout.tsx`. That layout becomes the only place that reads the workspace ID from the URL and hands it to a provider:
+
+```tsx
+export default function WorkspaceLayout() {
+  const { workspaceId } = useLocalSearchParams<{ workspaceId: string }>();
+  return (
+    <WorkspaceProvider id={workspaceId}>
+      <Slot />
+    </WorkspaceProvider>
+  );
+}
+```
+
+The old `setCurrentWorkspace()` disappears. In its place, callsites `router.replace('/ws/<other-id>/...')`. That's a big search-and-replace — but easy to audit, because anything that mutated workspace state now routes instead.
+
+Guard the loader: if the URL contains a workspace ID the user doesn't have access to, redirect to the picker at `/`. Sidebar workspace-switcher becomes a `<Link>` instead of a button that called the setter. Simpler code, correct URL behaviour.
+
+The one non-obvious piece is deep-links. Any URL your backend generates — push notifications, share links, email — has to include the workspace segment. That's a small backend migration.
+
+## What bit me
+
+Two things.
+
+Bookmarks. Users had older URLs bookmarked without the `/ws/<id>` prefix. Handled with a redirect middleware that treats bare `/home` as "go to `/ws/<last-used-id>/home`" using the local-storage record. Preserves bookmark behaviour during the transition.
+
+App-scheme deep-links on native. These accept URL-like strings but don't automatically inherit the same route structure. Update the Expo Router app scheme config to match.
+
+## Small PRs that fell out of it
+
+Two follow-ups shipped in the days after and were basically free:
+
+- Admin tools that generated in-app links now include the workspace prefix.
+- The top-level `/` route no longer renders a picker for signed-in users — it redirects to their last-used workspace URL, unless they don't have one, in which case it shows the picker.
+
+Both were 30-line PRs. Both would have been surprising bugs without them.
+
+## The payoff, two months later
+
+Two-tab confusion is gone. Every URL fully qualifies its context. New engineers don't have to learn a hidden global state — the URL tells the story. Deep-links from Slack, email, external tools work correctly the first time. Session-replay tooling captures URLs that make sense in isolation.
+
+<hr />
+
+Not glamorous. Load-bearing. If you're building a multi-tenant app and the tenant identifier lives anywhere other than the URL, you'll fix it eventually. Doing it early costs one large PR. Doing it late costs the same PR plus every deep-linking bug you didn't catch until users complained.
+
+<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
+  Filipe Sousa
+</p>
+
+</div>

@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Staged Migration to Expo Router",
+  title: "Migrating React Native to Expo Router",
   description:
-    "How I moved a React Native app off react-navigation onto Expo Router across four staged PRs — sessions, tabs, full app, cleanup. Rollback strategy included.",
+    "Incremental migration from react-navigation to Expo Router — small PRs, coexistence, no feature freeze.",
 };
 
 <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
@@ -17,120 +17,77 @@ export const metadata = {
 </Link>
 
 <p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  16 Jul 2026 · react-native · expo-router · migrations
+  react-native · expo-router · migrations
 </p>
 
-# Staged Migration to Expo Router without breaking releases
+# Migrating React Native to Expo Router
 
-Migrating a live React Native app off `react-navigation` onto `expo-router` is not a weekend job. The two libraries use different mental models — declarative object graphs versus file-based routing — and the migration touches every screen, deep-link handler, and modal in the app.
+<Callout icon="🎯">
+The constraint I gave myself: feature work does not stop. No freeze week, no long-lived migration branch. Everything downstream of that is negotiable.
+</Callout>
 
-I did this migration in production over several weeks, in four staged pull requests, without a single week where the team paused shipping features. This is the playbook — generic enough to apply to any team facing the same move.
+I planned this migration as four staged PRs. That was wrong. What actually shipped it was around twenty smaller PRs over four weeks — one stack at a time — because coexistence turned out to be the whole trick.
 
-## Why migrate at all
+## Why bother
 
-`react-navigation` is fine. `expo-router` is better *for teams that ship a lot* because it:
+React Navigation is fine. Expo Router is better *for teams that ship a lot* because file paths become routes. New engineers stop needing the "how does navigation work here" tour. Deep-linking aligns with the file tree without a separate config. Screen options move to `_layout.tsx` files at exactly the scope they apply.
 
-- **Makes URL structure explicit.** File paths *are* routes. New engineers stop needing the "how does navigation work here" tour.
-- **Aligns deep-linking with the file tree.** No more separate config for URL patterns and screen definitions.
-- **Enables the same app to run on web** with the same routing model.
-- **Reduces boilerplate.** Screen options move to `_layout.tsx` files at the exact scope they apply.
+And, most of the time the real trigger is: you want the same code to run on the web. React Navigation plus its web adapter is not a happy path there.
 
-A common trigger for the migration is cross-platform: wanting the mobile app to also serve web. `react-navigation` plus `react-navigation/web` are not the smoothest path there.
+## The shape of the work
 
-## Rule zero: don't stop shipping
+The trick is: **both libraries live in the app for most of the migration**. React Navigation stays as the root. Expo Router sits inside it as a child, one stack at a time. Every PR moves one small subtree, ships to production the same week, gets a week of real user traffic before the next PR touches it.
 
-Whatever staging plan you pick, the constraint is: **feature work continues in parallel**. That means:
+Week one is foundations. Get the base `app/` layout mounted inside the existing navigator. Serialize your route params (Expo Router requires URL-encodable params — this catches everything you were passing as objects). Move whatever global state lived in `navigation.setParams` somewhere else; I used Apollo reactive vars.
 
-- No feature-freeze window
-- No "migration branch" that lives for weeks
-- Each staged PR ships to production the same week it merges
-- The app must work end-to-end after every stage
+After that first PR the pattern is set. Every subsequent PR looks the same:
 
-Everything downstream of that constraint is negotiable.
+- pick a stack that's small and low-traffic
+- copy the screens into their new home under `app/`
+- update callsites to route via `expo-router`
+- delete the old stack config
+- ship it
 
-## The four stages
+By the end of the first week the team could open one of these PRs without needing to be told what shape it should have. That was the point.
 
-I staged the migration by *scope of the app*, from lowest-traffic areas to highest. Each stage was one PR, reviewed and merged before the next started.
+## What moves in what order
 
-### Stage 1 — a lower-traffic section first
+Small and lightly-used first. Confidence builds. Bigger, higher-traffic areas last. The final stack to move is always the root navigator itself, because that's the load-bearing one — by then everyone has muscle memory.
 
-Pick a section of the app used less often than the main flows, so any bug caught in the field has smaller blast radius. That section moves first.
+Tabs are structurally different from stacks and worth their own PR. Expo Router uses `(tabs)` route groups; you'll spend an afternoon getting the layout composition right and then never think about it again.
 
-- Set up an `app/<section>/_layout.tsx` with the same navigation options previously defined in the react-navigation stack.
-- Port each screen file one at a time — no logic changes, just structural moves.
-- Keep everything *outside* the section on react-navigation. The root navigator holds a placeholder screen that internally renders the expo-router tree.
-- Both libraries coexist in the app during this stage. That is expected and OK.
+## Rollback
 
-The whole PR is mostly `git mv` and small type adjustments. Zero user-facing changes.
+Because both libraries are present through the migration, every PR is `git revert`-able. If something breaks in a stack you just moved, revert the PR; the app falls back to the old code for that subtree; the rest keeps working.
 
-### Stage 2 — main tab tree
+The exception is the very last PR — the one that removes React Navigation entirely. That's the only irreversible step. By the time you get there, the new code has run in production for weeks. If it were going to break, it would have broken.
 
-Once the smaller section is stable in production for a week, the main tab tree moves.
+## The follow-up that surprised me
 
-- Establish shared layout patterns (`_layout.tsx` that renders a `<Tabs>`).
-- Move each tab's stack into `app/(tabs)/<name>/_layout.tsx`.
-- Deep-links pointing at `/tab-name/some-detail` start working automatically because of file-based routing.
+A week after the migration completed I built a small primitive I hadn't planned. Overlays — toasts, floating menus, bottom sheets — that used to live in the navigation container had no obvious home under Expo Router. Every screen would render its own copy, clipped by the layout above it.
 
-At the end of Stage 2, most user-facing routes run on expo-router. The remaining react-navigation code is the outer root navigator (auth, onboarding, splash — whichever your app has).
+The fix is a context at the root that exposes overlay slots. Any child calls `useOverlay().push(component)` and it renders into the top-most layer. Replaced maybe a dozen ad-hoc portal-ish hacks and became the pattern for every modal after.
 
-### Stage 3 — full app + expo-router root
+Not part of the migration. Emerged from it. I like when that happens — it means you left a better codebase behind, not just a different one.
 
-The root navigator moves to `app/_layout.tsx`. This is the highest-risk stage — everything routes through it — but by now the team has used the new patterns for weeks and has good intuition.
+## Things I'd do differently
 
-Extra care goes into:
+Two.
 
-- **Auth guarding** via a `useAuth` hook + a top-level redirect in `_layout.tsx`.
-- **Onboarding flows** that previously used imperative navigation (`navigation.replace(...)`) become `router.replace(...)`. Straight rename mostly.
-- **Type-safe params.** expo-router has `useLocalSearchParams<T>()` — a small win but worth catching everywhere.
+One: deep-link tests before the first PR. I retrofitted them mid-migration and while it worked, it added pressure I didn't need. Deep-links are exactly the shape of thing that regresses silently.
 
-By end of Stage 3, `react-navigation` is still imported in a handful of files as a compatibility layer.
+Two: a small "adapter" PR very early. A tiny compat helper that abstracts the underlying library so callsites don't `import` from `@react-navigation` directly. Would have kept per-stack PRs even smaller.
 
-### Stage 4 — dead-code removal
+## Signals it went well
 
-Once the app has run entirely on expo-router in production for a week, the cleanup PR:
+The team started opening their own "move X to expo-router" PRs without being asked. PR sizes trended down as boilerplate disappeared. New engineers no longer needed the navigation orientation session. All measurable eight weeks later.
 
-- Removes the `react-navigation` dependency.
-- Deletes the old stack navigator config file.
-- Deletes the compatibility layer that translated between the two libs.
-- Retires any dead-code ignore-list entries that accumulated during migration.
+<hr />
 
-This is the least glamorous PR of the migration and the most satisfying to merge.
-
-## The rollback strategy
-
-Every stage should be reversible.
-
-- **Stages 1–2:** feature flag guards the new navigator. If a section breaks in the field, a remote-config toggle sends users back to the old react-navigation tree. Keep it on for two weeks after each stage.
-- **Stage 3:** you need a full app release to roll back. Ship it during a low-visibility window so if a hotfix is needed, no user-facing launch is blocked.
-- **Stage 4:** irreversible after removal. By then you should have weeks of production signal on expo-router. That is the bar.
-
-The feature-flag approach costs a few extra branches in the code during migration but buys "if it explodes, we're fine" — worth it.
-
-## What I'd do differently
-
-Three things I'd change if I ran this again:
-
-1. **Ship the compatibility layer first, on its own PR.** Bundling it into Stage 1 bloats that PR and makes review harder. A tiny "add adapter" PR before touching any screens is easier to reason about.
-2. **Write the deep-link tests before Stage 1.** Retrofitting them mid-migration is possible but adds pressure. They should be the safety net from the start.
-3. **Explicitly plan a "week off migration" between stages 2 and 3.** By the time you reach the root navigator, migration fatigue is real. A calm reset week catches the small bugs before they make it to production.
-
-## Signals the migration is going well
-
-- No spike in crash reports during the days after each stage.
-- Team is using the new patterns for *new* features without being asked.
-- PR sizes trending downward as boilerplate disappears.
-- New engineers onboarding faster (measurable: time-to-first-shipped-PR).
-
-None of these are obvious in week one. All four showed up by week eight. That's the payoff.
-
-## Closing
-
-A staged migration across four PRs, with feature-flag safety nets, produces a routing model that works on iOS, Android and web from one file tree. That is the payoff.
-
-If you're staring at a similar migration and wondering whether to do it, the honest answer is: **it depends on how much you ship**. If your team ships two features a month, the payoff is small. If you ship ten, expo-router pays for itself in the first quarter after the migration lands.
+If you're staring at this migration and wondering whether to do it, the honest answer is: it depends how much you ship. If your team ships one or two features a month, the payoff is small. If you ship ten, Expo Router pays for itself inside a quarter.
 
 <p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  <em className="text-secondary not-italic">Filipe Sousa</em> — Senior Full-Stack Engineer
+  Filipe Sousa
 </p>
 
 </div>

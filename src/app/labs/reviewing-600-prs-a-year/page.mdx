@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { posts } from "@/data/posts";
 
 export const metadata = {
   title: "Reviewing 600+ PRs a Year",
   description:
-    "Six years of reviewing more PRs than I author. Triage rules, the 30-second first pass, when to comment vs pair, and how the AI bot fits in.",
+    "Notes on reviewing more code than I write — triage, the 30-second first pass, when to pair, and how a bot fits in.",
 };
 
 <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
@@ -18,128 +17,103 @@ export const metadata = {
 </Link>
 
 <p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  16 Jul 2026 · code-review
+  code-review · practice
 </p>
 
-# Reviewing 600+ PRs a Year: the patterns I actually use
+# Reviewing 600+ PRs a Year
 
-Over the last twelve months I reviewed **more than 600 pull requests** — more than I authored. That ratio has held for several years now, and the patterns below are what I actually reach for on a Tuesday afternoon when someone drops another PR into my queue.
+<Callout icon="👋">
+None of this is a manifesto. It's just what I actually reach for on a Tuesday afternoon when someone drops another PR into my queue.
+</Callout>
 
-Nothing here is theory. It's what has survived contact with real teams — small consultancies, a product startup, and cross-functional product pods.
+I've reviewed more pull requests than I've authored for about six years now. Some of that is being senior on smaller teams — you review because you have context. Some of it is because I like reviewing. It's the fastest way I know to see what a codebase is turning into.
+
+Here's what has survived contact with real teams.
 
 ## The 30-second first pass
 
-Every PR gets 30 seconds before I decide what to do with it. Three questions, in order:
+Every PR I open, I ask three things before looking at any code:
 
-1. **What is this trying to change?** — read the title and description. If I can't answer this from the description alone, that's already the first comment.
-2. **How big is it?** — files changed, LOC, number of commits. If it's over ~500 LOC, I mentally pre-commit more time.
-3. **Am I the right reviewer?** — if not (wrong domain, better reviewer nearby), I re-request review and drop out. Silent lurking is not helpful.
+1. What is this trying to change?
+2. How big is it?
+3. Am I the right reviewer?
 
-Only then do I look at the diff. About one PR in five gets stopped at step 1 with "help me understand what changed here" — every time it saves me from misreading the code by projecting the wrong intent onto it.
+If the description doesn't answer question one, that's my first comment. Not accusatory — usually just "help me understand what changed here." About a fifth of the time, the author replies with a much better summary and I now know why I was confused.
 
-## Triage: what makes a PR merge in under an hour
+Size sets my mental budget. Anything over ~500 lines and I book more focused time; I don't do it between meetings. This isn't a policy — it's honesty about what my attention can handle.
 
-The PRs that fly through review share a small set of properties:
+Question three is the one I got wrong for years. If I'm the wrong reviewer — wrong domain, someone else has better context — I decline and re-request. Silently keeping the PR in my queue helps nobody. It just makes me the bottleneck.
 
-- **One idea per PR.** If I see a refactor commit mixed with a feature commit, I'll ask to split. Not because rules — because I read them separately anyway.
-- **Explicit "why" in the description.** Not "fixes X" — "we need X because Y broke Z."
-- **Small.** Under 200 LOC merges roughly 5× faster than 500+ in my data. This isn't a policy, it's physics of attention.
-- **A comment explaining the tricky bit.** If there's a subtle piece, the author has already told me where it is.
+## What makes a PR fly
 
-I've noticed: authors who reliably ship small, well-described PRs get the fastest reviews from me. Not favouritism — cost of context.
+The PRs that get merged in the same day tend to share properties, and none of them are surprising:
 
-## The "do it as a diff comment" rule
+- one idea per PR
+- an explicit "why" in the description
+- small
+- a comment marking the tricky bit if there is one
 
-The single technique that made me a faster reviewer is this: **suggest changes as inline diff suggestions** rather than descriptions.
+I've noticed that authors who reliably ship this shape of PR get faster reviews from me. It's not favouritism. It's the cost of context. When I already trust the author's judgment on scope, I don't have to reconstruct it.
 
-Instead of:
+## The trick that made me faster
 
-> Consider extracting the `formatDate` helper — the same logic is in three other files.
+If I could teach one thing to junior reviewers, it would be **suggestion blocks**. On GitHub you can propose a code change inline; the author clicks "commit suggestion" and it lands. What used to be a five-minute back-and-forth is now thirty seconds.
 
-Write:
+I use them for renames, imports, small refactors under maybe five lines, and type annotations. Roughly 60% of what I comment on is small enough to be a suggestion. For anything larger, prose wins.
 
-```suggestion
-import { formatDate } from '@/lib/format';
-```
+## When to stop typing
 
-...as a GitHub suggestion block on the offending line. Author clicks "commit suggestion," we're done. What would have been a 5-minute back-and-forth is 30 seconds.
+If I've written a paragraph and I'm still not sure the author will get it, I stop. I ask for fifteen minutes on a call. We knock it out live and I approve during the call.
 
-I use it for:
+The signal I've hit the "should have paired" wall:
 
-- Renames (extract this variable / method / component)
-- Import fixes
-- Small refactors under 5 lines
-- Type annotations
-
-For anything larger I still write prose. But the small stuff — which is 60% of what I comment on — goes as a suggestion.
-
-## When to comment vs pair
-
-I have a simple rule: if I'd need three comments in a row to explain something, it's a pairing session.
-
-Signals I've hit the "should have paired" wall:
-
-- I've written a paragraph and I'm still not sure the author will understand the shape of what I want.
-- My comments are turning into a review of the entire design.
-- I've asked "why did you...?" more than twice.
+- I'm writing my third comment in a row.
 - The author's replies are getting shorter and less confident.
+- I'm reviewing the entire design, not the diff.
+- I've asked "why did you...?" more than twice.
 
-At that point I stop typing and say **"can I have 15 minutes with you today?"** — usually we knock it out and I approve during the call. The PR merges same day instead of dragging across a week.
-
-Corollary: if a PR is at four rounds of comments and still not converging, that's evidence I should have paired at round two.
+If a PR is at four rounds of comments and still not converging, that's evidence I should have paired at round two.
 
 ## Reviewing above your level
 
-The most valuable reviews I've done have been on code where I wasn't the domain expert. Two things I've learned:
-
-1. **You can review intent even when you can't review implementation.** "This function's name doesn't match what it does" is a valid comment even when you can't judge whether the algorithm is optimal.
-2. **Confusion is signal.** If I have to reread a block three times to follow it, I flag it. Future-me won't have context either. The author is close to the code and blind to it; my confusion is the artefact worth surfacing.
+The reviews I remember making the most impact are the ones where I wasn't the domain expert. Confused-me is signal. If I read a block three times and still can't follow it, future-me won't either — and the author is too close to the code to feel it.
 
 Junior reviewers often skip PRs they don't fully understand. That's a mistake. Your outside eyes are exactly what the PR needs.
 
-## How the AI bot fits in
+## The bot
 
-We use an AI code reviewer that comments on every PR. It's useful and it's not a threat to human review — the two roles are different:
+Most teams I've worked on lately have an AI code-reviewer that comments on every PR. It's useful, and it's not competing with human review — the roles are different.
 
-- **The bot catches** style violations, obvious null-safety, forgotten error handling, test coverage gaps. It's good at surface-level things and it never gets tired.
-- **The bot misses** intent, architectural fit, timing/ordering bugs, and anything that requires reading two files together. Everything worth an actual conversation.
+The bot catches style, obvious null-safety, forgotten error handling, missing tests. It never gets tired. It's not going to say "I don't think this is the right architectural pattern for what we're trying to build" — that's for humans.
 
-I've stopped writing comments the bot would write. If a `null` check is missing and I can see the bot is already commenting, I don't pile on. My review is for the things the bot cannot see.
+Practically, this means my reviews got shorter. If a null check is missing and the bot is already commenting on it, I don't pile on. I use the space for the thing the bot can't see.
 
-Net effect: my reviews have gotten *shorter* and *higher-leverage*. Not fewer PRs reviewed — better comments on each.
+## What I track
 
-## Metrics that matter (and that don't)
+Nothing serious. Three things I keep an eye on for myself:
 
-I track a few things about my own reviewing:
+- **Time to first review after request.** I aim under four hours during working hours. Reviewer latency is the biggest driver of team cycle time — that's on me.
+- **Approve rate on first pass.** Around 55% for me. Higher would mean I'm rubber-stamping. Lower would mean I'm asking for changes that could have been discussed before the PR opened.
+- **PRs I re-request review on after changes.** Should be nearly 100%. Otherwise I'm doing drive-by reviews.
 
-- **Time-to-first-review after request.** Aim for &lt;4h during working hours. This one is on me — reviewer latency is the biggest driver of team cycle time.
-- **Approve rate on first pass.** Around 55% for me. Higher would mean I'm reviewing too permissively. Lower would mean I'm asking for changes that could have been discussed before the PR opened.
-- **PRs I re-request review on after changes.** Should be ~100%. Otherwise I'm doing drive-by reviews.
-
-Metrics I've explicitly stopped caring about:
-
-- **Comments per review.** Encourages nit-picking.
-- **Approval rate.** Rewards rubber-stamping.
-- **Reviewer count.** Only matters that the *right* people looked.
+Metrics I don't care about: comments-per-review (encourages nit-picking), approval rate (rewards not-thinking), reviewer count (irrelevant if the right person didn't look).
 
 ## What I ask other reviewers to do
 
-When I onboard someone into reviewing my team's code, three asks:
+Three things:
 
-1. **Assume the author is smart and had context you don't have.** Start comments with a question, not a verdict.
-2. **Approve when you'd let it ship.** Not "approve when it's perfect." Perfect never happens; conditional-approvals live in the description.
-3. **Reply within one working day.** If you can't, decline the review — don't sit on it.
+1. Assume the author is smart and had context you don't. Start comments with a question, not a verdict.
+2. Approve when you'd let it ship. Not "when it's perfect." Perfect never happens.
+3. Reply within one working day. If you can't, decline the review — don't sit on it.
 
-Those three alone move a team's cycle time more than any process change.
+Those three alone move a team's cycle time more than any process change I've watched people try.
 
-## Closing
+<hr />
 
-Reviewing more PRs than I author isn't a badge. It's a lever. Each review touches someone else's code and — if done well — leaves the codebase and the author both slightly better. Do that a few hundred times a year and the compounding is real.
-
-The signal I trust most that I'm reviewing well: my teammates ship faster after I've reviewed their code, and they ask me to review their next PR. Everything else is vanity.
+The thing I trust most as a signal I'm reviewing well: my teammates ship faster after I've reviewed their code, and they ask me for the next one. Everything else is vanity.
 
 <p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  <em className="text-secondary not-italic">Filipe Sousa</em> — Senior Full-Stack Engineer
+  Filipe Sousa
 </p>
 
 </div>

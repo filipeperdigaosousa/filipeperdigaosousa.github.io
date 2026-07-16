@@ -1,0 +1,133 @@
+import Link from "next/link";
+
+export const metadata = {
+  title: "Designing a First-User Setup Flow Across Web and Mobile",
+  description:
+    "Onboarding new customers from zero — a step-based shell, CSV import, hardware-to-user assignment, feature-flag rollout, and shared primitives.",
+};
+
+<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
+
+<Link
+  href="/labs"
+  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
+>
+  <span className="material-symbols-outlined text-sm">arrow_back</span>
+  Back to Labs
+</Link>
+
+<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
+  onboarding · react-native · product-engineering
+</p>
+
+# Designing a First-User Setup Flow
+
+Onboarding is the hardest surface in a B2B product. A new customer opens the app for the first time. You have maybe five minutes before they decide whether this is going to work. In that time you need to explain what the app is, get them to bring in the rest of their team, assign whatever hardware they own to those people, configure sensible defaults, and land them somewhere useful.
+
+Not five features. One journey. This is a write-up of building that journey in production over about two months.
+
+## Constraints
+
+<Callout icon="📌">
+- Same flow on web and mobile.
+- Interruptible: users leave, come back a week later, pick up where they left off.
+- Non-destructive: users can go back and change things.
+- Bulk-friendly: anyone bringing in more than five people uses CSV, not a form.
+- Feature-flagged, so the old onboarding stays live until we're sure of the new one.
+</Callout>
+
+## The shell
+
+A step-based flow that hosts individual step components. Every step has a route, a header, a content slot, and a footer with Back / Next / Skip / Finish as appropriate. The shell owns navigation and validation gates. Individual steps plug in their content.
+
+```tsx
+<SetupStepFrame
+  step="add-members"
+  title="Add your team"
+  subtitle="Invite by link or upload a CSV."
+  footer={<SetupFooter onNext={goNext} nextDisabled={!isValid} />}
+>
+  <AddMembersStep ... />
+</SetupStepFrame>
+```
+
+Two design calls made this scale.
+
+**One shell, reused across every step.** No per-step layout duplication. That's the single biggest DX win of the whole thing — new steps drop in without touching the frame.
+
+**State lives on the server**, keyed to the account being set up. Each step commits its work via GraphQL mutations. The client fetches the current setup state and renders the appropriate step. Client is dumb. This is what makes the flow interruptible — close the browser, reopen it a week later, land on the same step.
+
+## The steps
+
+Rough order:
+
+- Account details (name, category).
+- Add team members. Invite by link or upload a CSV.
+- Add administrators. Same shape.
+- Assign hardware devices. For each device the account owns, assign it to a member.
+- Complete. A screen that says "you're ready" with next actions.
+
+Each step is its own file under `app/setup/[step-id]/page.tsx`. The shell layout sits at `app/setup/_layout.tsx`.
+
+## CSV import
+
+Bulk import is make-or-break for B2B onboarding. Nobody types 40 team members into a form.
+
+Three sub-steps inside "add members":
+
+1. Upload. Drop a CSV. Client parses to preview.
+2. Mapping. Show CSV columns on the left, target fields on the right, let the user drag-map. Remember the mapping.
+3. Review. Show parsed rows, highlight errors (missing required field, duplicate name), let the user edit inline before commit.
+
+The mapping component ended up the most reusable piece of the whole project. It gets used in a completely different admin surface six months later — the shape is generic enough.
+
+Native quirk worth mentioning: mapping needed a mobile-friendly layout. Desktop has a two-column drag interface; phones fall back to a step-by-step "match this column to X" flow. Same component, `useBreakpoint()`-driven layout swap.
+
+## Device assignment
+
+The gnarly step. For each hardware device the account owns, the user picks who it's assigned to. Rules I ended up needing:
+
+- Warn when there are more devices than members.
+- Prevent assigning the same device twice.
+- Show a rename-prefix picker (some customers number their devices; others use member initials).
+- Suggest historical owners when a device belonged to someone in a previous setup.
+
+That last one — historical ownership suggestions — was the piece that took the most iteration. Real user feedback pushed for it. Simple heuristic server-side; small win in UX.
+
+## Rollout
+
+The new flow lived behind a `new_onboarding` feature flag for the first six weeks. Old flow ran in parallel for existing customers.
+
+Stages went: internal team only → 20% A/B for new signups → all new signups → retire the flag. Retirement happened about ten weeks after rollout started, once nobody was still stuck on the old flow.
+
+## Sharing components with another surface
+
+Six months later, a separate admin surface needed bulk-import for the same records. The setup shell was designed reusable, so it got reused:
+
+- The shell (`SetupStepFrame`)
+- The mapping component
+- The review-and-commit component
+
+Cost of reuse: one refactor PR to genericise the mapping step. Payoff: that admin surface shipped its bulk import in one PR instead of two weeks. This is the kind of compounding that's easy to miss when you're building the first thing — you're not building for reuse, you're just naming things well and keeping the seams clean.
+
+## Things I'd do differently
+
+Set up `useBreakpoint()` before writing any step. I built the first three mobile-first, then retrofitted desktop. Should have been shared from the start.
+
+Server-driven step ordering earlier. For the first month, step order was a client-side array. Later the API returned "what's the next step?" — much cleaner. Should have been that way from step one.
+
+Playwright coverage before the pilot. e2e tests came post-pilot; that was uncomfortable during the pilot week.
+
+## Signals
+
+Support tickets from new signups dropped noticeably in the two months after cutover. The CS team stopped needing to walk new customers through initial setup on a call. The setup shell became the pattern every subsequent multi-step flow reached for — which is either the highest compliment a piece of engineering can get, or the moment you should worry that you built too much abstraction. In this case I think the former. But it's worth checking.
+
+<hr />
+
+Onboarding is a system, not a screen. Ship it as one — shared primitives, server-side state, feature-flag rollout — and it pays dividends every time you get a new customer.
+
+<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
+  Filipe Sousa
+</p>
+
+</div>

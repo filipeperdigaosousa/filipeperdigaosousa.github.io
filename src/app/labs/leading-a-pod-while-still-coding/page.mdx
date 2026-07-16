@@ -1,0 +1,124 @@
+import Link from "next/link";
+
+export const metadata = {
+  title: "Leading a Pod While Still Coding",
+  description:
+    "Notes on running a cycle as Pod Lead — what you own, what you delegate, and how you stay hands-on.",
+};
+
+<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
+
+<Link
+  href="/labs"
+  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
+>
+  <span className="material-symbols-outlined text-sm">arrow_back</span>
+  Back to Labs
+</Link>
+
+<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
+  leadership · process
+</p>
+
+# Leading a Pod While Still Coding
+
+Some product-engineering orgs rotate a "Pod Lead" role: one senior engineer takes accountability for a delivery cycle. Risk, scope, communication, decisions. The catch is that you're still expected to ship code. Stop coding and you drift out of the role. Fail to lead and you failed at the role.
+
+I've been Pod Lead a few times now. This is what worked for me. Not a manual — a personal system that survived contact with real cycles.
+
+<Callout icon="⚖️">
+Being main driver of a cycle's success doesn't mean sole owner. Success is the whole pod's. But when leadership asks "will this ship?", they ask the Lead.
+</Callout>
+
+## Three questions I ask myself in the morning
+
+Before opening my editor, every day, three things:
+
+- What is the biggest risk to this cycle shipping on time?
+- Who needs to hear from me this week that hasn't heard from me?
+- What decision has been open for more than 24 hours?
+
+If the answer to the first question changed from yesterday, that's the day's most important item. If someone would be surprised by our status, I owe them a Slack message. If a decision has been sitting, either I decide it, I ping the owner, or I escalate.
+
+Under a minute. Then I code.
+
+## The 60/40 split
+
+Rough budget across a cycle: 60% technical work, 40% lead work.
+
+It's not evenly distributed. Week 1 is closer to 40/60 (planning heavy). Weeks 2–4 lean technical because the framework work is happening and I want to be in it. Week 5 shifts back to 40/60 for demos and scope calls. Week 6 is heavy on comms.
+
+If I ever drop below 40% technical for more than a week, I'm doing it wrong. The Lead who stops coding loses context and can't call scope accurately. Managers can lead without coding. Pod Leads can't — the role isn't management, it's a technical role with communication demands.
+
+## What I delegate and what I don't
+
+Delegate individual technical decisions inside the pod's scope. If someone is designing an API, they own it. I ask sharp questions; I don't design it for them. Delegate the demo presentation — the engineer who did the work presents; I introduce. Delegate follow-up comms to product on their specific feature.
+
+Don't delegate scope calls. Cutting a feature is a Pod Lead decision. Even if a pod member suggests it, I'm the one who tells product. Don't delegate cross-pod dependencies — when Pod A blocks Pod B, someone at the Lead level unsticks it. Don't delegate the weekly confidence rating.
+
+## The three signals
+
+Watching cycles as an engineer for years before I ever led one, these are the signals I noticed:
+
+**Silent stand-ups.** A pod member updates without saying what's blocking them. They're either stuck or coasting. Either way, follow-up 1:1 the same day. This is the single highest-leverage habit I have as Pod Lead.
+
+**PRs open more than three days.** Reviewer's overloaded, PR's too big, or both. Fix one of them. Don't let PRs just sit.
+
+**Design changes in week three or later.** Designer wants to move a screen. Small change (cheap) — absorb. Structural change — defer to next cycle. Never let the pod silently absorb a scope change without a call.
+
+## The scope-cut conversation
+
+At some point in most cycles, something has to be cut. This conversation is 40% of the job. My script is something like:
+
+> Hey — we're at the end of week 3 and I want to flag a scope risk. Feature X is behind because Y turned out to be more complex than we scoped. To protect the core cycle deliverable, I want to defer X to next cycle. Here's what's still in scope: A, B, C. Here's what I'd defer: X. I'd like to make this call by end of tomorrow. Are you OK with this or do we need a bigger conversation?
+
+Four elements: state the risk clearly, state the proposed cut clearly, state the timeline, invite pushback with an off-ramp.
+
+Never announce a scope cut as a decided fact. Announce it as an intent with a deadline. The deadline forces the conversation.
+
+## The confidence rating
+
+Every Friday I give leadership a number 1–10 for shipping-on-time. Honestly.
+
+- **7.5** is my default for weeks 1–4 — on track if nothing goes wrong.
+- **6.5** — I have a specific concern. Say what the concern is.
+- **8+** — high confidence, most risks resolved. Should trend here by weeks 5–6.
+- **Below 6** — cycle in trouble. Escalate. Ask for help.
+
+The number is less useful than the trend. Flat at 7.5 for weeks means scope is matched to time — good. Trending down means slippage — bad. Trending up means finish line in sight — good.
+
+## Staying hands-on
+
+The temptation by week 3 is to become pure coordinator. I resist it. What I do:
+
+Take the trickiest technical work myself. Framework design, gnarly refactors, load-bearing pieces. Then other engineers build features on top. This uses my "I have context on the codebase" advantage.
+
+Review every PR that touches shared infra. Trust the reviewer rotation for the rest.
+
+Never take a feature PR I can't finish in a day. As Pod Lead I might be pulled into unblocking work at any moment. Long-running feature branches are incompatible with that.
+
+## The tracking artefact
+
+A single markdown doc per cycle. Sections for scopes with status, a decision log, a weekly roadblocks log, the confidence rating, a weekly progress review by scope. That doc is what I link from the demo, from status updates, from 1:1s with my manager. Single source of truth. If it doesn't exist, I'm working from memory — and memory is not a source of truth.
+
+<Callout icon="🎗️">
+Set up the tracking doc on day zero of the cycle. Twice I let it drift until week 2. Every time I regretted not having it earlier.
+</Callout>
+
+## Signals I was doing it well
+
+Pod members reported feeling unblocked and clear on priorities. No surprises for product or leadership in the final week. I still merged 30–50 PRs across the cycle — the coding stayed real. Scope was cut early enough to protect the core, never in a week-6 scramble. And the cycle shipped.
+
+## What I'd change
+
+Set up the tracking doc on day zero. Do the scope-risk conversation in week 2 by default, not week 3. Rotate PR review load explicitly instead of quietly doing more of it because it's "faster." I know these things and I still let them slip. Naming them out loud is how I try to stop.
+
+<hr />
+
+The framing that helped me most: **Pod Lead is a technical role with communication demands, not a management role that lost the plot on code.** Keep the code. Do the comms. Cut scope early. Trust the pod. Ship the cycle.
+
+<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
+  Filipe Sousa
+</p>
+
+</div>

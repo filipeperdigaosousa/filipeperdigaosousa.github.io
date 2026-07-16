@@ -1,0 +1,175 @@
+import Link from "next/link";
+
+export const metadata = {
+  title: "Shipping a Multi-Tenant Admin Panel in Six Weeks",
+  description:
+    "A cross-workspace admin panel — scope-by-scope recap, the framework work that unlocked speed, the calls I made as Pod Lead.",
+};
+
+<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
+
+<Link
+  href="/labs"
+  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
+>
+  <span className="material-symbols-outlined text-sm">arrow_back</span>
+  Back to Labs
+</Link>
+
+<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
+  multi-tenant · graphql · architecture · pod-lead
+</p>
+
+# Shipping a Multi-Tenant Admin Panel in Six Weeks
+
+Some B2B products nest their tenants. There's an outer entity — call it an *organisation* — that owns several inner *workspaces*, each with its own records and configuration. Users live inside a workspace and do their work there. But administrators need something else: a way to see and manage everything across the workspaces they belong to.
+
+This is a recap of shipping that surface in a six-week cycle. Real work, told the way I ran it at the time — scopes, decision log, weekly progress, and the framework work that made it possible to keep up.
+
+## The scopes
+
+<Callout icon="🧱" tone="info">
+Everything was broken into scopes so that when scope creep hit — and it always does — we knew which pieces to protect first.
+</Callout>
+
+### Foundation <StatusPill status="downhill" />
+
+The routing, layout, sidebar, and shared components that everything else sits on. Dedicated URL space, a shared web sidebar that works in both the normal workspace context and the new admin context, and the base list layout / empty state / page shell components. Ships first, unblocks everything else.
+
+### Workspaces list <StatusPill status="downhill" />
+
+The landing page: cards for every workspace in the organisation, header stats (active count, member totals, archived), search, filter chips, grid/list view toggle, per-card rename via modal, multi-select for bulk archive. Also a small backend change: workspaces needed to be archivable, which they weren't before.
+
+### Members list <StatusPill status="uphill" />
+
+Cross-workspace list of all members. Only fully visible to admins. Grant/revoke admin role. Auto-promote the first user of a new organisation to admin so nobody gets locked out at signup.
+
+### Bulk records management <StatusPill status="downhill" />
+
+The biggest scope. Copy, archive, restore records (of the primary type) across the workspaces the current user has permission in. Multi-select, conflict resolution, per-target validation. Bulk imports reused from the [setup flow](/labs/first-user-setup-flow/).
+
+### Bulk resources management <StatusPill status="downhill" />
+
+Same shape for the secondary resource types — tags, groups, and configuration objects. Sequenced internally to ship a thin slice early. Shared wizard, same shell.
+
+### Audit log <StatusPill status="uphill" />
+
+Every mutation emits an audit event: who, what, when, target IDs, source, success or failure. Bulk operations recorded as a single event with child references. Foundation for a future customer-facing history.
+
+### Admin-tools integration <StatusPill status="uphill" />
+
+Internal tool support for granting and revoking roles without engineering involvement.
+
+## The frameworks that unlocked speed
+
+Six weeks for a full admin panel is only possible if you build **one thing that works everywhere** rather than several similar things. Two frameworks landed early. Everything after was cheap.
+
+**Bulk-action framework on the API.** Every bulk action goes through one shared mutation:
+
+```graphql
+mutation CreateBulkAction($input: CreateBulkActionInput!) {
+  createBulkAction(input: $input) {
+    bulkAction { id status resultSummary { ok skipped failed } }
+  }
+}
+```
+
+`input.actionType` identifies the operation. `input.params` is a JSON blob. Server-side, actions register against a shared base class that handles permission checks, validation, chunking, async progress, audit trail, and error aggregation. Adding a new bulk action ends up around 50 lines: register, implement `perform_one(record, target)`, done. First action took a day to design. The second took an hour.
+
+**Wizard shell on the client.** Every bulk action runs the same steps: pick source records, pick target workspaces, server-side validation, resolve conflicts row by row, confirm, run, show a summary. One React tree. Actions plug in their item selector and their validation renderer. Nothing else varies.
+
+Same principle as the setup framework — one shell, many uses.
+
+## Weekly progress
+
+<Callout icon="📆">
+The frameworks landed in week 3. Week 4 is where the payoff shows up in the change log — every bulk operation ships in a small PR because the framework does the heavy lifting.
+</Callout>
+
+**Week 1.** Base admin panel routing. Shared sidebar. First set of page-shell components. API: expose members, first pass at grant/revoke role mutations. Not much user-visible progress; a lot of foundations.
+
+**Week 2.** Component library expands — cards, tables, chips. First list page (workspaces list). Backend picks up archivable workspaces + the shared bulk-operation base class.
+
+**Week 3.** Bulk-action framework lands, both sides. First user-facing bulk action rides it. Shared page shell for every scoped page. This is the week the cycle turned from uphill to downhill.
+
+**Week 4.** Resource sprawl. Every entity type gets its list page and its bulk operations. Filter tuning (default to "Active" instead of "All"). Icons and empty-state polish.
+
+**Week 5.** Members management page proper. Small backend additions — organisation-scoped person type, bulk archive for the config objects.
+
+**Week 6.** Auto-promotion of first user in a new organisation. Bulk grant/revoke admin role. Playwright e2e coverage. Feature-flag gating fixes. Policy-driven visibility everywhere.
+
+## Decision log
+
+Actual calls I made or facilitated during the cycle, all shipped:
+
+<CheckList>
+  <CheckItem done>
+    <strong>Descope the org-selector for multi-organisation users.</strong> Would have added a week for a rare case. Deferred.
+  </CheckItem>
+  <CheckItem done>
+    <strong>Backfill of member roles handled by CS, not engineering.</strong> Frees the pod's week 4.
+  </CheckItem>
+  <CheckItem done>
+    <strong>Enforce at least one admin per organisation.</strong> Disallow any action that would leave the org without one. Prevents a lockout class of incident.
+  </CheckItem>
+  <CheckItem done>
+    <strong>All mutation visibility driven by policy checks, not permission bits.</strong> Cleaner mental model. Slightly more work up-front, considerably less over time.
+  </CheckItem>
+  <CheckItem done>
+    <strong>Settings page descoped.</strong> Not required to ship the cycle. Cut at week 4.
+  </CheckItem>
+  <CheckItem done>
+    <strong>No creation or editing of one resource type in the panel.</strong> Its editor is a mobile-only flow already; not worth re-implementing.
+  </CheckItem>
+  <CheckItem done>
+    <strong>Cross-workspace copy skips based on name.</strong> Simple, predictable dedup key.
+  </CheckItem>
+  <CheckItem done>
+    <strong>Do not archive the current user's record.</strong> Would invalidate their session mid-action.
+  </CheckItem>
+</CheckList>
+
+## Roadblocks (weekly log)
+
+**Week 1.** One pod member split with a side-project. I lost a Tuesday to a separate cross-platform issue.
+
+**Week 2.** A blocked native release held up mobile PRs for a day.
+
+**Week 3.** CI slow / occasionally red. Fixed with a shard/parallelisation pass mid-week.
+
+**Week 4.** Clean. Everything moved.
+
+**Week 5.** A pod member helped an adjacent team with a pending-member problem for two days.
+
+**Week 6.** Clean run to the finish.
+
+## Confidence
+
+| Week | Rating | |
+|---|---|---|
+| 1 | 7.5 | 🟡 |
+| 2 | 7.5 | 🟡 |
+| 3 | 7.5 | 🟡 |
+| 4 | 7.5 | 🟡 |
+| 5 | 7.5 | 🟡 |
+| 6 | 8.5 | 🟢 |
+
+Flat at 7.5 for most of the cycle isn't a bad signal. It means scope stayed matched to time. The bump at week 6 is when the framework work paid off and the finish line was visible. If it had been trending *down* over weeks, that would have been the alarm.
+
+## What I'd change next time
+
+**Design the bulk-action framework in week 1, not week 3.** Two weeks earlier and the payoff would have been bigger. I was over-cautious about designing before the pod had shared understanding.
+
+**Playwright coverage from week 1.** By end of the cycle we had it. Earlier would have caught two bugs before demo day.
+
+**Version the shared cards from the start.** Some cards were designed for the workspace context and needed adaptation for the cross-workspace context. Designing for both up-front would have saved a couple of days.
+
+<hr />
+
+The single biggest lesson: **frameworks first, features second.** A bulk-action framework and a wizard shell are more valuable in a six-week cycle than any three individual features. Build the frameworks, then the features rush.
+
+<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
+  Filipe Sousa
+</p>
+
+</div>

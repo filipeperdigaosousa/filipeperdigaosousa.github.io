@@ -1,7 +1,14 @@
 import type { MDXComponents } from "mdx/types";
+import Callout from "@/components/labs/Callout";
+import StatusPill from "@/components/labs/StatusPill";
+import CheckList, { CheckItem } from "@/components/labs/CheckList";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
+    Callout,
+    StatusPill,
+    CheckList,
+    CheckItem,
     h1: ({ children }) => (
       <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary mt-12 mb-6 leading-tight">
         {children}
