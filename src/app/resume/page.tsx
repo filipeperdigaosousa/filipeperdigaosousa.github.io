@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import PrintButton from "@/components/resume/PrintButton";
-import Logo from "@/components/ui/Logo";
 import { profile } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { skillsByCategory, categoryLabels, type SkillCategory } from "@/data/skills";
@@ -41,7 +41,16 @@ export default function ResumePage() {
 
       <div className="resume-page bg-background text-on-surface mx-auto max-w-4xl px-margin-mobile md:px-10 py-10 print:py-0 print:px-0">
         <header className="resume-header pb-5 mb-6 border-b border-white/10 grid grid-cols-[auto_1fr] gap-5 items-start">
-          <Logo size={64} className="print:size-14 shrink-0" />
+          <div className="relative shrink-0 rounded-lg overflow-hidden border border-white/10 w-24 h-24">
+            <Image
+              src="/portrait.jpg"
+              alt={`${profile.name} portrait`}
+              fill
+              sizes="96px"
+              className="object-cover"
+              priority
+            />
+          </div>
           <div>
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2">
               <div>
@@ -131,39 +140,6 @@ export default function ResumePage() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="break-inside-avoid">
-              <h2 className="font-mono text-[10px] uppercase tracking-widest text-secondary mb-3">
-                / Contact
-              </h2>
-              <ul className="font-mono text-[11px] text-on-surface/85 leading-relaxed space-y-0.5">
-                <li>{profile.location}</li>
-                <li>
-                  <a
-                    href={profile.socials.email}
-                    className="text-primary underline-offset-2 hover:underline"
-                  >
-                    {profile.socials.email.replace("mailto:", "")}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={profile.socials.github}
-                    className="text-primary underline-offset-2 hover:underline"
-                  >
-                    github.com/filipeperdigaosousa
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={profile.socials.linkedin}
-                    className="text-primary underline-offset-2 hover:underline"
-                  >
-                    linkedin.com/in/filipeperdigaosousa
-                  </a>
-                </li>
-              </ul>
             </div>
           </aside>
         </div>
