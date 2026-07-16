@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Typewriter from "@/components/ui/Typewriter";
 import PostCard from "@/components/labs/PostCard";
-import { posts } from "@/data/posts";
+import { visiblePosts } from "@/data/posts";
 
 export const metadata: Metadata = {
   title: "Labs",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function LabsPage() {
-  const sorted = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const sorted = [...visiblePosts()].sort((a, b) => (a.date < b.date ? 1 : -1));
   const [featured, ...rest] = sorted;
 
   // bento pattern: featured (8) + 4 (4) — medium(6) medium(6) — small(4) small(4) small(4) — repeat

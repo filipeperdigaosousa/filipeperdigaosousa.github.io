@@ -4,7 +4,14 @@ export interface Post {
   summary: string;
   date: string;
   tags: string[];
+  /**
+   * If true, the post is only visible in development (localhost).
+   * In production builds the route returns 404 and the index hides it.
+   */
+  private?: boolean;
 }
+
+export const isDev = process.env.NODE_ENV === "development";
 
 export const posts: Post[] = [
   {
@@ -63,4 +70,17 @@ export const posts: Post[] = [
     date: "2026-01-18",
     tags: ["multi-tenant", "graphql", "architecture"],
   },
+  {
+    slug: "ten-years-one-consultancy",
+    title: "Ten Years, One Consultancy, Three Clients",
+    summary:
+      "The unusual CV shape: one employer for a decade, three deep client engagements underneath. Trade-offs of the umbrella-consultancy model, in plain terms.",
+    date: "2026-06-04",
+    tags: ["career", "contracting", "personal"],
+    private: true,
+  },
 ];
+
+export function visiblePosts(all: Post[] = posts): Post[] {
+  return all.filter((p) => !p.private || isDev);
+}

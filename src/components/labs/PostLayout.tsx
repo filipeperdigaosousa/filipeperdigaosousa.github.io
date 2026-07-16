@@ -21,8 +21,6 @@ function formatDate(iso: string) {
 }
 
 function estimateReadTime(): number {
-  // fallback estimate — MDX renders server-side, we don't have raw content here
-  // caller may override in future; for now render "N MIN READ" that scales with tags count roughly
   return 8;
 }
 
@@ -37,66 +35,9 @@ export default function PostLayout({ slug, children }: PostLayoutProps) {
     <>
       <ReadingProgress />
       <div className="pt-24 pb-24 px-margin-mobile md:px-margin-desktop max-w-content mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        <aside className="hidden lg:block lg:col-span-2">
-          <div className="sticky top-24">
-            <PostTOC />
-          </div>
-        </aside>
+        <aside className="hidden lg:flex lg:col-span-3 flex-col gap-4 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
+          <PostTOC />
 
-        <div className="col-span-1 lg:col-span-7">
-          <Link
-            href="/labs"
-            className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-6"
-          >
-            <span className="material-symbols-outlined text-sm">
-              arrow_back
-            </span>
-            Back to Labs
-          </Link>
-
-          <header className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="px-2 py-1 border border-secondary/30 bg-secondary/10 text-secondary rounded font-mono text-[10px] tracking-widest font-bold uppercase">
-                Labs · Notes
-              </span>
-              {date ? (
-                <span className="font-mono text-code-sm text-tertiary uppercase">
-                  {formatDate(date)}
-                </span>
-              ) : null}
-              <span className="w-1 h-1 rounded-full bg-outline-variant" />
-              <span className="font-mono text-code-sm text-tertiary uppercase inline-flex items-center gap-1">
-                <span className="material-symbols-outlined text-sm">
-                  schedule
-                </span>
-                {readMin} min read
-              </span>
-            </div>
-            <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary leading-tight">
-              {title}
-            </h1>
-          </header>
-
-          <article className="prose-post">{children}</article>
-
-          <footer className="mt-16 pt-8 border-t border-white/5">
-            <div className="flex flex-wrap gap-2 mb-6">
-              {tags.map((t) => (
-                <span
-                  key={t}
-                  className="px-3 py-1 bg-white/5 rounded-full font-mono text-[10px] uppercase tracking-widest text-on-surface-variant border border-white/10"
-                >
-                  #{t}
-                </span>
-              ))}
-            </div>
-            <div className="font-mono text-code-sm text-tertiary">
-              Filipe Sousa · Senior Full-Stack Engineer
-            </div>
-          </footer>
-        </div>
-
-        <aside className="col-span-1 lg:col-span-3 space-y-4">
           <div className="glass-card rounded-lg overflow-hidden border border-secondary/20">
             <div className="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-white/10">
               <span className="font-mono text-[10px] font-bold text-secondary uppercase tracking-widest inline-flex items-center gap-2">
@@ -140,6 +81,59 @@ export default function PostLayout({ slug, children }: PostLayoutProps) {
             </div>
           </Link>
         </aside>
+
+        <div className="col-span-1 lg:col-span-9">
+          <Link
+            href="/labs"
+            className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-6"
+          >
+            <span className="material-symbols-outlined text-sm">
+              arrow_back
+            </span>
+            Back to Labs
+          </Link>
+
+          <header className="mb-10">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <span className="px-2 py-1 border border-secondary/30 bg-secondary/10 text-secondary rounded font-mono text-[10px] tracking-widest font-bold uppercase">
+                Labs · Notes
+              </span>
+              {date ? (
+                <span className="font-mono text-code-sm text-tertiary uppercase">
+                  {formatDate(date)}
+                </span>
+              ) : null}
+              <span className="w-1 h-1 rounded-full bg-outline-variant" />
+              <span className="font-mono text-code-sm text-tertiary uppercase inline-flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm">
+                  schedule
+                </span>
+                {readMin} min read
+              </span>
+            </div>
+            <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary leading-tight">
+              {title}
+            </h1>
+          </header>
+
+          <article className="prose-post max-w-3xl">{children}</article>
+
+          <footer className="mt-16 pt-8 border-t border-white/5 max-w-3xl">
+            <div className="flex flex-wrap gap-2 mb-6">
+              {tags.map((t) => (
+                <span
+                  key={t}
+                  className="px-3 py-1 bg-white/5 rounded-full font-mono text-[10px] uppercase tracking-widest text-on-surface-variant border border-white/10"
+                >
+                  #{t}
+                </span>
+              ))}
+            </div>
+            <div className="font-mono text-code-sm text-tertiary">
+              Filipe Sousa · Senior Full-Stack Engineer
+            </div>
+          </footer>
+        </div>
       </div>
     </>
   );
