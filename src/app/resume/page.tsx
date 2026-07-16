@@ -28,7 +28,7 @@ const catOrder: SkillCategory[] = [
 export default function ResumePage() {
   return (
     <div className="resume-shell relative">
-      <div className="print:hidden max-w-content mx-auto px-margin-mobile md:px-margin-desktop pt-24 pb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="print:hidden max-w-content mx-auto px-margin-mobile md:px-margin-desktop pt-20 pb-2 flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/work"
           className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2"
@@ -39,7 +39,7 @@ export default function ResumePage() {
         <PrintButton />
       </div>
 
-      <div className="resume-page bg-background text-on-surface mx-auto max-w-4xl px-margin-mobile md:px-10 py-10 print:py-0 print:px-0">
+      <div className="resume-page bg-background text-on-surface mx-auto max-w-4xl px-margin-mobile md:px-10 pt-2 pb-10 print:py-0 print:px-0">
         <header className="resume-header pb-5 mb-6 border-b border-white/10 grid grid-cols-[auto_1fr] gap-5 items-start">
           <div className="relative shrink-0 rounded-lg overflow-hidden border border-white/10 w-24 h-24">
             <Image
