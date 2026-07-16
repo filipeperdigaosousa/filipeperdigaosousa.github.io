@@ -4,6 +4,7 @@ const items = [
   { href: "/", label: "Home", icon: "home" },
   { href: "/work", label: "Work", icon: "code" },
   { href: "/impact", label: "Impact", icon: "analytics" },
+  { href: "/labs", label: "Labs", icon: "biotech" },
 ];
 
 export default function BottomNav() {

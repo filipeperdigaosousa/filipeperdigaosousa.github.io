@@ -6,6 +6,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
   { href: "/impact", label: "Impact" },
+  { href: "/labs", label: "Labs" },
 ];
 
 export default function TopNav() {
