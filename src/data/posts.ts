@@ -12,7 +12,7 @@ export const posts: Post[] = [
     title: "Leading a Pod While Still Coding",
     summary:
       "The Pod Lead role in a product-engineering org: what you own, what you delegate, and how to stay hands-on without dropping the ball on cycle delivery.",
-    date: "2026-07-16",
+    date: "2026-07-15",
     tags: ["leadership", "process", "senior"],
   },
   {
@@ -20,7 +20,7 @@ export const posts: Post[] = [
     title: "Reviewing 600+ PRs a Year: the patterns I actually use",
     summary:
       "Six years of reviewing more PRs than I author. Triage rules, the 30-second first pass, when to comment vs pair, and how the AI bot fits in.",
-    date: "2026-07-16",
+    date: "2026-06-19",
     tags: ["code-review", "engineering-practice", "senior"],
   },
   {
@@ -28,7 +28,7 @@ export const posts: Post[] = [
     title: "Migrating React Native from React Navigation to Expo Router",
     summary:
       "An incremental migration from react-navigation to Expo Router — one screen-tree at a time, over four weeks, without a feature-freeze window.",
-    date: "2026-07-16",
+    date: "2026-05-23",
     tags: ["react-native", "expo-router", "migrations"],
   },
   {
@@ -36,7 +36,7 @@ export const posts: Post[] = [
     title: "Bringing a React Native App to the Web",
     summary:
       "Cross-platform playbook: page-by-page redesigns, static-asset infrastructure on GCS, stale-chunk recovery, and Playwright e2e coverage. All without disrupting mobile releases.",
-    date: "2026-07-16",
+    date: "2026-04-28",
     tags: ["react-native", "expo-router", "web", "migrations"],
   },
   {
@@ -44,23 +44,23 @@ export const posts: Post[] = [
     title: "Scoping the Workspace ID into the URL",
     summary:
       "One tenant. Many workspaces. How I refactored routing to make the workspace ID part of the URL — deep-links, tab-per-workspace, and no ambiguity about \"where am I?\".",
-    date: "2026-07-16",
+    date: "2026-04-02",
     tags: ["react-native", "expo-router", "multi-tenant", "routing"],
   },
   {
     slug: "first-user-setup-flow",
     title: "Designing a First-User Setup Flow Across Web and Mobile",
     summary:
-      "Onboarding an entire team into a product from scratch: step-based navigation, CSV import, device-to-user assignment, feature-flag rollout, and a shared setup framework reused across surfaces.",
-    date: "2026-07-16",
+      "Onboarding a new customer from zero — step-based navigation, CSV import, hardware-to-user assignment, feature-flag rollout, and shared primitives.",
+    date: "2026-02-24",
     tags: ["onboarding", "react-native", "product-engineering"],
   },
   {
     slug: "org-admin-panel",
-    title: "Shipping a Multi-Tenant Admin Panel in Four Weeks",
+    title: "Building Bulk-Action Frameworks in Multi-Tenant Products",
     summary:
-      "A cross-workspace admin panel: tenant-scoped routes, a reusable bulk-actions framework, a wizard shell that ships once and hosts every operation. Six-week cycle recap.",
-    date: "2026-07-16",
+      "One reusable mutation shape on the API. One wizard shell on the client. How treating bulk-actions as infrastructure lets a small team ship dozens of user-facing operations in weeks.",
+    date: "2026-01-18",
     tags: ["multi-tenant", "graphql", "architecture"],
   },
 ];
