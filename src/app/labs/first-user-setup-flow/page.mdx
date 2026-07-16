@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Designing a First-User Setup Flow Across Web and Mobile",
@@ -6,21 +6,7 @@ export const metadata = {
     "Onboarding new customers from zero — a step-based shell, CSV import, hardware-to-user assignment, feature-flag rollout, and shared primitives.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  onboarding · react-native · product-engineering
-</p>
-
-# Designing a First-User Setup Flow
+<PostLayout slug="first-user-setup-flow">
 
 Onboarding is the hardest surface in a B2B product. A new customer opens the app for the first time. You have maybe five minutes before they decide whether this is going to work. In that time you need to explain what the app is, get them to bring in the rest of their team, assign whatever hardware they own to those people, configure sensible defaults, and land them somewhere useful.
 
@@ -122,12 +108,8 @@ Playwright coverage before the pilot. e2e tests came post-pilot; that was uncomf
 
 Support tickets from new signups dropped noticeably in the two months after cutover. The CS team stopped needing to walk new customers through initial setup on a call. The setup shell became the pattern every subsequent multi-step flow reached for — which is either the highest compliment a piece of engineering can get, or the moment you should worry that you built too much abstraction. In this case I think the former. But it's worth checking.
 
-<hr />
+## Closing
 
 Onboarding is a system, not a screen. Ship it as one — shared primitives, server-side state, feature-flag rollout — and it pays dividends every time you get a new customer.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>

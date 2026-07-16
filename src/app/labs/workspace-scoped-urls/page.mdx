@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Scoping the Workspace ID into the URL",
@@ -6,21 +6,7 @@ export const metadata = {
     "A small refactor with an outsized DX payoff — put the tenant identifier in the URL and stop losing tab context.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  react-native · expo-router · multi-tenant
-</p>
-
-# Scoping the Workspace ID into the URL
+<PostLayout slug="workspace-scoped-urls">
 
 Every multi-tenant app I've worked on hits this problem the first time a user opens two tabs of the web build side-by-side and gets confused about which workspace each tab is showing. The URL says `/home` in both; the sidebars disagree; the "current workspace" is stored globally and tab A ends up affecting tab B.
 
@@ -31,12 +17,9 @@ The fix is straightforward and load-bearing: **make the workspace ID part of the
 The app supported multiple workspaces per user. Selection lived in a client-side context. Every screen read `currentWorkspace` implicitly; every deep-link inherited whatever was in local storage. Fine on native, where the app runs in one process. Broken on the web.
 
 <Callout icon="🎯">
-Target: every URL is fully qualified.
-<br />
-<code>/ws/[workspaceId]/home</code>
-<br />
-<code>/ws/[workspaceId]/records/[id]</code>
-<br />
+Target: every URL is fully qualified.<br />
+<code>/ws/[workspaceId]/home</code><br />
+<code>/ws/[workspaceId]/records/[id]</code><br />
 <code>/ws/[workspaceId]/settings</code>
 </Callout>
 
@@ -82,12 +65,8 @@ Both were 30-line PRs. Both would have been surprising bugs without them.
 
 Two-tab confusion is gone. Every URL fully qualifies its context. New engineers don't have to learn a hidden global state — the URL tells the story. Deep-links from Slack, email, external tools work correctly the first time. Session-replay tooling captures URLs that make sense in isolation.
 
-<hr />
+## Closing
 
 Not glamorous. Load-bearing. If you're building a multi-tenant app and the tenant identifier lives anywhere other than the URL, you'll fix it eventually. Doing it early costs one large PR. Doing it late costs the same PR plus every deep-linking bug you didn't catch until users complained.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>

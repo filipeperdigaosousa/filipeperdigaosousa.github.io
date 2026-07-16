@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Leading a Pod While Still Coding",
@@ -6,21 +6,7 @@ export const metadata = {
     "Notes on running a cycle as Pod Lead — what you own, what you delegate, and how you stay hands-on.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  leadership · process
-</p>
-
-# Leading a Pod While Still Coding
+<PostLayout slug="leading-a-pod-while-still-coding">
 
 Some product-engineering orgs rotate a "Pod Lead" role: one senior engineer takes accountability for a delivery cycle. Risk, scope, communication, decisions. The catch is that you're still expected to ship code. Stop coding and you drift out of the role. Fail to lead and you failed at the role.
 
@@ -113,12 +99,8 @@ Pod members reported feeling unblocked and clear on priorities. No surprises for
 
 Set up the tracking doc on day zero. Do the scope-risk conversation in week 2 by default, not week 3. Rotate PR review load explicitly instead of quietly doing more of it because it's "faster." I know these things and I still let them slip. Naming them out loud is how I try to stop.
 
-<hr />
+## Closing
 
 The framing that helped me most: **Pod Lead is a technical role with communication demands, not a management role that lost the plot on code.** Keep the code. Do the comms. Cut scope early. Trust the pod. Ship the cycle.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>

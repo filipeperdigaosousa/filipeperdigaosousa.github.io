@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Reviewing 600+ PRs a Year",
@@ -6,21 +6,7 @@ export const metadata = {
     "Notes on reviewing more code than I write — triage, the 30-second first pass, when to pair, and how a bot fits in.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  code-review · practice
-</p>
-
-# Reviewing 600+ PRs a Year
+<PostLayout slug="reviewing-600-prs-a-year">
 
 <Callout icon="👋">
 None of this is a manifesto. It's just what I actually reach for on a Tuesday afternoon when someone drops another PR into my queue.
@@ -108,12 +94,8 @@ Three things:
 
 Those three alone move a team's cycle time more than any process change I've watched people try.
 
-<hr />
+## Signal I'm reviewing well
 
-The thing I trust most as a signal I'm reviewing well: my teammates ship faster after I've reviewed their code, and they ask me for the next one. Everything else is vanity.
+My teammates ship faster after I've reviewed their code, and they ask me for the next one. Everything else is vanity.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>

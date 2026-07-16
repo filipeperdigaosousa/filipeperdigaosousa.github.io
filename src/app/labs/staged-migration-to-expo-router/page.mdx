@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Migrating React Native to Expo Router",
@@ -6,21 +6,7 @@ export const metadata = {
     "Incremental migration from react-navigation to Expo Router — small PRs, coexistence, no feature freeze.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  react-native · expo-router · migrations
-</p>
-
-# Migrating React Native to Expo Router
+<PostLayout slug="staged-migration-to-expo-router">
 
 <Callout icon="🎯">
 The constraint I gave myself: feature work does not stop. No freeze week, no long-lived migration branch. Everything downstream of that is negotiable.
@@ -82,12 +68,8 @@ Two: a small "adapter" PR very early. A tiny compat helper that abstracts the un
 
 The team started opening their own "move X to expo-router" PRs without being asked. PR sizes trended down as boilerplate disappeared. New engineers no longer needed the navigation orientation session. All measurable eight weeks later.
 
-<hr />
+## Closing
 
 If you're staring at this migration and wondering whether to do it, the honest answer is: it depends how much you ship. If your team ships one or two features a month, the payoff is small. If you ship ten, Expo Router pays for itself inside a quarter.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>

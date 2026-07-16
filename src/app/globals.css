@@ -27,6 +27,7 @@
 
   --color-error: #ffb4ab;
   --color-error-container: #93000a;
+  --color-warn: #d29922;
 
   --color-on-surface: #e3e2e7;
   --color-on-surface-variant: #c1c6d7;
@@ -152,5 +153,12 @@
   }
   .progress-glow {
     box-shadow: 0 0 10px currentColor;
+  }
+
+  .prose-post h2 {
+    scroll-margin-top: 96px;
+  }
+  .prose-post h3 {
+    scroll-margin-top: 96px;
   }
 }

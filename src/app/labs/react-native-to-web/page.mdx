@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Bringing a React Native App to the Web",
@@ -6,25 +6,11 @@ export const metadata = {
     "Cross-platform playbook — page-by-page redesigns, static-asset infrastructure, stale-chunk recovery, e2e coverage.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  react-native · expo-router · web
-</p>
-
-# Bringing a React Native App to the Web
+<PostLayout slug="react-native-to-web">
 
 React Native for web is a real technology in 2026, but "our RN app also runs on the web now" is not a switch you flip. Getting there means rethinking layouts, wiring up static-asset delivery, adding a testing layer that mobile never needed, and cutting over production traffic without breaking either surface.
 
-I did this over about three months, following [an Expo Router migration](/labs/staged-migration-to-expo-router/). What follows is the shape of the work, not a recipe — every codebase does this a bit differently.
+I did this over about three months, following an Expo Router migration. What follows is the shape of the work, not a recipe — every codebase does this a bit differently.
 
 ## The prerequisite
 
@@ -94,12 +80,8 @@ Playwright before the cutover, not during it. Retrofitting e2e coverage while un
 
 Team members started opening their own "move X into web design" PRs unprompted. Bug reports shifted from "web is broken" to specific browser edge cases — a good change. The sales team started demoing the web build without qualifiers.
 
-<hr />
+## Closing
 
 Cross-platform React Native is a real project, not a checkbox. Done incrementally, page by page, behind flags, it ships. The payoff is a single JavaScript codebase running on iOS, Android and the web with the same navigation, auth, and features — and a team that isn't stretched maintaining two of them.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>

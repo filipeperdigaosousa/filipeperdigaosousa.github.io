@@ -1,4 +1,4 @@
-import Link from "next/link";
+import PostLayout from "@/components/labs/PostLayout";
 
 export const metadata = {
   title: "Building Bulk-Action Frameworks in Multi-Tenant Products",
@@ -6,21 +6,7 @@ export const metadata = {
     "One reusable mutation shape on the API. One wizard shell on the client. How treating bulk-actions as infrastructure changes what a small team can ship.",
 };
 
-<div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-3xl mx-auto">
-
-<Link
-  href="/labs"
-  className="font-mono text-code-sm text-tertiary hover:text-primary inline-flex items-center gap-2 mb-8"
->
-  <span className="material-symbols-outlined text-sm">arrow_back</span>
-  Back to Labs
-</Link>
-
-<p className="font-mono text-code-sm text-secondary uppercase tracking-widest mb-3">
-  multi-tenant · graphql · architecture
-</p>
-
-# Building Bulk-Action Frameworks in Multi-Tenant Products
+<PostLayout slug="org-admin-panel">
 
 Multi-tenant products accumulate bulk operations. Copy this record from workspace A to B. Archive these ten records across three workspaces. Delete the ones no longer active. Every one of these looks different from the outside — but underneath they share almost everything: permission checks, validation, chunking, progress reporting, error aggregation, audit trail, a wizard UI on top.
 
@@ -61,14 +47,7 @@ class BulkAction::Base
 end
 ```
 
-Adding a new bulk action becomes ~50 lines: subclass `BulkAction::Base`, implement `perform_one`, register the action type. The base handles:
-
-- Permission checks per source and per target workspace
-- Chunking to avoid timeout on large operations
-- Async progress reporting via subscriptions
-- Per-record success/failure aggregation
-- Audit event emission
-- Error surfacing back to the client in a structured shape
+Adding a new bulk action becomes ~50 lines: subclass `BulkAction::Base`, implement `perform_one`, register the action type. The base handles permission checks per source and per target workspace, chunking to avoid timeouts on large operations, async progress reporting via subscriptions, per-record success/failure aggregation, audit event emission, and error surfacing back to the client in a structured shape.
 
 First bulk action took a couple of days to design. The second took an hour.
 
@@ -99,47 +78,25 @@ The shell is one React component tree. Individual actions plug in their **item s
 />
 ```
 
-The wizard state machine — pick → validate → resolve → confirm → run → summary — is generic. Every specific action adapts through props. Same pattern as [the setup framework](/labs/first-user-setup-flow/): one shell, many uses.
+The wizard state machine — pick → validate → resolve → confirm → run → summary — is generic. Every specific action adapts through props. Same pattern as the setup shell: one form, many uses.
 
 ## Why the shape matters
 
-Two properties that a bulk-action framework must have, and are easy to accidentally miss:
+Two properties that a bulk-action framework must have, and are easy to accidentally miss.
 
 **Every operation is idempotent per (record, target).** If a copy from record A to workspace B fails, you can retry the whole bulk action; the framework skips (A, B) pairs that already succeeded. Without this, half-failed operations become manual cleanups.
 
-**Validation is server-side, but returned per-row for the client to render.** The client can't be trusted to compute conflicts (it doesn't have the whole picture). The server can't render UI. Split the responsibilities cleanly: server returns `{ record → { target → status } }`, client renders it. Get this API shape right on day one — refactoring it later is painful.
+**Validation is server-side, but returned per-row for the client to render.** The client can't be trusted to compute conflicts — it doesn't have the whole picture. The server can't render UI. Split the responsibilities cleanly: server returns `{ record → { target → status } }`, client renders it. Get this API shape right on day one — refactoring it later is painful.
 
 ## Permissions and scoping
 
 Every list query behind the panel filters by "workspaces the user has permission in." This is *not* a simple `where` clause on a database — it involves a join through the role membership table.
 
-Two rules I follow:
-
-- Server-side, every mutation double-checks permission. Client-side gating is a UX nicety; the server is the truth.
-- Policy-driven visibility instead of permission-bit-driven. `can?(:manage, Record)` reads better than checking three boolean columns.
+Two rules I follow: server-side, every mutation double-checks permission. Client-side gating is a UX nicety; the server is the truth. And use policy-driven visibility instead of permission-bit-driven — `can?(:manage, Record)` reads better than checking three boolean columns.
 
 ## Audit trail as infrastructure
 
-Every bulk action emits a single audit event with child references. Not one event per record — one per operation, with the child records nested inside. Makes the audit log queryable at both levels.
-
-The audit shape:
-
-```
-{
-  actor_id,
-  action_type,
-  source_workspace_id,
-  target_workspace_ids: [...],
-  result: { ok: 12, skipped: 2, failed: 1 },
-  children: [
-    { record_id, target_workspace_id, status },
-    ...
-  ],
-  timestamp
-}
-```
-
-Cheap to query. Powers a future customer-facing history view.
+Every bulk action emits a single audit event with child references. Not one event per record — one per operation, with the child records nested inside. Makes the audit log queryable at both levels. Cheap to query. Powers a future customer-facing history view.
 
 ## The wizard-shell reuse
 
@@ -147,12 +104,8 @@ Six months after shipping the framework, an unrelated admin surface needed bulk-
 
 That compounding is the point. First operation is expensive. Second is cheap. Fifth is trivial.
 
-<hr />
+## Closing
 
 If you're staring at "we need bulk copy for records" as an item on the roadmap and you don't already have a framework, the honest cost is: 2× the time for the first operation to buy 10× speed on operations 2 through N. Whether that trade is worth it depends how many bulk operations you can see landing over the next year. In my experience, always more than you think.
 
-<p className="text-tertiary font-mono text-code-sm mt-12 pt-8 border-t border-white/5">
-  Filipe Sousa
-</p>
-
-</div>
+</PostLayout>
