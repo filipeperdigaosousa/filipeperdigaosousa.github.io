@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import TimelineItem from "@/components/work/TimelineItem";
 import Typewriter from "@/components/ui/Typewriter";
 import { experience } from "@/data/experience";
@@ -26,6 +27,15 @@ export default function WorkPage() {
             platforms, fraud-detection systems, and today&apos;s sports
             performance analytics.
           </p>
+          <Link
+            href="/resume"
+            className="inline-flex items-center gap-2 mt-6 bg-primary text-on-primary px-5 py-2.5 font-mono text-label-caps uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all"
+          >
+            <span className="material-symbols-outlined text-sm">
+              picture_as_pdf
+            </span>
+            Download Résumé (PDF)
+          </Link>
         </div>
         <div className="flex gap-4 mb-2">
           <div className="flex flex-col items-start md:items-end">

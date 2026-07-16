@@ -162,3 +162,38 @@
     scroll-margin-top: 96px;
   }
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+  html,
+  body {
+    background: var(--color-background) !important;
+    color: var(--color-on-surface) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  header:has(nav),
+  footer,
+  nav[class*="fixed"],
+  .print\:hidden {
+    display: none !important;
+  }
+  main {
+    padding-top: 0 !important;
+  }
+  .resume-page {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .resume-entry {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
