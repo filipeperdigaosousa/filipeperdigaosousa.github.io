@@ -89,8 +89,8 @@ export default function ImpactPage() {
           <Typewriter text="Metrics Log" />
         </h1>
         <p className="text-on-surface-variant max-w-2xl text-body-lg">
-          Live engineering telemetry. Refreshed every 6 hours from the GitHub
-          API via a scheduled GitHub Action.
+          Live engineering telemetry. Refreshed daily from the GitHub API via
+          a scheduled GitHub Action.
         </p>
         {isStale && snapshotDate ? (
           <div className="mt-6 glass-card rounded-xl px-4 py-3 inline-flex items-center gap-3 border-primary/20">
@@ -256,7 +256,7 @@ export default function ImpactPage() {
             — Source: GitHub API
           </p>
           <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
-            build:auto · cron:6h
+            build:auto · cron:daily
           </span>
         </div>
       </section>

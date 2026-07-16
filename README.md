@@ -2,7 +2,7 @@
 
 Personal portfolio + live engineering metrics dashboard.
 
-Static site. Next.js App Router (`output: 'export'`) → deployed to GitHub Pages via GitHub Actions. Metrics refreshed every 6 hours from the public GitHub GraphQL API.
+Static site. Next.js App Router (`output: 'export'`) → deployed to GitHub Pages via GitHub Actions. Metrics refreshed daily from the GitHub GraphQL API.
 
 ## Stack
 
@@ -41,7 +41,7 @@ If no token, existing stubs in `src/data/generated/` are kept.
 
 Workflow: `.github/workflows/build.yml`. Triggers:
 - `push` to `main`
-- `schedule` cron every 6 hours (offset 17 min)
+- `schedule` cron once daily (03:17 UTC)
 - manual `workflow_dispatch`
 
 Setup checklist:
