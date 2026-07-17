@@ -34,6 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Fetch GitHub metrics
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN || github.token }}
           GH_USER: ${{ github.repository_owner }}
