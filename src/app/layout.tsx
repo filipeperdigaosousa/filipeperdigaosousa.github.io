@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import TopNav from "@/components/layout/TopNav";
@@ -58,6 +59,11 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <BottomNav />
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="41e32407-9185-4871-9209-a2470dc59b09"
+        />
       </body>
     </html>
   );

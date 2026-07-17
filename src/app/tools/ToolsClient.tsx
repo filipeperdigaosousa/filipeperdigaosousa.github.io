@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import Typewriter from "@/components/ui/Typewriter";
+import { track } from "@/lib/analytics";
 import {
   categoryLabels,
   categoryOrder,
@@ -160,6 +161,7 @@ function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
       href={`/tools/${tool.slug}`}
+      onClick={() => track("tool-open", { tool: tool.slug })}
       className="glass-card rounded-xl p-5 group flex flex-col gap-3 transition-all hover:-translate-y-0.5 hover:border-secondary/60"
     >
       <div className="flex items-start justify-between gap-3">

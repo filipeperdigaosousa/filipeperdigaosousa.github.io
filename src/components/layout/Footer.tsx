@@ -1,4 +1,7 @@
+"use client";
+
 import { profile } from "@/data/profile";
+import { track } from "@/lib/analytics";
 
 const links = [
   { href: profile.socials.github, label: "GITHUB" },
@@ -19,6 +22,7 @@ export default function Footer() {
             <a
               key={l.href}
               href={l.href}
+              onClick={() => track("outbound", { link: l.label })}
               className="font-mono text-code-sm text-tertiary hover:text-primary transition-colors"
               target="_blank"
               rel="noopener noreferrer"
