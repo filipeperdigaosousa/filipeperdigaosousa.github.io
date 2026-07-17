@@ -11,6 +11,7 @@ export interface Profile {
     github: string;
     linkedin: string;
     email: string;
+    buyMeACoffee: string;
   };
 }
 
@@ -26,5 +27,6 @@ export const profile: Profile = {
     github: "https://github.com/filipeperdigaosousa",
     linkedin: "https://www.linkedin.com/in/filipeperdigaosousa/",
     email: "mailto:fpsousa91@gmail.com",
+    buyMeACoffee: "https://buymeacoffee.com/fpsousa91m",
   },
 };

@@ -4,6 +4,7 @@ const links = [
   { href: profile.socials.github, label: "GITHUB" },
   { href: profile.socials.linkedin, label: "LINKEDIN" },
   { href: profile.socials.email, label: "EMAIL" },
+  { href: profile.socials.buyMeACoffee, label: "BUY ME A COFFEE" },
 ];
 
 export default function Footer() {
