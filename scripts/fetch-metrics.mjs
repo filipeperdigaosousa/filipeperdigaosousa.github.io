@@ -14,9 +14,36 @@ if (!TOKEN) {
   process.exit(0);
 }
 
-const gql = graphql.defaults({
+const rawGql = graphql.defaults({
   headers: { authorization: `token ${TOKEN}` },
 });
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function gql(query, variables) {
+  let attempt = 0;
+  const maxAttempts = 5;
+  while (true) {
+    try {
+      return await rawGql(query, variables);
+    } catch (err) {
+      const msg = err?.message ?? "";
+      const retriable =
+        msg.includes("Resource limits") ||
+        msg.includes("secondary rate limit") ||
+        msg.includes("abuse detection") ||
+        err?.status === 502 ||
+        err?.status === 503;
+      attempt += 1;
+      if (!retriable || attempt >= maxAttempts) throw err;
+      const backoff = 2 ** attempt * 1500;
+      console.warn(
+        `[fetch-metrics] retriable error (attempt ${attempt}/${maxAttempts - 1}): ${msg.slice(0, 120)} — sleeping ${backoff}ms`,
+      );
+      await sleep(backoff);
+    }
+  }
+}
 
 async function fetchCareerYears(firstYear = 2016) {
   const now = new Date();
@@ -177,25 +204,25 @@ async function fetchTopLanguages() {
   return list;
 }
 
-async function fetchMergedPRDetail(maxPages = 5) {
+async function fetchMergedPRDetail(maxPages = 10) {
   const query = `
     query($user:String!, $cursor:String) {
       user(login:$user) {
-        pullRequests(states:[MERGED], first:100, after:$cursor, orderBy:{field:UPDATED_AT, direction:DESC}) {
+        pullRequests(states:[MERGED], first:50, after:$cursor, orderBy:{field:UPDATED_AT, direction:DESC}) {
           pageInfo { hasNextPage endCursor }
           nodes {
             createdAt mergedAt additions deletions
             repository { nameWithOwner }
-            commits(first:30) {
+            commits(first:15) {
               nodes {
                 commit {
                   authoredDate
                   messageHeadline
-                  authors(first:5) { nodes { user { login } email } }
+                  authors(first:3) { nodes { user { login } email } }
                 }
               }
             }
-            reviews(first:20, states:[APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+            reviews(first:10, states:[APPROVED, CHANGES_REQUESTED, COMMENTED]) {
               nodes { submittedAt author { login } }
             }
           }
@@ -478,15 +505,12 @@ async function main() {
 
   const previous = await loadPrevious();
 
-  const [contributions, prof, prs, langs, reviewedInfo, careerYears] =
-    await Promise.all([
-      fetchContributions(),
-      fetchProfile(),
-      fetchMergedPRDetail(5),
-      fetchTopLanguages(),
-      fetchReviewedAuthors(),
-      fetchCareerYears(2016),
-    ]);
+  const contributions = await fetchContributions();
+  const prof = await fetchProfile();
+  const prs = await fetchMergedPRDetail(10);
+  const langs = await fetchTopLanguages();
+  const reviewedInfo = await fetchReviewedAuthors();
+  const careerYears = await fetchCareerYears(2016);
   const careerTotal = careerYears.reduce((a, b) => a + b.total, 0);
   const firstActiveYear =
     careerYears.find((y) => y.total > 0)?.year ?? 2016;
