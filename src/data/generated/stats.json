@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-07-16T10:15:19.930Z",
+  "generatedAt": "2026-07-20T07:51:33.157Z",
   "totals": {
-    "contributionsLastYear": 2709,
-    "currentStreak": 4,
+    "contributionsLastYear": 2760,
+    "currentStreak": 1,
     "longestStreak": 6,
-    "topLanguage": "Ruby",
-    "prsMerged": 551,
-    "prsOpened": 592,
-    "prsReviewed": 643,
-    "issuesOpened": 400,
+    "topLanguage": "TypeScript",
+    "prsMerged": 554,
+    "prsOpened": 596,
+    "prsReviewed": 645,
+    "issuesOpened": 402,
     "publicRepos": 14,
-    "prsMergedAllTime": 1159,
+    "prsMergedAllTime": 1162,
     "distinctAuthorsReviewed": 16,
     "reposTouched": 8,
-    "careerTotal": 15485,
+    "careerTotal": 15536,
     "firstActiveYear": 2016,
     "yearsShipping": 11,
     "peakYear": 2022,
@@ -62,55 +62,55 @@
     },
     {
       "year": 2026,
-      "total": 1676
+      "total": 1727
     }
   ],
   "cycle": {
     "p50": 17.7,
     "mean": 36.1,
     "p90": 87.5,
-    "sameDayPct": 70
+    "sameDayPct": 69
   },
   "topLanguages": [
     {
-      "name": "Ruby",
-      "percent": 69
+      "name": "TypeScript",
+      "percent": 57
     },
     {
-      "name": "TypeScript",
-      "percent": 23
+      "name": "Ruby",
+      "percent": 31
+    },
+    {
+      "name": "MDX",
+      "percent": 8
     },
     {
       "name": "JavaScript",
-      "percent": 6
+      "percent": 3
     },
     {
       "name": "CSS",
       "percent": 1
-    },
-    {
-      "name": "SCSS",
-      "percent": 0
     }
   ],
   "sizeHistogram": {
-    "S": 278,
+    "S": 277,
     "M": 87,
     "L": 63,
-    "XL": 72
+    "XL": 73
   },
   "ttfrHistogram": {
-    "<1h": 229,
+    "<1h": 228,
     "1-4h": 81,
     "4-24h": 106,
     "1-3d": 55,
     ">3d": 26
   },
   "commitTypes": {
-    "feat": 380,
-    "fix": 250,
-    "refactor": 128,
-    "test": 47,
+    "feat": 372,
+    "fix": 243,
+    "refactor": 129,
+    "test": 44,
     "chore": 36,
     "docs": 2,
     "perf": 4,
@@ -120,15 +120,15 @@
     "other": 15
   },
   "contributionMix": {
-    "commits": 1074,
-    "pullRequests": 592,
-    "codeReviews": 643,
-    "issues": 400,
-    "total": 2709,
+    "commits": 1117,
+    "pullRequests": 596,
+    "codeReviews": 645,
+    "issues": 402,
+    "total": 2760,
     "percent": {
       "commits": 40,
       "pullRequests": 22,
-      "codeReviews": 24,
+      "codeReviews": 23,
       "issues": 15
     }
   },
