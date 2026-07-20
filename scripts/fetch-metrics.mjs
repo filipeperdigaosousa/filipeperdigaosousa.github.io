@@ -479,10 +479,16 @@ function reconcile(fresh, prev) {
     }));
   }
 
-  stats.totals.contributionsLastYear = pickHigher(
-    stats.totals.contributionsLastYear,
-    prev.totals?.contributionsLastYear,
-  );
+  if (
+    isDegraded(
+      stats.totals.contributionsLastYear,
+      prev.totals?.contributionsLastYear,
+      200,
+    )
+  ) {
+    stats.totals.contributionsLastYear = prev.totals.contributionsLastYear;
+    staleFields.push("contributionsLastYear");
+  }
 
   if (staleFields.length) {
     stats.snapshot = {
