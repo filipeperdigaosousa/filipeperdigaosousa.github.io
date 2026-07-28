@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-27T06:43:28.895Z",
+  "generatedAt": "2026-07-28T06:04:27.247Z",
   "totals": {
-    "contributionsLastYear": 2833,
+    "contributionsLastYear": 2832,
     "currentStreak": 0,
     "longestStreak": 6,
     "topLanguage": "TypeScript",
@@ -134,6 +134,17 @@
   },
   "prSampleSize": 500,
   "snapshot": {
-    "hasStale": false
+    "hasStale": true,
+    "snapshotAt": "2026-07-27T06:43:28.895Z",
+    "staleFields": [
+      "prsMerged",
+      "prsOpened",
+      "prsReviewed",
+      "cycle",
+      "sizeHistogram",
+      "ttfrHistogram",
+      "commitTypes",
+      "contributionMix"
+    ]
   }
 }
