@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-06T10:54:37.435Z",
+  "generatedAt": "2026-11-07T10:12:10.749Z",
   "totals": {
-    "contributionsLastYear": 2849,
+    "contributionsLastYear": 2862,
     "currentStreak": 5,
     "longestStreak": 12,
     "topLanguage": "TypeScript",
@@ -13,11 +13,11 @@
     "prsMergedAllTime": 1178,
     "distinctAuthorsReviewed": 16,
     "reposTouched": 14,
-    "careerTotal": 16426,
+    "careerTotal": 16452,
     "firstActiveYear": 2016,
     "yearsShipping": 11,
     "peakYear": 2026,
-    "peakYearTotal": 2619
+    "peakYearTotal": 2645
   },
   "careerYears": [
     {
@@ -62,7 +62,7 @@
     },
     {
       "year": 2026,
-      "total": 2619
+      "total": 2645
     }
   ],
   "cycle": {
@@ -135,7 +135,7 @@
   "prSampleSize": 500,
   "snapshot": {
     "hasStale": true,
-    "snapshotAt": "2026-11-05T10:58:02.799Z",
+    "snapshotAt": "2026-11-06T10:54:37.435Z",
     "staleFields": [
       "prsMerged",
       "prsOpened",
