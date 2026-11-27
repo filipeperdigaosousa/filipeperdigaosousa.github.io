@@ -15,6 +15,14 @@ export const isDev = process.env.NODE_ENV === "development";
 
 export const posts: Post[] = [
   {
+    slug: "building-portugal-em-dados",
+    title: "Building Portugal em Dados",
+    summary:
+      "A side project that turns official Portuguese statistics into an answer, a chart and a source: the problem, the engineering constraints, where AI sits in the product, and how AI let one person ship it in 10 days.",
+    date: "2026-11-27",
+    tags: ["side-project", "data", "ai"],
+  },
+  {
     slug: "leading-a-pod-while-still-coding",
     title: "Leading a Pod While Still Coding",
     summary:

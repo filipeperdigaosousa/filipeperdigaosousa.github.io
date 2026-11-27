@@ -1,0 +1,56 @@
+<Callout icon="📊">
+[Portugal em Dados](https://portugalemdados.pt) is a side project: ask a question about Portugal in plain Portuguese, get an official number, a chart and its source. It went live 10 days after the first commit.
+</Callout>
+
+## The problem
+
+Portugal publishes a lot of good statistics. INE, the national statistics institute, alone has over 13,000 indicators, most of them down to the municipality. Almost nobody can find them.
+
+An INE title reads like "Taxa bruta de natalidade (‰) por Local de residência (NUTS - 2024); Anual". People don't search like that. They ask "is the population of my town growing?" or "where is rent rising fastest?". The data exists, but the interface stands between people and the answer.
+
+## The engineering view
+
+Underneath the product idea there were five hard constraints.
+
+- **The source is unreliable at request time.** During the prototype, 3 of 8 requests to the INE API timed out and one indicator returned 40 MB of JSON. Nothing can depend on it live.
+- **The data is messy.** Periods come as "Abril de 2011", "S7A2025" or "2024T3". Geography codes change between versions. People ask by distrito while INE publishes by statistical region.
+- **Some numbers can't be combined.** Population can be summed into a distrito total; medians and rates can't. Getting that wrong produces confident, wrong numbers.
+- **A language model can't be trusted with facts.** It's good at understanding a question and bad at being a source of statistics.
+- **It has to be findable and cheap.** Search is the main way people arrive, so every page must render on the server. And it's a side project, so it has to run on very little.
+
+## The solution, briefly
+
+Two rules settled most decisions: **never call the source at request time**, and **numbers come from the database, never from the model**.
+
+- An overnight ingest syncs the catalog, fetches only changed indicators, normalizes periods and geography codes, and validates before loading. A failing indicator keeps its previous version live, so a bad night never blanks the site.
+- Postgres holds everything: about 9.5 million observations from seven public sources, one geography tree with every code version, and an aggregation rule per indicator so medians are never summed.
+- A read-only GraphQL API in Python sits in front of the database, and a server-rendered Next.js site draws charts and maps of all 308 concelhos as SVG.
+- Gaps are labeled, never filled in. When a place has no data of its own, the page says which wider area it's showing instead.
+- It all runs on one small VM behind a CDN, for about €10 a month, with nightly backups and a tested restore.
+
+## Where AI sits in the product
+
+AI does exactly one job: turning a question into a query.
+
+1. An open model reads the question and returns places, topics and years in a fixed JSON format. The prompt treats the question as data, never as instructions.
+2. Our own search, Postgres full-text plus trigram matching and a curated vocabulary, finds candidate indicators.
+3. The model picks among those candidate ids only, so it can never invent an indicator.
+4. Code runs the query and picks the chart by rule.
+
+The model never sees, writes or rounds a number. I originally planned for it to write a one-line caption, guarded by a check that rejected any number not in the data. I dropped that for fixed templates generated from the rows by code. Less charming, never wrong. An eval script runs a set of real questions through the pipeline and prints the hit rate, so a prompt or vocabulary change shows its effect before it ships.
+
+## How AI changed the build
+
+I built this with Claude Code as my pair, and it changed what one person can ship on a side project.
+
+- **Speed:** live 10 days after the first commit. 508 commits over 29 active days, 507 of them co-authored with Claude.
+- **Scope:** about 76,000 lines across ingest, API, web and SQL, with 255 test files. Without AI, I'd have scoped this to a fraction of that.
+- **Plans first:** every feature started as a written plan in the repo (31 of them) before any code. That's where my time went: deciding what to build, the rules it must follow and what "done" means.
+- **Rules in the repo:** the two rules above, plus product and design rules, live in files the agent reads every session. It doesn't have to be reminded that numbers never come from the model.
+- **Review, not typing:** my job shifted from writing code to reviewing diffs, running the app and deciding. The judgment calls stayed mine: dropping generated captions, refusing to sum medians, which sources to trust.
+
+The lesson isn't that AI writes the app. It's that the engineering work moves up a level. Clear constraints, written plans, tests and review are what make the speed safe. Without them, you just get more code faster.
+
+## Try it
+
+It's live at [portugalemdados.pt](https://portugalemdados.pt). Pick your concelho and ask it something.
