@@ -40,9 +40,9 @@ export default function PostLayout({ slug, children }: PostLayoutProps) {
 
           <div className="glass-card rounded-lg overflow-hidden border border-secondary/20">
             <div className="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-white/10">
-              <span className="font-mono text-[10px] font-bold text-secondary uppercase tracking-widest inline-flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                Post_Meta
+              <span className="font-mono text-[12px] font-bold text-secondary uppercase tracking-wider inline-flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-secondary" />
+                Post details
               </span>
               <div className="flex gap-1">
                 <span className="w-2 h-2 rounded-full bg-error/50" />
@@ -95,7 +95,7 @@ export default function PostLayout({ slug, children }: PostLayoutProps) {
 
           <header className="mb-10">
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <span className="px-2 py-1 border border-secondary/30 bg-secondary/10 text-secondary rounded font-mono text-[10px] tracking-widest font-bold uppercase">
+              <span className="px-2 py-1 border border-secondary/30 bg-secondary/10 text-secondary rounded font-mono text-[12px] tracking-wider font-bold uppercase">
                 Labs · Notes
               </span>
               {date ? (
@@ -123,7 +123,7 @@ export default function PostLayout({ slug, children }: PostLayoutProps) {
               {tags.map((t) => (
                 <span
                   key={t}
-                  className="px-3 py-1 bg-white/5 rounded-full font-mono text-[10px] uppercase tracking-widest text-on-surface-variant border border-white/10"
+                  className="px-3 py-1 bg-white/5 rounded-full font-mono text-[12px] uppercase tracking-wider text-on-surface-variant border border-white/10"
                 >
                   #{t}
                 </span>

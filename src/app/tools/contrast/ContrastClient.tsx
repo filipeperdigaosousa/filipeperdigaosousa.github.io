@@ -146,7 +146,7 @@ export default function ContrastClient() {
                   <span className="block font-mono text-code-sm text-on-surface truncate">
                     {p.label}
                   </span>
-                  <span className="block font-mono text-[11px] text-tertiary mt-0.5">
+                  <span className="block font-mono text-[12px] text-tertiary mt-0.5">
                     {p.fg} on {p.bg}
                     {c ? ` — ${c.toFixed(2)}:1` : ""}
                   </span>

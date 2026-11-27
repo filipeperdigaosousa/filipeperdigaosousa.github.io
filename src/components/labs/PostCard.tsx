@@ -25,8 +25,8 @@ export default function PostCard({ post, variant = "small" }: PostCardProps) {
   const primaryTag = post.tags[0] ?? "post";
   const colorClass =
     tone(post.slug.length) === "primary"
-      ? { text: "text-primary", border: "border-primary/40", hover: "hover:border-primary/60" }
-      : { text: "text-secondary", border: "border-secondary/40", hover: "hover:border-secondary/60" };
+      ? { text: "text-primary", border: "border-primary/25", hover: "hover:border-primary/60" }
+      : { text: "text-secondary", border: "border-secondary/25", hover: "hover:border-secondary/60" };
 
   if (variant === "featured") {
     return (
@@ -62,7 +62,7 @@ export default function PostCard({ post, variant = "small" }: PostCardProps) {
             {post.tags.slice(0, 4).map((t) => (
               <span
                 key={t}
-                className="px-2 py-1 bg-white/5 rounded font-mono text-[10px] uppercase tracking-widest text-on-surface-variant border border-white/5"
+                className="px-2 py-1 bg-white/5 rounded font-mono text-[12px] uppercase tracking-wider text-on-surface-variant border border-white/5"
               >
                 {t}
               </span>
@@ -81,13 +81,13 @@ export default function PostCard({ post, variant = "small" }: PostCardProps) {
     return (
       <Link
         href={`/labs/${post.slug}`}
-        className={`glass-card rounded-xl p-6 group flex flex-col border-t-2 ${colorClass.border} transition-all hover:border-t-2 min-h-[240px]`}
+        className={`glass-card rounded-xl p-6 group flex flex-col ${colorClass.border} ${colorClass.hover} transition-all min-h-[240px]`}
       >
         <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.slice(0, 3).map((t) => (
+          {post.tags.slice(0, 3).map((t, i) => (
             <span
               key={t}
-              className="bg-white/5 px-2 py-0.5 rounded font-mono text-[10px] uppercase tracking-widest text-on-surface-variant"
+              className={`bg-white/5 px-2 py-0.5 rounded font-mono text-[12px] uppercase tracking-wider ${i === 0 ? colorClass.text : "text-on-surface-variant"}`}
             >
               [{t}]
             </span>
@@ -118,7 +118,7 @@ export default function PostCard({ post, variant = "small" }: PostCardProps) {
   return (
     <Link
       href={`/labs/${post.slug}`}
-      className={`glass-card rounded-xl p-6 group flex flex-col border-l-2 ${colorClass.border} transition-all min-h-[220px]`}
+      className={`glass-card rounded-xl p-6 group flex flex-col ${colorClass.border} ${colorClass.hover} transition-all min-h-[220px]`}
     >
       <div className={`font-mono text-label-caps ${colorClass.text} uppercase tracking-widest mb-3`}>
         [{primaryTag}]

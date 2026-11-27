@@ -54,7 +54,7 @@ export default function ToolsClient() {
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/30 rounded mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
           <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
             / Tools
           </span>
@@ -79,11 +79,11 @@ export default function ToolsClient() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="filter --search [query]..."
-            className="w-full bg-surface-container border border-white/10 rounded-lg py-3 pl-10 pr-4 font-mono text-code-sm md:text-body-md text-on-surface focus:outline-none focus:border-secondary/60 transition-colors placeholder:text-on-surface-variant/40"
+            className="w-full bg-surface-container border border-white/10 rounded-lg py-3 pl-10 pr-4 font-mono text-code-sm md:text-body-md text-on-surface focus:outline-none focus:border-secondary/60 transition-colors placeholder:text-on-surface-variant/70"
           />
         </div>
         <div className="flex flex-wrap gap-2 items-center">
-          <span className="font-mono text-[10px] text-on-surface-variant/60 uppercase tracking-widest mr-1">
+          <span className="font-mono text-[12px] text-on-surface-variant/80 uppercase tracking-wider mr-1">
             Categories:
           </span>
           {FILTERS.map((f) => (
@@ -91,7 +91,7 @@ export default function ToolsClient() {
               key={f.key}
               type="button"
               onClick={() => setFilter(f.key)}
-              className={`px-2.5 py-1 rounded font-mono text-[10px] uppercase tracking-widest border transition-colors ${
+              className={`px-2.5 py-1 rounded font-mono text-[12px] uppercase tracking-wider border transition-colors ${
                 filter === f.key
                   ? "bg-secondary/20 border-secondary text-secondary"
                   : "bg-secondary/5 border-secondary/20 text-secondary/70 hover:bg-secondary/10 hover:border-secondary/40"
@@ -119,7 +119,7 @@ export default function ToolsClient() {
                     / {categoryLabels[cat]}
                   </h2>
                   <div className="h-px flex-1 bg-gradient-to-r from-white/15 to-transparent" />
-                  <span className="font-mono text-[10px] text-on-surface-variant/60 uppercase tracking-widest">
+                  <span className="font-mono text-[12px] text-on-surface-variant/80 uppercase tracking-wider">
                     {list.length.toString().padStart(2, "0")}
                   </span>
                 </div>
@@ -134,7 +134,7 @@ export default function ToolsClient() {
         </div>
       )}
 
-      <footer className="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/70">
+      <footer className="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 font-mono text-[12px] uppercase tracking-wider text-on-surface-variant/70">
         <div className="flex items-center gap-4 flex-wrap">
           <span className="inline-flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-secondary" />
@@ -149,7 +149,7 @@ export default function ToolsClient() {
             {tools.length.toString().padStart(2, "0")}_utilities
           </span>
         </div>
-        <span className="text-on-surface-variant/50">
+        <span className="text-on-surface-variant/80">
           designed_for_precision
         </span>
       </footer>
@@ -174,7 +174,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           </span>
         </div>
         {tool.featured ? (
-          <span className="font-mono text-[9px] tracking-widest uppercase px-2 py-0.5 rounded border border-primary/40 bg-primary/10 text-primary">
+          <span className="font-mono text-[12px] tracking-wider uppercase px-2 py-0.5 rounded border border-primary/40 bg-primary/10 text-primary">
             featured
           </span>
         ) : null}
@@ -192,13 +192,13 @@ function ToolCard({ tool }: { tool: Tool }) {
           {tool.tags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant/80 bg-white/5 px-2 py-0.5 rounded"
+              className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant/80 bg-white/5 px-2 py-0.5 rounded"
             >
               {tag}
             </span>
           ))}
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-widest text-secondary inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+        <span className="font-mono text-[12px] uppercase tracking-wider text-secondary inline-flex items-center gap-1 group-hover:gap-2 transition-all">
           open
           <span className="material-symbols-outlined text-sm">
             arrow_right_alt

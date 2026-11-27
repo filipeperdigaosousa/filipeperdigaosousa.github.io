@@ -18,7 +18,7 @@ export default function NotFound() {
           className="inline-flex items-center gap-2 border border-white/10 px-6 py-3 text-label-caps uppercase hover:bg-white/5 active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined">home</span>
-          Return_Home
+          Back home
         </Link>
       </div>
     </div>

@@ -17,7 +17,7 @@ export default function TerminalWindow({
         <div className="w-3 h-3 rounded-full bg-error/50" />
         <div className="w-3 h-3 rounded-full bg-secondary/50" />
         <div className="w-3 h-3 rounded-full bg-primary/50" />
-        <span className="ml-4 text-code-sm text-on-surface-variant opacity-40">
+        <span className="ml-4 text-code-sm text-on-surface-variant opacity-70">
           {prompt}
         </span>
       </div>

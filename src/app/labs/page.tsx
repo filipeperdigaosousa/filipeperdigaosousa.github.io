@@ -31,11 +31,6 @@ export default function LabsPage() {
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12 md:mb-16">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="inline-block px-3 py-1 bg-secondary/10 border border-secondary/30 rounded font-mono text-label-caps text-secondary uppercase tracking-widest">
-            V1.0 · Stable
-          </span>
-        </div>
         <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary mb-4">
           <Typewriter text="Labs" />
         </h1>

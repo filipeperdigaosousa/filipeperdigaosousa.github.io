@@ -148,7 +148,7 @@ export default function Base64Client() {
             </div>
           )}
           {mode === "decode" && output.ok && output.bytesLen !== undefined ? (
-            <p className="mt-2 font-mono text-[10px] text-tertiary">
+            <p className="mt-2 font-mono text-[12px] text-tertiary">
               {output.bytesLen} bytes decoded
             </p>
           ) : null}
@@ -203,7 +203,7 @@ function FieldBox({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-black/30 border border-white/10 rounded-lg p-3">
       <div className="flex justify-between items-center mb-1">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant">
+        <p className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant">
           {label}
         </p>
         <CopyButton value={value} />

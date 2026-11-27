@@ -29,7 +29,7 @@ export const experience: ExperienceEntry[] = [
       "Cloud deployments on AWS and GCP with Terraform and Kubernetes.",
       "**Drove** CI/CD adoption and engineering practice across teams.",
     ],
-    note: "Umbrella consultancy — WeChangers, Pasabi, PlayerData, and Canvas Medical were placements delivered through Glazed.",
+    note: "Umbrella consultancy. WeChangers, Pasabi, PlayerData, and Canvas Medical were placements delivered through Glazed.",
   },
   {
     company: "Canvas Medical",
@@ -68,14 +68,14 @@ export const experience: ExperienceEntry[] = [
     summary:
       "Core engineer in a cross-functional product pod, delivering end-to-end features for a sports performance analytics platform used by professional sports clubs.",
     highlights: [
-      "**Delivered** a configurable metrics platform spanning backend, web and mobile — server-side unit conversion, per-club configuration, flexible metric selection.",
-      "**Designed and implemented** Session Blueprints — recurring training sessions automatically materialised with device assignment and timezone-aware scheduling.",
+      "**Delivered** a configurable metrics platform spanning backend, web and mobile: server-side unit conversion, per-club configuration, flexible metric selection.",
+      "**Designed and implemented** Session Blueprints: recurring training sessions automatically materialised with device assignment and timezone-aware scheduling.",
       "**Led** the React Native → web migration with Expo Router, establishing routing patterns adopted across the product.",
       "**Built** a multi-tenant Staff Admin Panel with a reusable bulk-actions framework for copy, archive, restore and delete across athletes, staff, pitches, tags, surveys.",
       "**Migrated** ingestion and enrichment pipelines to Numaflow and adapted the API's async job model for improved scalability.",
       "**Implemented** HubSpot CRM integration synchronising clubs, organisations and staff via webhook-driven async processing.",
-      "**Optimised** backend performance across Rails and GraphQL — eliminated N+1 queries, introduced DataLoader batching.",
-      "**Assumed** Pod Lead while remaining hands-on — delivery planning, risk management, stakeholder coordination.",
+      "**Optimised** backend performance across Rails and GraphQL: eliminated N+1 queries, introduced DataLoader batching.",
+      "**Assumed** Pod Lead while remaining hands-on: delivery planning, risk management, stakeholder coordination.",
     ],
     note: "Placement delivered through Glazed.",
   },
@@ -129,7 +129,7 @@ export const experience: ExperienceEntry[] = [
     summary:
       "Social-impact network platform. Owned architecture from day one, delivered the full stack end-to-end.",
     highlights: [
-      "**Defined** project architecture from the beginning — structured and developed all project layers.",
+      "**Defined** project architecture from the beginning: structured and developed all project layers.",
       "**Built** multi-tenancy infrastructure from start to finish.",
       "**Created** database models in Ruby on Rails with PostgreSQL integration and developed all pages.",
       "**Built** an internal real-time messaging system using Rails and React.",
@@ -148,7 +148,7 @@ export const experience: ExperienceEntry[] = [
     logo: "/logos/deloitte.png",
     stack: ["AngularJS", "Node.js", "MongoDB"],
     summary:
-      "Digital transformation tooling — insurance products and rapid prototyping platform.",
+      "Digital transformation tooling: insurance products and rapid prototyping platform.",
     highlights: [
       "**Developed** tools for online insurance companies.",
       "**Built** a Node.js backend integrated with MongoDB.",

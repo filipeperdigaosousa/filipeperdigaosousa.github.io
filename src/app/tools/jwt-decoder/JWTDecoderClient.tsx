@@ -228,7 +228,7 @@ function StatusTile({
       </p>
       <p className={`font-mono text-headline-md ${color} truncate`}>{value}</p>
       {hint ? (
-        <p className="mt-1 font-mono text-[10px] text-tertiary">{hint}</p>
+        <p className="mt-1 font-mono text-[12px] text-tertiary">{hint}</p>
       ) : null}
     </div>
   );
@@ -251,7 +251,7 @@ function TimeRow({
         : "text-on-surface";
   return (
     <li className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-      <span className="text-on-surface-variant uppercase tracking-widest text-[10px] w-32 shrink-0">
+      <span className="text-on-surface-variant uppercase tracking-wider text-[12px] w-32 shrink-0">
         {label}
       </span>
       <span className={color}>{humanTime(epoch)}</span>

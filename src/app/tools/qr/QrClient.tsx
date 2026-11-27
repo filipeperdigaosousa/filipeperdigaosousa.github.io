@@ -179,7 +179,7 @@ export default function QrClient() {
 
           <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/5">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+              <p className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
                 Error correction
               </p>
               <div className="inline-flex rounded-lg border border-white/10 bg-white/5 p-0.5">
@@ -200,7 +200,7 @@ export default function QrClient() {
               </div>
             </div>
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+              <p className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
                 Size ({size}px)
               </p>
               <input
@@ -356,7 +356,7 @@ function ColorRow({
 }) {
   return (
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+      <p className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
         {label}
       </p>
       <div className="flex items-center gap-2">

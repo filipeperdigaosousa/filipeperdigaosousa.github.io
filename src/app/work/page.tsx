@@ -7,12 +7,11 @@ import { experience } from "@/data/experience";
 export const metadata: Metadata = {
   title: "Experience",
   description:
-    "10 years of production web and mobile engineering — Canvas Medical, PlayerData, Pasabi, Glazed, WeChangers, Manolo Blahnik, Deloitte Digital.",
+    "10+ years of production web and mobile engineering: Canvas Medical, PlayerData, Pasabi, WeChangers, Deloitte Digital, via Glazed.",
 };
 
 export default function WorkPage() {
   const yearsExperience = new Date().getFullYear() - 2015;
-  const currentRole = experience.find((e) => e.end === null);
 
   return (
     <div className="pt-32 pb-24 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
@@ -22,10 +21,9 @@ export default function WorkPage() {
             <Typewriter text="Career Architecture" />
           </h1>
           <p className="text-on-surface-variant text-body-lg max-w-2xl">
-            A structural timeline of shipped web and mobile products, from
-            early insurance tooling through luxury commerce, social-impact
-            platforms, fraud-detection systems, and today&apos;s sports
-            performance analytics.
+            A timeline of shipped web and mobile products: insurance tooling,
+            social-impact platforms, fraud detection, sports performance
+            analytics, and now healthcare.
           </p>
           <Link
             href="/resume"
@@ -43,7 +41,7 @@ export default function WorkPage() {
               {yearsExperience}+
             </span>
             <span className="font-mono text-label-caps text-on-surface-variant uppercase tracking-widest mt-1">
-              Years_Exp
+              Years
             </span>
           </div>
           <div className="w-px h-10 bg-white/10" />
@@ -59,14 +57,13 @@ export default function WorkPage() {
       </section>
 
       <div className="relative">
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px timeline-line -translate-x-1/2 md:block" />
+        <div className="absolute left-2 top-0 bottom-0 w-px timeline-line" />
         <div className="space-y-16">
-          {experience.map((entry, i) => (
+          {experience.map((entry) => (
             <TimelineItem
               key={entry.company + entry.start}
               entry={entry}
-              side={i % 2 === 0 ? "left" : "right"}
-              active={entry === currentRole}
+              active={entry.end === null}
             />
           ))}
         </div>

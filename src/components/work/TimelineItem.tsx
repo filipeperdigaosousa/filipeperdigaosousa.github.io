@@ -19,68 +19,49 @@ function renderInlineBold(text: string) {
 
 interface TimelineItemProps {
   entry: ExperienceEntry;
-  side: "left" | "right";
   active?: boolean;
 }
 
 export default function TimelineItem({
   entry,
-  side,
   active = false,
 }: TimelineItemProps) {
-  const isLeft = side === "left";
   return (
-    <div className="relative flex flex-col md:flex-row items-start md:items-center">
-      {!isLeft && <div className="flex-1 hidden md:block" />}
-
+    <div className="relative grid grid-cols-[16px_1fr] md:grid-cols-[16px_240px_1fr] gap-x-6 md:gap-x-7 items-start">
       <div
-        className={`absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-background border-2 ${
-          active ? "border-primary" : "border-outline"
-        } rounded-full z-10 hidden md:block`}
-      >
-        {active ? (
-          <div className="w-full h-full rounded-full bg-primary animate-ping opacity-25" />
-        ) : null}
+        className={`w-4 h-4 mt-1 rounded-full border-2 z-10 ${
+          active ? "border-primary bg-primary" : "border-outline bg-background"
+        }`}
+      />
+
+      <div className="md:sticky md:top-24">
+        <span className="font-mono text-label-caps text-secondary uppercase tracking-widest block opacity-80">
+          {formatRange(entry.start, entry.end)}
+        </span>
+        <CompanyLogo
+          company={entry.company}
+          domain={entry.domain}
+          logo={entry.logo}
+          size={48}
+          className="shrink-0 my-3"
+        />
+        <h2 className="font-mono text-headline-md text-primary leading-tight">
+          {entry.company}
+        </h2>
+        <p className="font-mono text-code-sm text-on-surface-variant font-bold tracking-widest uppercase mt-1">
+          {entry.role}
+        </p>
       </div>
 
-      <div
-        className={`flex-1 w-full pl-12 md:pl-0 ${
-          isLeft ? "md:pr-16 md:text-right md:order-1" : "md:pl-16 order-2"
-        } order-2 mt-4 md:mt-0`}
-      >
-        <div
-          className={`glass-card p-6 md:p-8 rounded-lg text-left w-full max-w-2xl inline-block ${
-            isLeft ? "md:ml-auto" : ""
-          }`}
-        >
-          <span className="font-mono text-label-caps text-secondary uppercase tracking-widest mb-3 block opacity-80">
-            {formatRange(entry.start, entry.end)}
-          </span>
-          <div className="flex items-center gap-4 mb-6">
-            <CompanyLogo
-              company={entry.company}
-              domain={entry.domain}
-              logo={entry.logo}
-              size={48}
-              className="shrink-0"
-            />
-            <div>
-              <h3 className="font-mono text-headline-md text-primary leading-tight">
-                {entry.company}
-              </h3>
-              <p className="font-mono text-code-sm text-on-surface-variant font-bold tracking-widest uppercase mt-1">
-                {entry.role}
-              </p>
-            </div>
-          </div>
-
+      <div className="col-start-2 md:col-start-3 mt-4 md:mt-0">
+        <div className="glass-card p-6 md:p-8 rounded-lg max-w-3xl">
           <p className="text-body-md text-on-surface/80 mb-6">
             {entry.summary}
           </p>
 
           <ul className="space-y-3">
             {entry.highlights.map((h) => (
-              <li key={h} className="flex items-start gap-3 text-left">
+              <li key={h} className="flex items-start gap-3">
                 <span className="material-symbols-outlined text-primary text-sm mt-1">
                   subdirectory_arrow_right
                 </span>
@@ -90,7 +71,7 @@ export default function TimelineItem({
           </ul>
 
           {entry.note ? (
-            <p className="mt-6 text-code-sm font-mono text-on-surface-variant/60 border-l-2 border-outline-variant pl-3 text-left">
+            <p className="mt-6 text-code-sm font-mono text-on-surface-variant/80 border-l-2 border-outline-variant pl-3 ">
               Note: {entry.note}
             </p>
           ) : null}
@@ -99,7 +80,7 @@ export default function TimelineItem({
             {entry.stack.map((s) => (
               <span
                 key={s}
-                className="px-2 py-1 bg-white/5 rounded text-[10px] font-mono text-on-surface-variant uppercase tracking-widest"
+                className="px-2 py-1 bg-white/5 rounded text-[12px] font-mono text-on-surface-variant uppercase tracking-wider"
               >
                 {s}
               </span>
@@ -107,8 +88,6 @@ export default function TimelineItem({
           </div>
         </div>
       </div>
-
-      {isLeft && <div className="flex-1 hidden md:block order-2" />}
     </div>
   );
 }

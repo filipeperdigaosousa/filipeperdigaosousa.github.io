@@ -17,7 +17,7 @@ const map = {
 export default function StatusPill({ status, children }: StatusPillProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border font-mono text-[10px] uppercase tracking-widest ${map[status]}`}
+      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border font-mono text-[12px] uppercase tracking-wider ${map[status]}`}
     >
       {children ?? status}
     </span>

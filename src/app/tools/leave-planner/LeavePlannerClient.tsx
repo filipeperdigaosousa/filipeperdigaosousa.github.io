@@ -392,7 +392,7 @@ export default function LeavePlannerClient() {
           </p>
         </div>
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1.5">
+          <p className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1.5">
             Non-working days (won't consume leave)
           </p>
           <div className="flex flex-wrap gap-2">
@@ -414,7 +414,7 @@ export default function LeavePlannerClient() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <label className="block">
-            <span className="block font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+            <span className="block font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
               Hours per workday
             </span>
             <input
@@ -431,7 +431,7 @@ export default function LeavePlannerClient() {
             />
           </label>
           <label className="block">
-            <span className="block font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+            <span className="block font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
               Public holidays (YYYY-MM-DD per line)
             </span>
             <textarea
@@ -615,7 +615,7 @@ function LeaveCard({
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-3 items-end">
         <label className="block">
-          <span className="block font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+          <span className="block font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
             Start date
           </span>
           <input
@@ -626,7 +626,7 @@ function LeaveCard({
           />
         </label>
         <label className="block">
-          <span className="block font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+          <span className="block font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
             Amount
           </span>
           <input
@@ -706,7 +706,7 @@ function ResultRow({
 }) {
   return (
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-widest text-on-surface-variant">
+      <p className="font-mono text-[12px] uppercase tracking-wider text-on-surface-variant">
         {label}
       </p>
       <p
@@ -814,7 +814,7 @@ function MonthCalendar({
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 font-mono text-[10px] uppercase tracking-widest text-tertiary mb-1">
+      <div className="grid grid-cols-7 gap-1 font-mono text-[12px] uppercase tracking-wider text-tertiary mb-1">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
           <div key={d} className="text-center py-1">
             {d}
@@ -841,7 +841,7 @@ function MonthCalendar({
                     : "border-white/10 bg-white/[0.03]"
               }`}
             >
-              <div className="flex items-center justify-between text-[10px]">
+              <div className="flex items-center justify-between text-[12px]">
                 <span
                   className={
                     isWeekend

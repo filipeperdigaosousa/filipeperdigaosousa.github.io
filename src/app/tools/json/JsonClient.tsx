@@ -226,7 +226,7 @@ export default function JsonClient() {
                 {result.error}
               </p>
               {result.errorLoc ? (
-                <p className="font-mono text-[10px] text-tertiary mt-1">
+                <p className="font-mono text-[12px] text-tertiary mt-1">
                   line {result.errorLoc.line}, col {result.errorLoc.col}
                 </p>
               ) : null}

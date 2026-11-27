@@ -30,17 +30,18 @@ export default function HomePage() {
                 />
               </h1>
               <p className="text-body-md md:text-body-lg leading-relaxed">
-                I enjoy taking complex product ideas from architecture
-                through production, working across{" "}
-                <span className="text-secondary">Ruby on Rails</span>,{" "}
-                <span className="text-secondary">JavaScript</span>,{" "}
+                I take complex product ideas from architecture through
+                production, working across{" "}
+                <span className="text-secondary">TypeScript</span>,{" "}
                 <span className="text-secondary">React</span>,{" "}
                 <span className="text-secondary">React Native</span>,{" "}
-                <span className="text-secondary">GraphQL</span>
-                {" "}and cloud infrastructure. More recently I&apos;ve been leading
-                cross-functional engineering pods while remaining a hands-on
-                contributor — owning technical direction, delivery planning
-                and implementation.
+                <span className="text-secondary">Ruby on Rails</span>,{" "}
+                <span className="text-secondary">Python</span> and{" "}
+                <span className="text-secondary">Django</span>, plus cloud
+                infrastructure. Lately I&apos;ve been building developer
+                platforms and internal tooling in healthcare, after leading a
+                cross-functional pod in sports tech. I stay hands-on: technical
+                direction, delivery planning and implementation.
               </p>
 
               <div className="flex flex-wrap gap-3 pt-2">
@@ -49,23 +50,16 @@ export default function HomePage() {
                   className="bg-primary text-on-primary px-6 py-3 font-mono text-label-caps uppercase flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
                 >
                   <span className="material-symbols-outlined">work</span>
-                  View_Experience
+                  View experience
                 </Link>
                 <a
                   href={profile.socials.email}
                   className="border border-white/10 px-6 py-3 font-mono text-label-caps uppercase flex items-center gap-2 hover:bg-white/5 active:scale-95 transition-all"
                 >
                   <span className="material-symbols-outlined">mail</span>
-                  Contact_Me
+                  Contact me
                 </a>
               </div>
-
-              <p className="pt-4 mt-2 border-t border-white/5 font-mono text-code-sm text-secondary flex items-center gap-2">
-                <span className="material-symbols-outlined text-sm">
-                  terminal
-                </span>
-                <span>status: active_deployment_01.sh</span>
-              </p>
             </div>
           </TerminalWindow>
         </div>
@@ -86,7 +80,7 @@ export default function HomePage() {
               <div className="flex justify-between items-end">
                 <div>
                   <p className="font-mono text-label-caps text-secondary uppercase tracking-widest mb-1">
-                    Current_Loc
+                    Location
                   </p>
                   <p className="text-body-md font-bold">{profile.location}</p>
                 </div>
@@ -95,7 +89,7 @@ export default function HomePage() {
                     Availability
                   </p>
                   <div className="flex items-center gap-2 justify-end">
-                    <div className="w-2 h-2 bg-secondary rounded-full animate-pulse shadow-[0_0_8px_rgba(66,227,85,1)]" />
+                    <div className="w-2 h-2 bg-secondary rounded-full shadow-[0_0_8px_rgba(66,227,85,1)]" />
                     <p className="text-body-md">
                       {availabilityLabel[profile.availability]}
                     </p>
@@ -132,7 +126,7 @@ export default function HomePage() {
 
       <section className="mb-20">
         <div className="flex items-center gap-4 mb-8">
-          <h2 className="font-mono text-headline-md text-primary">Tech_Stack</h2>
+          <h2 className="font-mono text-headline-md text-primary">Tech stack</h2>
           <div className="h-px flex-1 bg-white/10" />
         </div>
         <div className="glass-card rounded-xl p-8 space-y-8">
@@ -160,7 +154,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
               <h3 className="font-mono text-headline-md text-secondary">
-                System_Activity
+                GitHub activity
               </h3>
               <p className="font-mono text-code-sm opacity-60">
                 {stats.totals.contributionsLastYear.toLocaleString()} contributions
@@ -168,7 +162,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex items-center gap-2 font-mono text-code-sm">
-              <span className="opacity-40">Less</span>
+              <span className="opacity-70">Less</span>
               <div className="flex gap-1">
                 <div className="w-3 h-3 bg-white/5 rounded-[2px]" />
                 <div className="w-3 h-3 bg-secondary/20 rounded-[2px]" />
@@ -176,7 +170,7 @@ export default function HomePage() {
                 <div className="w-3 h-3 bg-secondary/70 rounded-[2px]" />
                 <div className="w-3 h-3 bg-secondary rounded-[2px]" />
               </div>
-              <span className="opacity-40">More</span>
+              <span className="opacity-70">More</span>
             </div>
           </div>
           <Heatmap days={contributions.days} />

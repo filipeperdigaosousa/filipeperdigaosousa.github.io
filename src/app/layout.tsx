@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Filipe Sousa | Portfolio",
     description:
-      "React Native + Ruby on Rails. 10y shipping production apps. Live engineering metrics.",
+      "Full-stack engineer. TypeScript, React, Rails and Python. 10+ years shipping production apps. Live engineering metrics.",
     url: "https://filipeperdigaosousa.github.io",
     siteName: "Filipe Sousa",
     type: "website",

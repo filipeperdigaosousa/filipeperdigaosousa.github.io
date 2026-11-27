@@ -99,7 +99,7 @@ export default function MeetingCostClient() {
             onChange={(e) => setSalary(Math.max(0, Number(e.target.value) || 0))}
             className="w-full bg-black/30 border border-white/10 rounded-lg p-2 font-mono text-headline-md text-primary focus:outline-none focus:border-primary/50"
           />
-          <p className="font-mono text-[10px] text-tertiary mt-2">
+          <p className="font-mono text-[12px] text-tertiary mt-2">
             Assumes {HOURS_PER_YEAR} billable hours / year.
           </p>
         </div>
@@ -229,7 +229,7 @@ function Slider({
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-primary"
       />
-      <div className="flex justify-between font-mono text-[10px] text-tertiary uppercase tracking-widest mt-1">
+      <div className="flex justify-between font-mono text-[12px] text-tertiary uppercase tracking-wider mt-1">
         <span>{min}</span>
         <span>{max}</span>
       </div>
@@ -253,7 +253,7 @@ function StatTile({
       </p>
       <p className="font-mono text-headline-md text-primary">{value}</p>
       {hint ? (
-        <p className="font-mono text-[10px] text-tertiary mt-1">{hint}</p>
+        <p className="font-mono text-[12px] text-tertiary mt-1">{hint}</p>
       ) : null}
     </div>
   );

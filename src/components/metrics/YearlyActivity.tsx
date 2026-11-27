@@ -47,7 +47,7 @@ export default function YearlyActivity({ years }: YearlyActivityProps) {
         {years.map((y) => (
           <div
             key={y.year}
-            className="font-mono text-[10px] text-tertiary text-center uppercase tracking-widest"
+            className="font-mono text-[12px] text-tertiary text-center uppercase tracking-wider"
           >
             {y.year}
           </div>

@@ -47,7 +47,7 @@ export default function ToolShell({
               {tags.map((t) => (
                 <span
                   key={t}
-                  className="px-2 py-0.5 rounded font-mono text-[10px] uppercase tracking-widest bg-white/5 border border-white/10 text-on-surface-variant"
+                  className="px-2 py-0.5 rounded font-mono text-[12px] uppercase tracking-wider bg-white/5 border border-white/10 text-on-surface-variant"
                 >
                   {t}
                 </span>

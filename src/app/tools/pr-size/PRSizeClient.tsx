@@ -216,7 +216,7 @@ function ManualField({
 }) {
   return (
     <label className="block">
-      <span className="block font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+      <span className="block font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
         {label}
       </span>
       <input
@@ -292,7 +292,7 @@ function ScaleBar({ totalChanged }: { totalChanged: number }) {
           style={{ width: `${pct}%` }}
         />
       </div>
-      <div className="mt-2 grid grid-cols-5 font-mono text-[10px] uppercase tracking-widest text-tertiary">
+      <div className="mt-2 grid grid-cols-5 font-mono text-[12px] uppercase tracking-wider text-tertiary">
         {stops.map(([label, upper]) => (
           <div key={label}>
             <span className="text-on-surface-variant">{label}</span>{" "}

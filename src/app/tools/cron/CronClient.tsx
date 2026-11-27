@@ -75,7 +75,7 @@ export default function CronClient() {
           placeholder="* * * * *"
           className="w-full bg-black/30 border border-white/10 rounded-lg p-3 font-mono text-headline-md text-primary focus:outline-none focus:border-primary/50"
         />
-        <div className="mt-3 grid grid-cols-5 gap-2 font-mono text-[10px] uppercase tracking-widest text-tertiary">
+        <div className="mt-3 grid grid-cols-5 gap-2 font-mono text-[12px] uppercase tracking-wider text-tertiary">
           {FIELDS.map((f, i) => (
             <div key={f}>
               <span className="block text-on-surface-variant">{f}</span>
@@ -120,7 +120,7 @@ export default function CronClient() {
                   : "border-white/10 bg-white/5 text-on-surface-variant hover:text-primary hover:border-primary/40"
               }`}
             >
-              <span className="block text-[10px] uppercase tracking-widest opacity-70">
+              <span className="block text-[12px] uppercase tracking-wider opacity-70">
                 {p.label}
               </span>
               <span className="block">{p.expr}</span>

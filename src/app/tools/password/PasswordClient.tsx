@@ -189,7 +189,7 @@ export default function PasswordClient() {
             }
             className="w-full accent-primary"
           />
-          <div className="flex justify-between font-mono text-[10px] text-tertiary uppercase tracking-widest mt-1">
+          <div className="flex justify-between font-mono text-[12px] text-tertiary uppercase tracking-wider mt-1">
             <span>4</span>
             <span>32</span>
             <span>64</span>

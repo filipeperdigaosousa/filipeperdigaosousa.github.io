@@ -61,27 +61,28 @@ export default function ResumePage() {
                   {profile.role}
                 </p>
               </div>
-              <ul className="font-mono text-[11px] text-on-surface-variant leading-relaxed md:text-right space-y-0.5">
+              <ul className="font-mono text-[12px] text-on-surface-variant leading-relaxed md:text-right space-y-0.5">
                 <li>{profile.location}</li>
                 <li>{profile.socials.email.replace("mailto:", "")}</li>
                 <li>github.com/filipeperdigaosousa</li>
                 <li>linkedin.com/in/filipeperdigaosousa</li>
               </ul>
             </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-on-surface/85 max-w-3xl">
-              I enjoy taking complex product ideas from architecture through
-              production, working across Ruby on Rails, JavaScript, React,
-              React Native, GraphQL and cloud infrastructure. More recently
-              I&apos;ve been leading cross-functional engineering pods while
-              remaining a hands-on contributor — owning technical direction,
-              delivery planning and implementation.
+            <p className="mt-3 text-[13.5px] leading-relaxed text-on-surface/85 max-w-[58ch]">
+              I take complex product ideas from architecture through
+              production, working across TypeScript, React, React Native, Ruby
+              on Rails, Python and Django, plus cloud infrastructure. Lately
+              I&apos;ve been building developer platforms and internal tooling
+              in healthcare, after leading a cross-functional pod in sports
+              tech. I stay hands-on: technical direction, delivery planning and
+              implementation.
             </p>
           </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-6 print:gap-4">
           <section>
-            <h2 className="font-mono text-[10px] uppercase tracking-widest text-secondary mb-3">
+            <h2 className="font-mono text-[12px] uppercase tracking-wider text-secondary mb-3">
               / Experience
             </h2>
             <ul className="space-y-4">
@@ -99,14 +100,14 @@ export default function ResumePage() {
                         · {e.role}
                       </span>
                     </div>
-                    <span className="font-mono text-[10px] text-tertiary uppercase tracking-widest">
+                    <span className="font-mono text-[12px] text-tertiary uppercase tracking-wider">
                       {formatRange(e.start, e.end)}
                     </span>
                   </div>
-                  <p className="mt-1 text-[13px] text-on-surface/80 leading-relaxed">
+                  <p className="mt-1 text-[13.5px] text-on-surface/80 leading-relaxed">
                     {e.summary}
                   </p>
-                  <ul className="mt-1.5 space-y-0.5 text-[12.5px] text-on-surface/80 leading-relaxed pl-4">
+                  <ul className="mt-1.5 space-y-0.5 text-[13.5px] text-on-surface/80 leading-relaxed pl-4">
                     {e.highlights.map((h) => (
                       <li key={h} className="list-disc marker:text-primary/60">
                         {stripMarkers(h)}
@@ -114,12 +115,12 @@ export default function ResumePage() {
                     ))}
                   </ul>
                   {e.stack.length ? (
-                    <p className="mt-1.5 font-mono text-[10.5px] text-tertiary">
+                    <p className="mt-1.5 font-mono text-[12px] text-tertiary">
                       {e.stack.join(" · ")}
                     </p>
                   ) : null}
                   {e.note ? (
-                    <p className="mt-1 font-mono text-[10.5px] text-on-surface-variant/70 italic">
+                    <p className="mt-1 font-mono text-[12px] text-on-surface-variant/70 italic">
                       {e.note}
                     </p>
                   ) : null}
@@ -130,13 +131,13 @@ export default function ResumePage() {
 
           <aside className="space-y-5">
             <div>
-              <h2 className="font-mono text-[10px] uppercase tracking-widest text-secondary mb-3">
+              <h2 className="font-mono text-[12px] uppercase tracking-wider text-secondary mb-3">
                 / Skills
               </h2>
               <div className="space-y-3">
                 {catOrder.map((cat) => (
                   <div key={cat} className="break-inside-avoid">
-                    <p className="font-mono text-[10px] text-primary uppercase tracking-widest mb-1">
+                    <p className="font-mono text-[12px] text-primary uppercase tracking-wider mb-1">
                       {categoryLabels[cat]}
                     </p>
                     <p className="text-[12px] leading-relaxed text-on-surface/85">

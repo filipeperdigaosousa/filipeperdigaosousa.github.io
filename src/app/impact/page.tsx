@@ -79,12 +79,6 @@ export default function ImpactPage() {
   return (
     <div className="pt-24 pb-32 px-margin-mobile md:px-margin-desktop max-w-content mx-auto">
       <header className="mb-12">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="w-3 h-3 bg-secondary rounded-full animate-pulse shadow-[0_0_15px_currentColor]" />
-          <span className="font-mono text-label-caps text-secondary uppercase tracking-widest">
-            System Online
-          </span>
-        </div>
         <h1 className="font-mono text-headline-xl-mobile md:text-headline-xl text-primary mb-4">
           <Typewriter text="Metrics Log" />
         </h1>
@@ -132,7 +126,7 @@ export default function ImpactPage() {
         </div>
         <div className="glass-card rounded-xl p-6">
           <div className="mb-4">
-            <h3 className="font-mono text-headline-md mb-1">Career Activity</h3>
+            <h2 className="font-mono text-headline-md mb-1">Career Activity</h2>
             <p className="text-tertiary font-mono text-code-sm">
               Contributions per year across my full GitHub-tracked career
             </p>
@@ -176,9 +170,9 @@ export default function ImpactPage() {
         <div className="glass-card p-6 rounded-xl">
           <div className="flex justify-between items-end mb-6">
             <div>
-              <h3 className="font-mono text-headline-md mb-1">
+              <h2 className="font-mono text-headline-md mb-1">
                 Contribution Activity
-              </h3>
+              </h2>
               <p className="text-tertiary font-mono text-code-sm">
                 {formatNumber(totals.contributionsLastYear)} contributions in
                 the last year
@@ -200,9 +194,9 @@ export default function ImpactPage() {
         {contributionMix ? (
           <div className="glass-card rounded-xl p-6 mt-gutter">
             <div className="mb-4 text-center">
-              <h3 className="font-mono text-headline-md mb-1">
+              <h2 className="font-mono text-headline-md mb-1">
                 Contribution Mix
-              </h3>
+              </h2>
               <p className="text-tertiary font-mono text-code-sm">
                 How my last-12-month contributions split across commits,
                 reviews, PRs and issues

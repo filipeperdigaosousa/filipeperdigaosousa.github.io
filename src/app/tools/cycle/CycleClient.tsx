@@ -542,7 +542,7 @@ const mdComponents = {
     <h3 className="font-mono text-code-sm text-secondary uppercase tracking-widest mt-4 mb-1" {...p} />
   ),
   h4: (p: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h4 className="font-mono text-[10px] text-secondary uppercase tracking-widest mt-3 mb-1" {...p} />
+    <h4 className="font-mono text-[12px] text-secondary uppercase tracking-wider mt-3 mb-1" {...p} />
   ),
   p: (p: React.HTMLAttributes<HTMLParagraphElement>) => (
     <p className="text-body-md text-on-surface/85 leading-relaxed my-2" {...p} />
@@ -578,7 +578,7 @@ const mdComponents = {
   ),
   th: (p: React.ThHTMLAttributes<HTMLTableCellElement>) => (
     <th
-      className="text-left font-mono text-[10px] uppercase tracking-widest text-secondary border-b border-white/10 pb-2 pr-3 align-bottom"
+      className="text-left font-mono text-[12px] uppercase tracking-wider text-secondary border-b border-white/10 pb-2 pr-3 align-bottom"
       {...p}
     />
   ),
@@ -614,7 +614,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="block font-mono text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">
+      <span className="block font-mono text-[12px] uppercase tracking-wider text-on-surface-variant mb-1">
         {label}
       </span>
       {children}

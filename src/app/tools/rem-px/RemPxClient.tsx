@@ -90,7 +90,7 @@ export default function RemPxClient() {
               }`}
             >
               <span className="block text-primary">{p}px</span>
-              <span className="block text-[10px] text-tertiary">
+              <span className="block text-[12px] text-tertiary">
                 {fmt(p / rootPx)}rem
               </span>
             </button>

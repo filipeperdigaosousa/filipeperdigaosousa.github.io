@@ -261,7 +261,7 @@ function ResultRows({
         <CopyableValue value={date.toISOString()} />
       </li>
       <li className="text-on-surface-variant">{relative(date, now)}</li>
-      {note ? <li className="text-tertiary text-[11px]">{note}</li> : null}
+      {note ? <li className="text-tertiary text-[12px]">{note}</li> : null}
     </ul>
   );
 }

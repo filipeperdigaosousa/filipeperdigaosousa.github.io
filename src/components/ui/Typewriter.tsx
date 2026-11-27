@@ -18,6 +18,10 @@ export default function Typewriter({
   const [shown, setShown] = useState("");
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(text);
+      return;
+    }
     let i = 0;
     let timer: ReturnType<typeof setTimeout>;
     const tick = () => {
@@ -34,10 +38,12 @@ export default function Typewriter({
     };
   }, [text, speed, startDelay]);
 
+  // One copy of the text for crawlers and screen readers; untyped letters stay transparent.
   return (
     <span className={className}>
       {shown}
-      <span className="terminal-cursor" />
+      <span className="terminal-cursor" aria-hidden="true" />
+      <span className="text-transparent">{text.slice(shown.length)}</span>
     </span>
   );
 }
