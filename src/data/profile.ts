@@ -20,7 +20,7 @@ export const profile: Profile = {
   handle: "filipeperdigaosousa",
   role: "Senior Full-Stack Engineer",
   tagline:
-    "React Native + TypeScript on the front. Ruby on Rails + GraphQL on the back. I own the load-bearing migrations other engineers build on.",
+    "TypeScript and React on the front. Ruby on Rails, Python and Django on the back. I own the load-bearing migrations and platform work other engineers build on.",
   location: "Porto, Portugal",
   availability: "open",
   socials: {

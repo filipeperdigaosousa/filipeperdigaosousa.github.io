@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "Filipe Sousa | %s",
   },
   description:
-    "Senior full-stack engineer. React Native + TypeScript on the front, Ruby on Rails + GraphQL on the back. Portfolio, experience, and live engineering metrics.",
+    "Senior full-stack engineer. TypeScript and React on the front, Ruby on Rails, Python and Django on the back. Portfolio, experience, and live engineering metrics.",
   metadataBase: new URL("https://filipeperdigaosousa.github.io"),
   openGraph: {
     title: "Filipe Sousa | Portfolio",

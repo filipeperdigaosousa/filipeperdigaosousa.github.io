@@ -7,7 +7,7 @@ import { experience } from "@/data/experience";
 export const metadata: Metadata = {
   title: "Experience",
   description:
-    "10 years of production web and mobile engineering — PlayerData, Pasabi, Glazed, WeChangers, Manolo Blahnik, Deloitte Digital.",
+    "10 years of production web and mobile engineering — Canvas Medical, PlayerData, Pasabi, Glazed, WeChangers, Manolo Blahnik, Deloitte Digital.",
 };
 
 export default function WorkPage() {

@@ -21,7 +21,7 @@ export const experience: ExperienceEntry[] = [
     logo: "/logos/glazed.jpeg",
     stack: ["Ruby on Rails", "Node.js", "React", "TypeScript", "PostgreSQL"],
     summary:
-      "Home consultancy since 2016. WeChangers, Pasabi, and PlayerData engagements below were delivered through Glazed.",
+      "Home consultancy since 2016. WeChangers, Pasabi, PlayerData, and Canvas Medical engagements below were delivered through Glazed.",
     highlights: [
       "9+ years shipping client work across web and mobile, front-end and back-end.",
       "JavaScript, Ruby on Rails, Node.js, React, TypeScript in production across engagements.",
@@ -29,7 +29,26 @@ export const experience: ExperienceEntry[] = [
       "Cloud deployments on AWS and GCP with Terraform and Kubernetes.",
       "**Drove** CI/CD adoption and engineering practice across teams.",
     ],
-    note: "Umbrella consultancy — WeChangers, Pasabi, and PlayerData were placements delivered through Glazed.",
+    note: "Umbrella consultancy — WeChangers, Pasabi, PlayerData, and Canvas Medical were placements delivered through Glazed.",
+  },
+  {
+    company: "Canvas Medical",
+    role: "Senior Full-Stack Engineer",
+    start: "2026-09",
+    end: null,
+    domain: "canvasmedical.com",
+    logo: "/logos/canvas.png",
+    stack: ["Python", "Django", "PostgreSQL", "TypeScript"],
+    summary:
+      "Full-stack engineer on a cloud healthcare platform, owning features end to end across the core product, a public Python SDK and internal tooling.",
+    highlights: [
+      "**Built** a full-stack internal platform in Django and TypeScript for managing customer environments, from data model and async jobs to UI components.",
+      "**Designed and implemented** a deployment workflow that moves configuration between environments, with permissions, audit history and validation.",
+      "**Led** the migration of legacy plugins to a versioned release model, including data import, batch processing and customer notifications.",
+      "**Extended** the public SDK's data layer with new read-only models, shipping coordinated releases across multiple repositories.",
+      "**Delivered** new SDK APIs that let third-party plugins automate clinical and administrative workflows.",
+    ],
+    note: "Placement delivered through Glazed.",
   },
   {
     company: "PlayerData",
