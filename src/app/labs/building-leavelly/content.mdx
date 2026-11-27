@@ -1,0 +1,55 @@
+<Callout icon="🏖️">
+[Leavelly](https://leavelly.com) is a leave planner for individuals and freelancers. It went from planning docs to a live product with analytics and a feedback form in a single day.
+</Callout>
+
+## The problem
+
+Planning time off is a surprisingly bad experience if you're not inside a company's HR system.
+
+- **HR suites** like BambooHR or Personio need your employer to buy them.
+- **Team tools** like Timetastic are built for companies: signup, an admin, a price per user.
+- **Holiday optimizer sites** ("turn 3 days of leave into 10 off") are ad-heavy, forget everything when you close the tab and export nothing.
+- **Spreadsheets** work, but everyone rebuilds the same one.
+
+Nobody serves the single person well: an employee planning their year, a freelancer tracking availability against clients, a couple fitting leave around two employers. Freelancers feel it most, because a day off is a day not billed.
+
+## The engineering view
+
+The interesting constraints were about trust and dates, not scale.
+
+- **No signup, no server.** If people have to create an account to plan a holiday, most won't. So v1 keeps everything on the device, which also means nothing personal is ever sent anywhere.
+- **Dates are harder than they look.** Leave is counted in days or hours, with half days, partial first and last days, different working weeks, and rules about whether weekends and public holidays count.
+- **Holidays are local.** National holidays aren't enough; many countries have regional ones.
+- **The plan has to leave the app.** People live in their calendar, not in a planner, so export matters more than features.
+- **It should cost nothing to run** until someone actually needs more.
+
+## The solution, briefly
+
+- A static Next.js app with no backend, installable as a PWA and usable offline. Plans live in the browser's local storage.
+- A small, tested domain library for the date logic: leave calculation, conflicts between periods, holidays and the optimizer, kept apart from the UI.
+- Built-in public holidays for 14 countries, including regional holidays, plus custom ones.
+- A "max your leave" optimizer. It scans the year for runs of working days sitting between weekends and holidays, then ranks them by days off per day of leave. Five styles, from long weekends to extended breaks, and it marks suggestions you've already applied.
+- Export to ICS, CSV and Markdown, ICS import, and print to PDF.
+- Read-only share links with the whole plan encoded in the URL, so sharing needs no server either.
+- Hosted as a static site on Netlify, with privacy-friendly analytics and a feedback form.
+
+## Built in a day
+
+The commit history tells the story.
+
+1. **09:59, plan.** The first commit has no code at all: vision, market and competitors, features, stack, monetization, distribution and a roadmap, each as a short doc in the repo. The market doc is where "freelancers first" came from.
+2. **14:49, build.** About five hours later, the whole v1 planner landed in one commit: plans, leave periods, partial days, holidays, calendar, optimizer, export, share links, PWA and tests for the date logic.
+3. **16:20, ship.** Live on its own domain with analytics, then a feedback form and tracked events within the hour.
+4. **17:15, iterate.** Break styles for the optimizer, regional holidays and a plan summary. Pricing came out: the plan had paid tiers, but a free tool with a support link fits v1 better.
+
+About 4,200 lines of TypeScript, about seven hours from first commit to last.
+
+The order is the lesson. Deciding who it's for, what not to build and what "done" means came first, in writing. That's what made the build fast: there was nothing left to argue about when the code started.
+
+## What's next
+
+The roadmap adds optional sign-in with magic links, sync across devices, a calendar feed you can subscribe to, and small-team features. All of it optional: the no-signup planner stays free.
+
+## Try it
+
+It's live at [leavelly.com](https://leavelly.com). Pick your country and find out how far your leave can go.

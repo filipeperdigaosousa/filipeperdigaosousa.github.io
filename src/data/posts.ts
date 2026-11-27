@@ -15,6 +15,14 @@ export const isDev = process.env.NODE_ENV === "development";
 
 export const posts: Post[] = [
   {
+    slug: "building-leavelly",
+    title: "Building Leavelly",
+    summary:
+      "A leave planner for individuals and freelancers, from planning docs to a live product in one day: the problem, the constraints, a no-server design and a bridge-day optimizer.",
+    date: "2026-11-27",
+    tags: ["side-project", "product", "nextjs"],
+  },
+  {
     slug: "building-portugal-em-dados",
     title: "Building Portugal em Dados",
     summary:
