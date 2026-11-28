@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-27T12:23:36.784Z",
+  "generatedAt": "2026-11-28T11:48:00.228Z",
   "totals": {
-    "contributionsLastYear": 2971,
+    "contributionsLastYear": 2968,
     "currentStreak": 5,
     "longestStreak": 12,
-    "topLanguage": "TypeScript",
+    "topLanguage": "Ruby",
     "prsMerged": 565,
     "prsOpened": 604,
     "prsReviewed": 648,
@@ -13,11 +13,11 @@
     "prsMergedAllTime": 1178,
     "distinctAuthorsReviewed": 16,
     "reposTouched": 16,
-    "careerTotal": 16704,
+    "careerTotal": 16716,
     "firstActiveYear": 2016,
     "yearsShipping": 11,
     "peakYear": 2026,
-    "peakYearTotal": 2897
+    "peakYearTotal": 2909
   },
   "careerYears": [
     {
@@ -62,7 +62,7 @@
     },
     {
       "year": 2026,
-      "total": 2897
+      "total": 2909
     }
   ],
   "cycle": {
@@ -73,20 +73,20 @@
   },
   "topLanguages": [
     {
-      "name": "TypeScript",
-      "percent": 57
+      "name": "Ruby",
+      "percent": 49
     },
     {
-      "name": "Ruby",
-      "percent": 31
+      "name": "TypeScript",
+      "percent": 29
     },
     {
       "name": "MDX",
-      "percent": 8
+      "percent": 15
     },
     {
       "name": "JavaScript",
-      "percent": 3
+      "percent": 5
     },
     {
       "name": "CSS",
@@ -135,7 +135,7 @@
   "prSampleSize": 500,
   "snapshot": {
     "hasStale": true,
-    "snapshotAt": "2026-11-26T12:37:22.549Z",
+    "snapshotAt": "2026-11-27T12:23:36.784Z",
     "staleFields": [
       "prsMerged",
       "prsOpened",
